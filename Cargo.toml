@@ -3,6 +3,14 @@ name = "soma-player"
 version = "0.1.0"
 edition = "2024"
 
+# Add these for better release builds
+[profile.release]
+opt-level = 3        # Maximum optimization
+lto = true          # Link-time optimization
+codegen-units = 1   # Better optimization
+panic = "abort"     # Smaller binary size
+strip = true        # Remove debug symbols
+
 [dependencies]
 reqwest = { version = "0.12", features = ["json", "stream"] }
 serde = { version = "1.0", features = ["derive"] }
@@ -16,5 +24,9 @@ tokio-util = { version = "0.7", features = ["io-util"] }
 crossterm = "0.27"
 icy-metadata = "0.2"
 stream-download = { version = "0.10", features = ["reqwest"] }
-colored = "2.0"
-unicode-width = "0.1"
+ratatui = "0.28"
+color-eyre = "0.6"
+toml = "0.8"
+dirs = "5.0"
+log = "0.4"
+env_logger = "0.11"
