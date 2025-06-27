@@ -2188,7 +2188,7 @@ dependencies = [
 
 [[package]]
 name = "soma-player"
-version = "0.1.7"
+version = "0.1.8"
 dependencies = [
  "bytes",
  "color-eyre",
