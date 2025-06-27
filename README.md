@@ -23,7 +23,15 @@ A terminal-based music player for [SomaFM](https://somafm.com/) internet radio s
 
 ## Installation
 
-### Quick Install (Recommended)
+### From crates.io (Recommended)
+
+Install directly from the Rust package registry:
+
+```bash
+cargo install soma-player
+```
+
+### Quick Install Script
 
 Install SomaFM Player with a single command:
 
