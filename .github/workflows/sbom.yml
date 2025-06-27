@@ -42,7 +42,11 @@ jobs:
 
     - name: Install SBOM tools
       run: |
-        cargo install cargo-cyclonedx
+        if ! command -v cargo-cyclonedx &> /dev/null; then
+          cargo install cargo-cyclonedx
+        else
+          echo "cargo-cyclonedx already installed"
+        fi
 
     - name: Generate SBOM
       run: |
