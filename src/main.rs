@@ -154,17 +154,17 @@ async fn play_session_tui(
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Handle command line arguments
+    // Handle command line arguments FIRST, before any initialization
     let args: Vec<String> = env::args().collect();
     if args.len() > 1 {
         match args[1].as_str() {
             "--version" | "-V" => {
                 println!("soma-player {}", env!("CARGO_PKG_VERSION"));
-                return Ok(());
+                std::process::exit(0);
             }
             "--help" | "-h" => {
                 print_help();
-                return Ok(());
+                std::process::exit(0);
             }
             _ => {
                 eprintln!("Unknown argument: {}", args[1]);

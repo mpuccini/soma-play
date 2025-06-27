@@ -139,11 +139,13 @@ verify_installation() {
     if [ -x "$INSTALL_DIR/$BINARY_NAME" ]; then
         log_info "Verification: $BINARY_NAME is installed at $INSTALL_DIR/$BINARY_NAME"
         
-        # Try to get version
-        if "$INSTALL_DIR/$BINARY_NAME" --version >/dev/null 2>&1; then
+        # Try to get version (with timeout to avoid hanging)
+        if timeout 5s "$INSTALL_DIR/$BINARY_NAME" --version >/dev/null 2>&1; then
             local version_output
-            version_output=$("$INSTALL_DIR/$BINARY_NAME" --version 2>/dev/null || echo "Version info not available")
+            version_output=$(timeout 5s "$INSTALL_DIR/$BINARY_NAME" --version 2>/dev/null || echo "Version check failed")
             log_info "Version: $version_output"
+        else
+            log_warn "Version check failed or timed out, but binary is installed"
         fi
         
         return 0
