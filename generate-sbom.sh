@@ -21,11 +21,17 @@ cargo tree --prefix depth > sbom/dependencies-structured.txt
 
 # Generate CycloneDX SBOM
 echo "🔄 Generating CycloneDX SBOM..."
-cargo cyclonedx --format json
-cargo cyclonedx --format xml
-# Move the generated files to sbom directory
-mv *.cdx.json sbom/sbom-cyclonedx.json 2>/dev/null || true
-mv *.cdx.xml sbom/sbom-cyclonedx.xml 2>/dev/null || true
+if cargo cyclonedx --format json > sbom/sbom.json 2>/dev/null; then
+    echo "✅ JSON SBOM generated successfully"
+else
+    echo "⚠️  JSON SBOM generation failed"
+fi
+
+if cargo cyclonedx --format xml > sbom/sbom.xml 2>/dev/null; then
+    echo "✅ XML SBOM generated successfully" 
+else
+    echo "⚠️  XML SBOM generation failed"
+fi
 
 # Generate security audit
 echo "🔒 Running security audit..."
@@ -47,10 +53,10 @@ Version: $(grep '^version = ' Cargo.toml | sed 's/version = "\(.*\)"/\1/')
 
 ## Files
 
-- \`sbom-cyclonedx.json\` - SBOM in CycloneDX JSON format
-- \`sbom-cyclonedx.xml\` - SBOM in CycloneDX XML format
+- \`sbom.json\` - SBOM in CycloneDX JSON format
+- \`sbom.xml\` - SBOM in CycloneDX XML format
 - \`dependencies.txt\` - Simple dependency tree
-- \`dependencies-versions.txt\` - Dependencies with versions
+- \`dependencies-structured.txt\` - Dependencies with structure
 - \`security-audit.txt\` - Security vulnerability report
 - \`security-audit.json\` - Security report in JSON format
 
