@@ -7,6 +7,9 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: write
+
 env:
   CARGO_TERM_COLOR: always
 
@@ -142,8 +145,7 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          **/*.tar.gz
-          **/*.zip
+          *.tar.gz
         draft: false
         prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
         generate_release_notes: true
