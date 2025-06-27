@@ -126,8 +126,8 @@ jobs:
         cargo cyclonedx --format json > sbom.json
         cargo cyclonedx --format xml > sbom.xml
         
-        # Also generate a dependency tree
-        cargo tree --format "{p} {v}" > dependencies.txt
+        # Also generate a dependency tree (fixed format)
+        cargo tree > dependencies.txt
 
     - name: Upload SBOM artifacts
       if: matrix.os == 'ubuntu-latest' && matrix.target == 'x86_64-unknown-linux-gnu'
