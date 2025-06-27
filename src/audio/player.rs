@@ -1,3 +1,37 @@
+//! Audio playback engine for SomaFM streams.
+//!
+//! This module handles the core audio functionality including:
+//! - Connecting to audio streams
+//! - Parsing ICY metadata for track information
+//! - Real-time volume control
+//! - Command-based playback control
+//!
+//! # Examples
+//!
+//! ```rust,no_run
+//! use soma_player::audio::{play_channel, PlayerCommand};
+//! use soma_player::models::{Channel, TrackInfo};
+//! use tokio::sync::{mpsc, Mutex};
+//! use std::sync::Arc;
+//!
+//! # async fn example() -> Result<(), Box<dyn std::error::Error>> {
+//! let channel = Channel {
+//!     id: "groovesalad".to_string(),
+//!     title: "Groove Salad".to_string(),
+//!     description: "A nicely chilled plate of ambient beats".to_string(),
+//!     playlists: vec![],
+//! };
+//!
+//! let track_info = Arc::new(Mutex::new(TrackInfo::default()));
+//! let (tx, rx) = mpsc::unbounded_channel();
+//! let volume = Some(75);
+//!
+//! // Start playback
+//! let result = play_channel(&channel, track_info, rx, volume).await;
+//! # Ok(())
+//! # }
+//! ```
+
 use std::sync::Arc;
 use tokio::sync::{mpsc, Mutex};
 use rodio::{OutputStream, Sink, Decoder};
@@ -11,13 +45,46 @@ use log::{debug, error, info, warn};
 use crate::models::{Channel, TrackInfo, parse_track_info};
 use crate::api::parse_pls_playlist;
 
+/// Commands that can be sent to control audio playback.
 #[derive(Debug)]
 pub enum PlayerCommand {
+    /// Stop playback and quit
     Quit,
+    /// Change volume (0-100)
     SetVolume(u8),
+    /// Pause playback
+    Pause,
+    /// Resume playback
+    Resume,
 }
 
-/// Plays the selected SomaFM channel's stream with real-time control
+/// Plays a SomaFM channel's audio stream with real-time control.
+///
+/// This function handles the complete audio playback pipeline:
+/// 1. Resolves playlist URLs (handles .pls files)
+/// 2. Establishes HTTP connection with ICY metadata support
+/// 3. Sets up audio decoding and playback
+/// 4. Processes real-time metadata updates
+/// 5. Responds to volume and control commands
+///
+/// # Arguments
+///
+/// * `channel` - The SomaFM channel to play
+/// * `track_info` - Shared track information updated with ICY metadata
+/// * `rx` - Command receiver for controlling playback
+/// * `volume` - Optional initial volume (0-100), defaults to system volume
+///
+/// # Returns
+///
+/// Returns `Ok(false)` when playback stops normally, or an error if playback fails.
+///
+/// # Errors
+///
+/// This function can return errors for:
+/// - Network connection failures
+/// - Audio device initialization problems
+/// - Stream decoding issues
+/// - Invalid playlist formats
 pub async fn play_channel(
     channel: &Channel, 
     track_info: Arc<Mutex<TrackInfo>>,
@@ -170,6 +237,16 @@ pub async fn play_channel(
                         let volume_float = (vol as f32) / 100.0;
                         sink.set_volume(volume_float);
                         debug!("Volume changed to: {}% ({})", vol, volume_float);
+                        // Continue the loop to handle more commands
+                    }
+                    Some(PlayerCommand::Pause) => {
+                        sink.pause();
+                        info!("Playback paused");
+                        // Continue the loop to handle more commands
+                    }
+                    Some(PlayerCommand::Resume) => {
+                        sink.play();
+                        info!("Playback resumed");
                         // Continue the loop to handle more commands
                     }
                 }

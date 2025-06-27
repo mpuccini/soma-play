@@ -71,6 +71,18 @@ pub fn handle_key_event(
             }
             EventResult::None
         }
+        (UIState::Playing, KeyCode::Char('p') | KeyCode::Char('P')) => {
+            // Toggle pause/resume
+            if app.is_paused {
+                app.resume();
+                info!("Playback resumed");
+                EventResult::PlayerCommand(PlayerCommand::Resume)
+            } else {
+                app.pause();
+                info!("Playback paused");
+                EventResult::PlayerCommand(PlayerCommand::Pause)
+            }
+        }
         (UIState::Playing, KeyCode::Char('q') | KeyCode::Char('Q') | KeyCode::Esc) => {
             app.quit();
             EventResult::Quit

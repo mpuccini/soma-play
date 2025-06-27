@@ -1,3 +1,5 @@
+use crate::models::AudioSpectrum;
+
 #[derive(Debug, Clone)]
 pub enum UIState {
     InitialChannelSelection,
@@ -9,6 +11,8 @@ pub struct AppState {
     pub ui_state: UIState,
     pub selected_index: usize,
     pub should_quit: bool,
+    pub is_paused: bool,
+    pub spectrum: AudioSpectrum,
 }
 
 impl AppState {
@@ -17,6 +21,8 @@ impl AppState {
             ui_state: UIState::InitialChannelSelection,
             selected_index: 0,
             should_quit: false,
+            is_paused: false,
+            spectrum: AudioSpectrum::default(),
         }
     }
 
@@ -49,5 +55,17 @@ impl AppState {
 
     pub fn quit(&mut self) {
         self.should_quit = true;
+    }
+
+    pub fn toggle_pause(&mut self) {
+        self.is_paused = !self.is_paused;
+    }
+
+    pub fn pause(&mut self) {
+        self.is_paused = true;
+    }
+
+    pub fn resume(&mut self) {
+        self.is_paused = false;
     }
 }

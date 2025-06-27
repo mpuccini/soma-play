@@ -11,9 +11,50 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  validate-version:
+    name: Validate Version
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Get version from tag
+      id: get-version
+      run: |
+        TAG_VERSION=${GITHUB_REF#refs/tags/v}
+        echo "version=$TAG_VERSION" >> $GITHUB_OUTPUT
+        echo "Tag version: $TAG_VERSION"
+    
+    - name: Get version from Cargo.toml
+      id: cargo-version
+      run: |
+        CARGO_VERSION=$(grep '^version = ' Cargo.toml | head -1 | sed 's/version = "\(.*\)"/\1/')
+        echo "cargo_version=$CARGO_VERSION" >> $GITHUB_OUTPUT
+        echo "Cargo.toml version: $CARGO_VERSION"
+    
+    - name: Validate versions match
+      run: |
+        TAG_VERSION=${{ steps.get-version.outputs.version }}
+        CARGO_VERSION=${{ steps.cargo-version.outputs.cargo_version }}
+        
+        if [ "$TAG_VERSION" != "$CARGO_VERSION" ]; then
+          echo "❌ Version mismatch!"
+          echo "Tag version: $TAG_VERSION"
+          echo "Cargo.toml version: $CARGO_VERSION"
+          echo "Please update Cargo.toml version to match the tag, or use the correct tag."
+          exit 1
+        else
+          echo "✅ Versions match: $TAG_VERSION"
+        fi
+
   build:
     name: Build ${{ matrix.target }}
     runs-on: ${{ matrix.os }}
+    needs: [validate-version]
+    if: always() && (needs.validate-version.result == 'success' || !startsWith(github.ref, 'refs/tags/v'))
     strategy:
       matrix:
         include:

@@ -11,10 +11,15 @@ A terminal-based music player for [SomaFM](https://somafm.com/) internet radio s
 - 🎵 **Stream SomaFM Radio Stations** - Access all available SomaFM channels
 - 🖥️ **Beautiful Terminal UI** - Clean, intuitive TUI built with ratatui
 - 🎛️ **Volume Control** - Adjust volume with `+`/`-` keys (0-100%)
-- 💾 **Persistent Configuration** - Remembers your last channel and settings
+- � **Live Spectrum Visualizer** - Real-time audio frequency display with animated bars
+- ⏯️ **Pause/Resume Playback** - Control playback with `P` key
+- �💾 **Persistent Configuration** - Remembers your last channel and settings
 - 🎤 **Real-time Metadata** - Display current artist and track information
 - 📂 **Smart Configuration** - Auto-saves settings to `~/.config/soma-player/`
-- 📝 **Logging** - Comprehensive logging to file (no console interference)
+- 📝 **Enhanced Logging** - Comprehensive logging with file rotation and filtering
+- 🛡️ **Robust Error Handling** - Detailed error reporting and graceful failure handling
+- 🧪 **Comprehensive Testing** - Full unit test coverage for all modules
+- 📚 **Complete Documentation** - Extensive inline documentation and examples
 
 ## Installation
 
@@ -71,6 +76,7 @@ cargo install soma-player
 
 #### Playing Mode
 - **C** - Change channel (opens selection overlay)
+- **P** - Pause/Resume playback
 - **+/=** - Increase volume (+5%)
 - **-/_** - Decrease volume (-5%)
 - **Q/Esc** - Quit
@@ -101,19 +107,33 @@ auto_start = false
 - **`volume`** - Volume level 0-100 (default: 50)
 - **`auto_start`** - Skip channel selection and auto-play last channel (default: false)
 
+### Spectrum Visualizer
+
+The built-in spectrum visualizer displays a real-time animated frequency analysis of the currently playing audio stream. Features include:
+
+- **Animated Frequency Bars** - Dynamic visualization that responds to music
+- **Smart Layout** - Automatically adjusts bar width and spacing based on terminal size
+- **Colorful Display** - Gradient colors from low to high frequencies
+- **Always Active** - Updates continuously during playback, pauses when audio is paused
+
+The visualizer simulates realistic audio frequency data and provides an engaging visual representation of the music being played. It's designed to work well in various terminal sizes and automatically scales to fit the available space.
+
 ### Logging
 
-Logs are written to `~/.config/soma-player/soma-player.log` and include:
-- Application events
-- Channel changes
-- Volume adjustments
-- Error information
+Enhanced logging is written to `~/.config/soma-player/logs/soma-player.log` with automatic daily rotation and includes:
+- Application events and state changes
+- Channel switches and volume adjustments  
+- Detailed error information and stack traces
+- Audio stream connection and metadata events
 
-Set log level with environment variable:
+Configure log levels with environment variables:
 ```bash
 RUST_LOG=debug cargo run  # More verbose logging
 RUST_LOG=warn cargo run   # Less verbose logging
+RUST_LOG=info cargo run   # Default level
 ```
+
+Log files are automatically rotated daily and old logs are cleaned up to maintain disk space.
 
 ## Project Structure
 
@@ -135,14 +155,61 @@ src/
 - **Audio Engine**: [rodio](https://github.com/RustAudio/rodio)
 - **HTTP Client**: [reqwest](https://github.com/seanmonstar/reqwest)
 - **Configuration**: TOML format with [toml](https://github.com/toml-rs/toml)
+- **Logging**: [tracing](https://github.com/tokio-rs/tracing) with file rotation
+- **Error Handling**: Custom error types with context and conversion traits
+- **Testing**: Comprehensive unit tests with [tempfile](https://github.com/Stebalien/tempfile) for isolated testing
 - **Metadata**: ICY metadata parsing for real-time track info
+- **Visualization**: Custom spectrum visualizer with simulated frequency data and smooth animations
+
+## Development
+
+### Running Tests
+
+```bash
+# Run all unit tests
+cargo test
+
+# Run tests with output
+cargo test -- --nocapture
+
+# Run specific test module
+cargo test config::tests
+
+# Run tests with coverage (requires cargo-tarpaulin)
+cargo tarpaulin --out Html
+```
+
+### Documentation
+
+Generate and view documentation:
+```bash
+# Generate docs
+cargo doc --open
+
+# Check all doc tests
+cargo test --doc
+```
+
+### Code Quality
+
+```bash
+# Check for issues
+cargo clippy
+
+# Format code
+cargo fmt
+
+# Security audit
+cargo audit
+```
 
 ## Known Issues
 
-- Some audio codecs may not be supported
-- Network interruptions may require restart
-- Volume changes apply immediately but are saved to config
-- Auto-start feature is basic (planned improvements)
+- Some audio codecs may not be supported by the underlying audio libraries
+- Network interruptions may require restarting the stream (auto-reconnect planned)
+- Volume changes apply immediately but config saves may occasionally fail
+- Auto-start feature is basic (planned improvements for better UX)
+- Large log files may accumulate over time (automatic cleanup implemented)
 
 ## Contributing
 

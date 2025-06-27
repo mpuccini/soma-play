@@ -10,7 +10,7 @@ use ratatui::{
     backend::CrosstermBackend,
     Terminal,
 };
-use log::{debug, error, info};
+use tracing;
 
 use soma_player::{
     api::fetch_channels,
@@ -57,6 +57,10 @@ async fn play_session_tui(
     let result = loop {
         // Update display
         if last_update.elapsed() >= std::time::Duration::from_millis(100) {
+            // Update spectrum visualizer based on current state
+            let is_playing = matches!(app.ui_state, UIState::Playing | UIState::SelectingChannel);
+            app.spectrum.update(is_playing, app.is_paused);
+            
             let track = track_info.lock().await;
             if let Err(e) = terminal.draw(|frame| {
                 match app.ui_state {
@@ -64,7 +68,7 @@ async fn play_session_tui(
                         render_initial_channel_selection(frame, channels, app.selected_index)
                     }
                     UIState::Playing => {
-                        render_playing_ui(frame, selected_channel, &track, config)
+                        render_playing_ui(frame, selected_channel, &track, config, &app)
                     }
                     UIState::SelectingChannel => {
                         render_channel_selection(frame, channels, selected_channel, &track, app.selected_index)
@@ -90,10 +94,9 @@ async fn play_session_tui(
                 ) {
                     EventResult::ChannelChange(new_channel_index) => {
                         // Update config with selected channel
-                        if let Some(channel) = channels.get(new_channel_index) {
-                            if let Err(e) = config.set_last_channel(channel.id.clone()) {
-                                error!("Failed to save config: {}", e);
-                            }
+                        if let Some(channel) = channels.get(new_channel_index) {                        if let Err(e) = config.set_last_channel(channel.id.clone()) {
+                            tracing::error!("Failed to save config: {}", e);
+                        }
                         }
                         
                         // Send quit to current audio if playing
@@ -150,51 +153,22 @@ async fn play_session_tui(
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Configure logging to write to a file instead of stdout to avoid interfering with TUI
-    use std::fs::OpenOptions;
-    
-    // Create log directory if it doesn't exist
-    if let Some(home) = dirs::home_dir() {
-        let log_dir = home.join(".config").join("soma-player");
-        let _ = std::fs::create_dir_all(&log_dir);
-        
-        let log_file = log_dir.join("soma-player.log");
-        
-        // Configure env_logger to write to file
-        if let Ok(file) = OpenOptions::new()
-            .create(true)
-            .append(true)
-            .open(&log_file)
-        {
-            env_logger::Builder::from_env(
-                env_logger::Env::default().default_filter_or("info,symphonia_core=off,symphonia_bundle_mp3=off")
-            )
-            .target(env_logger::Target::Pipe(Box::new(file)))
-            .init();
-        } else {
-            // Fallback: disable logging if we can't write to file
-            env_logger::Builder::from_env(
-                env_logger::Env::default().default_filter_or("off")
-            ).init();
-        }
-    } else {
-        // Fallback: disable logging if we can't find home directory
-        env_logger::Builder::from_env(
-            env_logger::Env::default().default_filter_or("off")
-        ).init();
-    }
-    
+    // Initialize enhanced logging system
+    let _log_guard = soma_player::logging::init_logging(
+        soma_player::logging::LogConfig::default()
+    )?;
+
     color_eyre::install()?;
-    log::info!("Starting SomaFM Player");
+    tracing::info!("Starting SomaFM Player");
     
     // Load configuration
     let mut config = AppConfig::load().unwrap_or_default();
-    debug!("Configuration loaded: {:?}", config);
+    tracing::debug!("Configuration loaded: {:?}", config);
     
     let result = run_player(&mut config).await;
     
     if let Err(e) = &result {
-        error!("Application error: {}", e);
+        tracing::error!("Application error: {}", e);
     }
     
     result
@@ -264,7 +238,7 @@ async fn run_player(config: &mut AppConfig) -> Result<(), Box<dyn std::error::Er
                 if index < channels.len() {
                     selected_channel = &channels[index];
                     first_run = false;
-                    info!("Switching to channel: {}", selected_channel.title);
+                    tracing::info!("Switching to channel: {}", selected_channel.title);
                     
                     // Reset track info for new channel
                     {
@@ -276,13 +250,13 @@ async fn run_player(config: &mut AppConfig) -> Result<(), Box<dyn std::error::Er
                 }
             }
             None => {
-                info!("User quit application");
+                tracing::info!("User quit application");
                 break;
             }
         }
     }
     
-    info!("SomaFM Player shutting down");
+    tracing::info!("SomaFM Player shutting down");
     Ok(())
 }
 
