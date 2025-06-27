@@ -27,11 +27,13 @@ A terminal-based music player for [SomaFM](https://somafm.com/) internet radio s
 
 Install SomaFM Player with a single command:
 
-```bash
 # Using curl
+```bash
 curl -sSL https://raw.githubusercontent.com/mpuccini/soma-play/main/install.sh | bash
+```
 
 # Using wget
+```bash
 wget -qO- https://raw.githubusercontent.com/mpuccini/soma-play/main/install.sh | bash
 ```
 
