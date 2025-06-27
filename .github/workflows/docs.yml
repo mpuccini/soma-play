@@ -113,6 +113,9 @@ jobs:
     needs: build-docs
     if: github.ref == 'refs/heads/main'
     steps:
+    - name: Setup Pages
+      uses: actions/configure-pages@v5
+    
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4

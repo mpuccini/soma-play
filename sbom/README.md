@@ -1,6 +1,6 @@
 # Software Bill of Materials (SBOM) for soma-player
 
-Generated on: Fri Jun 27 12:38:52 PM CEST 2025
+Generated on: Fri Jun 27 12:58:04 PM CEST 2025
 Version: 0.1.6
 
 ## Files
