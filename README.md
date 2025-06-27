@@ -231,6 +231,9 @@ cargo install mdbook
 # Build and serve the documentation locally
 cd docs
 mdbook serve --open
+
+# Or build all documentation (API + User Guide)
+./build-docs.sh
 ```
 
 ### Online Documentation
@@ -361,12 +364,32 @@ This project is in early development. If you'd like to contribute:
 
 ### Development Setup
 
-```bash   git clone https://github.com/mpuccini/soma-play.git
+```bash
+git clone https://github.com/mpuccini/soma-play.git
 cd soma-player
 cargo build
 cargo test
 cargo run
 ```
+
+### CI/CD Workflows
+
+This project includes automated workflows for:
+
+- **Build & Release** (`.github/workflows/build.yml`)
+  - Builds binaries for Linux x64 and macOS ARM64
+  - Creates GitHub releases on version tags
+  - Validates version consistency
+
+- **Documentation** (`.github/workflows/docs.yml`)
+  - Generates API documentation with `cargo doc`
+  - Builds user guide with mdBook
+  - Deploys to GitHub Pages automatically
+
+- **SBOM Generation** (`.github/workflows/sbom.yml`)
+  - Creates Software Bill of Materials
+  - Performs security audits
+  - Uploads artifacts to releases
 
 ## License
 
