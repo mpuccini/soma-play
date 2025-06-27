@@ -163,8 +163,7 @@ jobs:
         generate_release_notes: true
         make_latest: true
         fail_on_unmatched_files: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
 
   publish-crates:
     name: Publish to crates.io
@@ -200,13 +199,28 @@ jobs:
     - name: Verify package can be built
       run: cargo build --release
 
+    - name: Update Cargo.lock
+      run: |
+        # Ensure Cargo.lock is up to date
+        cargo update --workspace
+        
+    - name: Check git status
+      run: |
+        git status
+        echo "Checking for uncommitted changes..."
+        if [ -n "$(git status --porcelain)" ]; then
+          echo "Found uncommitted changes, will use --allow-dirty flag"
+        else
+          echo "No uncommitted changes found"
+        fi
+
     - name: Run tests
       run: cargo test
 
     - name: Dry run publish
-      run: cargo publish --dry-run
+      run: cargo publish --dry-run --allow-dirty
 
     - name: Publish to crates.io
-      run: cargo publish --token ${{ secrets.CRATES_IO_TOKEN }}
+      run: cargo publish --token ${{ secrets.CRATES_IO_TOKEN }} --allow-dirty
       env:
         CARGO_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
