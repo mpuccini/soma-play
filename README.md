@@ -196,6 +196,83 @@ RUST_LOG=info cargo run   # Default level
 
 Log files are automatically rotated daily and old logs are cleaned up to maintain disk space.
 
+## Documentation
+
+### API Documentation (Generated from Source)
+
+The project includes comprehensive inline documentation for all modules and functions. You can generate and view the API documentation locally:
+
+```bash
+# Generate API documentation
+cargo doc --no-deps --document-private-items --open
+
+# Or just generate without opening
+cargo doc --no-deps --document-private-items
+```
+
+The API documentation includes:
+- **Module Documentation** - Detailed descriptions of each module's purpose
+- **Function Documentation** - Examples and usage patterns for all public functions
+- **Error Types** - Complete error handling documentation
+- **Configuration Options** - All available settings and their effects
+
+### User Guide (mdBook)
+
+An extended user guide is available that covers:
+- **Installation & Setup** - Platform-specific installation instructions
+- **Configuration Guide** - Complete configuration reference
+- **Troubleshooting** - Common issues and solutions
+- **Advanced Usage** - Tips for power users
+
+```bash
+# Install mdbook (if not already installed)
+cargo install mdbook
+
+# Build and serve the documentation locally
+cd docs
+mdbook serve --open
+```
+
+### Online Documentation
+
+When the project is ready for public release, documentation will be hosted at:
+- **API Docs**: `https://yourusername.github.io/soma-player/api/`
+- **User Guide**: `https://yourusername.github.io/soma-player/guide/`
+
+## Supply Chain Security (SBOM)
+
+This project generates a comprehensive Software Bill of Materials (SBOM) for supply chain security and compliance.
+
+### Generate SBOM Locally
+
+```bash
+# Run the SBOM generation script
+./generate-sbom.sh
+```
+
+This generates:
+- **CycloneDX SBOM** (JSON/XML) - Industry standard SBOM format
+- **Dependency Tree** - Complete dependency listing
+- **Security Audit** - Known vulnerability report
+- **License Information** - All dependency licenses
+
+### SBOM Contents
+
+The generated SBOM includes:
+- ✅ **Complete dependency tree** with version information
+- ✅ **License compliance data** for all dependencies
+- ✅ **Security vulnerability scan** using cargo-audit
+- ✅ **CycloneDX format** for industry compatibility
+- ✅ **Automated generation** in CI/CD pipeline
+
+### CI/CD Integration
+
+SBOM generation is integrated into our CI/CD pipeline:
+- Generated automatically on every release
+- Uploaded as release artifacts
+- Available for download from GitHub releases
+- Updated weekly via scheduled workflow
+
 ## Project Structure
 
 ```

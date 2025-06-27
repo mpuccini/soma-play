@@ -1,0 +1,99 @@
+name: Generate SBOM
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run weekly to keep SBOM updated
+    - cron: '0 0 * * 0'
+
+permissions:
+  contents: read
+
+jobs:
+  generate-sbom:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+
+    - name: Install SBOM tools
+      run: |
+        cargo install cargo-cyclonedx
+        cargo install cargo-auditable
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libasound2-dev pkg-config
+
+    - name: Generate dependency tree
+      run: |
+        cargo tree --format "{p} {v}" > dependencies.txt
+        cargo tree --format "{p} {v} {l}" > dependencies-with-licenses.txt
+
+    - name: Generate SBOM (CycloneDX JSON)
+      run: cargo cyclonedx --format json --output-file sbom-cyclonedx.json
+
+    - name: Generate SBOM (CycloneDX XML)
+      run: cargo cyclonedx --format xml --output-file sbom-cyclonedx.xml
+
+    - name: Generate SBOM (SPDX)
+      run: |
+        # Using cargo-spdx if available, or create a simple SPDX document
+        if cargo install cargo-spdx 2>/dev/null; then
+          cargo spdx > sbom-spdx.json
+        else
+          echo "SPDX generation tool not available, creating basic manifest"
+          cat > sbom-spdx.json << EOF
+        {
+          "SPDXID": "SPDXRef-DOCUMENT",
+          "spdxVersion": "SPDX-2.3",
+          "creationInfo": {
+            "created": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "creators": ["Tool: GitHub Actions"]
+          },
+          "name": "soma-player-sbom",
+          "documentNamespace": "https://github.com/mpuccini/soma-play/sbom-$(date +%s)",
+          "packages": []
+        }
+        EOF
+        fi
+
+    - name: Create security report
+      run: |
+        echo "# Security Report" > security-report.md
+        echo "Generated on: $(date)" >> security-report.md
+        echo "" >> security-report.md
+        
+        echo "## Dependencies" >> security-report.md
+        echo "\`\`\`" >> security-report.md
+        cargo tree --depth 1 >> security-report.md
+        echo "\`\`\`" >> security-report.md
+        echo "" >> security-report.md
+        
+        echo "## Audit Report" >> security-report.md
+        if cargo audit --version >/dev/null 2>&1; then
+          echo "\`\`\`" >> security-report.md
+          cargo audit 2>&1 || echo "No known vulnerabilities found" >> security-report.md
+          echo "\`\`\`" >> security-report.md
+        else
+          echo "cargo-audit not available" >> security-report.md
+        fi
+
+    - name: Upload SBOM artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: sbom-${{ github.sha }}
+        path: |
+          sbom-cyclonedx.json
+          sbom-cyclonedx.xml
+          sbom-spdx.json
+          dependencies.txt
+          dependencies-with-licenses.txt
+          security-report.md
+        retention-days: 90

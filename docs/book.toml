@@ -1,0 +1,17 @@
+[book]
+title = "SomaFM Player Documentation"
+authors = ["Marco Puccini"]
+description = "A terminal-based music player for SomaFM internet radio stations"
+src = "src"
+
+[build]
+build-dir = "book"
+
+[output.html]
+default-theme = "navy"
+preferred-dark-theme = "navy"
+git-repository-url = "https://github.com/mpuccini/soma-play"
+
+[output.html.playground]
+editable = true
+line-numbers = true

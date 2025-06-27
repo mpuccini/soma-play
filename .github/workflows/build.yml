@@ -111,6 +111,29 @@ jobs:
     - name: Build binary
       run: cargo build --release --target ${{ matrix.target }}
 
+    - name: Generate SBOM
+      if: matrix.os == 'ubuntu-latest' && matrix.target == 'x86_64-unknown-linux-gnu'
+      run: |
+        # Install cargo-cyclonedx for SBOM generation
+        cargo install cargo-cyclonedx
+        
+        # Generate SBOM in multiple formats
+        cargo cyclonedx --format json --output-file sbom.json
+        cargo cyclonedx --format xml --output-file sbom.xml
+        
+        # Also generate a dependency tree
+        cargo tree --format "{p} {v}" > dependencies.txt
+
+    - name: Upload SBOM artifacts
+      if: matrix.os == 'ubuntu-latest' && matrix.target == 'x86_64-unknown-linux-gnu'
+      uses: actions/upload-artifact@v4
+      with:
+        name: sbom-files
+        path: |
+          sbom.json
+          sbom.xml
+          dependencies.txt
+
     - name: Create archive
       run: |
         cd target/${{ matrix.target }}/release
@@ -141,11 +164,20 @@ jobs:
     - name: List files for debugging
       run: ls -la
 
+    - name: Move SBOM files
+      run: |
+        if [ -d "artifacts/sbom-files" ]; then
+          mv artifacts/sbom-files/* .
+        fi
+
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
         files: |
           *.tar.gz
+          sbom.json
+          sbom.xml
+          dependencies.txt
         draft: false
         prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
         generate_release_notes: true

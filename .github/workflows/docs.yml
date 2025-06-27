@@ -1,0 +1,69 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install Rust
+      uses: dtolnay/rust-toolchain@stable
+    
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libasound2-dev pkg-config
+    
+    - name: Install mdbook
+      run: |
+        curl -L https://github.com/rust-lang/mdBook/releases/latest/download/mdbook-x86_64-unknown-linux-gnu.tar.gz | tar xz
+        sudo mv mdbook /usr/local/bin/
+    
+    - name: Generate Rust documentation
+      run: |
+        cargo doc --no-deps --document-private-items
+        echo '<meta http-equiv="refresh" content="0; url=soma_player">' > target/doc/index.html
+    
+    - name: Generate mdBook documentation
+      run: |
+        cd docs
+        mdbook build
+    
+    - name: Prepare documentation site
+      run: |
+        mkdir -p site
+        cp -r target/doc site/api
+        cp -r docs/book site/guide
+        echo '<h1>Soma Player Documentation</h1><ul><li><a href="api/">API Documentation</a></li><li><a href="guide/">User Guide</a></li></ul>' > site/index.html
+    
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build-docs
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
