@@ -1,7 +1,24 @@
 [package]
 name = "soma-player"
-version = "0.1.6"
+version = "0.1.7"
 edition = "2024"
+authors = ["Marco Puccini <mpuccini@example.com>"]
+description = "A terminal-based music player for SomaFM internet radio stations with spectrum visualizer"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/mpuccini/soma-play"
+homepage = "https://github.com/mpuccini/soma-play"
+documentation = "https://mpuccini.github.io/soma-play/"
+readme = "README.md"
+keywords = ["music", "radio", "terminal", "tui", "somafm"]
+categories = ["multimedia::audio", "command-line-utilities"]
+exclude = [
+    "/.github/",
+    "/docs/",
+    "/site/",
+    "/sbom/",
+    "*.sh",
+    ".gitignore"
+]
 
 # Add these for better release builds
 [profile.release]

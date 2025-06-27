@@ -9,6 +9,8 @@ on:
 
 permissions:
   contents: write
+  actions: read
+  id-token: write
 
 env:
   CARGO_TERM_COLOR: always
@@ -181,5 +183,4 @@ jobs:
         draft: false
         prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
         generate_release_notes: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
