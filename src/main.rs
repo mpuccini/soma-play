@@ -1,4 +1,5 @@
 use std::io;
+use std::env;
 use std::sync::Arc;
 use tokio::sync::{mpsc, Mutex};
 use crossterm::{
@@ -153,6 +154,26 @@ async fn play_session_tui(
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Handle command line arguments
+    let args: Vec<String> = env::args().collect();
+    if args.len() > 1 {
+        match args[1].as_str() {
+            "--version" | "-V" => {
+                println!("soma-player {}", env!("CARGO_PKG_VERSION"));
+                return Ok(());
+            }
+            "--help" | "-h" => {
+                print_help();
+                return Ok(());
+            }
+            _ => {
+                eprintln!("Unknown argument: {}", args[1]);
+                print_help();
+                std::process::exit(1);
+            }
+        }
+    }
+
     // Initialize enhanced logging system
     let _log_guard = soma_player::logging::init_logging(
         soma_player::logging::LogConfig::default()
@@ -172,6 +193,27 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     
     result
+}
+
+fn print_help() {
+    println!("SomaFM Player {} - Terminal-based SomaFM radio player", env!("CARGO_PKG_VERSION"));
+    println!();
+    println!("USAGE:");
+    println!("    soma-player [OPTIONS]");
+    println!();
+    println!("OPTIONS:");
+    println!("    -h, --help       Print this help message");
+    println!("    -V, --version    Print version information");
+    println!();
+    println!("CONTROLS:");
+    println!("    ↑/↓             Navigate channels");
+    println!("    Enter           Select channel");
+    println!("    C               Change channel (while playing)");
+    println!("    P               Pause/Resume playback");
+    println!("    +/-             Volume control");
+    println!("    Q/Esc           Quit");
+    println!();
+    println!("For more information, visit: https://github.com/mpuccini/soma-play");
 }
 
 async fn run_player(config: &mut AppConfig) -> Result<(), Box<dyn std::error::Error>> {
