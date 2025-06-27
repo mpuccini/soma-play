@@ -62,18 +62,6 @@ jobs:
             target: x86_64-unknown-linux-gnu
             binary_name: soma-player
             archive_name: soma-player-linux-x64.tar.gz
-          - os: ubuntu-latest
-            target: x86_64-unknown-linux-musl
-            binary_name: soma-player
-            archive_name: soma-player-linux-x64-static.tar.gz
-          - os: windows-latest
-            target: x86_64-pc-windows-msvc
-            binary_name: soma-player.exe
-            archive_name: soma-player-windows-x64.zip
-          - os: macos-latest
-            target: x86_64-apple-darwin
-            binary_name: soma-player
-            archive_name: soma-player-macos-x64.tar.gz
           - os: macos-latest
             target: aarch64-apple-darwin
             binary_name: soma-player
@@ -92,9 +80,6 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libasound2-dev pkg-config
-        if [ "${{ matrix.target }}" = "x86_64-unknown-linux-musl" ]; then
-          sudo apt-get install -y musl-tools
-        fi
 
     - name: Install system dependencies (macOS)
       if: matrix.os == 'macos-latest'
@@ -123,17 +108,10 @@ jobs:
     - name: Build binary
       run: cargo build --release --target ${{ matrix.target }}
 
-    - name: Create archive (Unix)
-      if: matrix.os != 'windows-latest'
+    - name: Create archive
       run: |
         cd target/${{ matrix.target }}/release
         tar -czf ../../../${{ matrix.archive_name }} ${{ matrix.binary_name }}
-
-    - name: Create archive (Windows)
-      if: matrix.os == 'windows-latest'
-      run: |
-        cd target/${{ matrix.target }}/release
-        7z a ../../../${{ matrix.archive_name }} ${{ matrix.binary_name }}
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
