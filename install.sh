@@ -188,7 +188,5 @@ main() {
     fi
 }
 
-# Run main function
-if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
-    main "$@"
-fi
+# Run main function automatically
+main "$@"
