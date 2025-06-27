@@ -103,19 +103,19 @@ jobs:
         echo "No additional dependencies needed for macOS"
 
     - name: Cache cargo registry
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cargo/registry
         key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
 
     - name: Cache cargo index
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cargo/git
         key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
 
     - name: Cache cargo build
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: target
         key: ${{ runner.os }}-cargo-build-target-${{ matrix.target }}-${{ hashFiles('**/Cargo.lock') }}
@@ -136,7 +136,7 @@ jobs:
         7z a ../../../${{ matrix.archive_name }} ${{ matrix.binary_name }}
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.archive_name }}
         path: ${{ matrix.archive_name }}
@@ -149,10 +149,16 @@ jobs:
     
     steps:
     - name: Download all artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+
+    - name: Move artifacts to root
+      run: |
+        find artifacts -name "*.tar.gz" -o -name "*.zip" | xargs -I {} mv {} .
 
     - name: Create Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: |
           **/*.tar.gz
