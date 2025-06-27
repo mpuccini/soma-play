@@ -11,7 +11,6 @@ use ratatui::{
     backend::CrosstermBackend,
     Terminal,
 };
-use tracing;
 
 use soma_player::{
     api::fetch_channels,
@@ -55,7 +54,9 @@ async fn play_session_tui(
     };
     
     let mut last_update = std::time::Instant::now();
-    let result = loop {
+    
+    
+    loop {
         // Update display
         if last_update.elapsed() >= std::time::Duration::from_millis(100) {
             // Update spectrum visualizer based on current state
@@ -147,9 +148,7 @@ async fn play_session_tui(
         }
         
         tokio::time::sleep(std::time::Duration::from_millis(10)).await;
-    };
-    
-    result
+    }
 }
 
 #[tokio::main]

@@ -97,8 +97,7 @@ fn clean_old_logs(log_dir: &PathBuf, max_files: usize) -> Result<(), Box<dyn std
         .filter_map(|entry| entry.ok())
         .filter(|entry| {
             entry.path().extension()
-                .and_then(|ext| ext.to_str())
-                .map_or(false, |ext| ext == "log")
+                .and_then(|ext| ext.to_str()) == Some("log")
         })
         .collect();
 
