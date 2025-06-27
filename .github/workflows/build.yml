@@ -10,10 +10,10 @@ on:
 permissions:
   contents: write
   actions: read
-  id-token: write
   packages: write
-  pull-requests: read
-  statuses: write
+  pull-requests: write
+  issues: write
+  deployments: write
 
 env:
   CARGO_TERM_COLOR: always
@@ -116,48 +116,6 @@ jobs:
     - name: Build binary
       run: cargo build --release --target ${{ matrix.target }}
 
-    - name: Generate SBOM
-      if: matrix.os == 'ubuntu-latest' && matrix.target == 'x86_64-unknown-linux-gnu'
-      run: |
-        # Install cargo-cyclonedx for SBOM generation
-        cargo install cargo-cyclonedx
-        
-        # Generate SBOM in multiple formats (correct syntax)
-        echo "🔄 Generating JSON SBOM..."
-        cargo cyclonedx --format json > sbom.json
-        
-        echo "🔄 Generating XML SBOM..."
-        cargo cyclonedx --format xml > sbom.xml
-        
-        # Generate dependency tree with validation
-        echo "📋 Generating dependency tree..."
-        cargo tree > dependencies.txt
-        
-        # Validate files were created and are not empty
-        echo "🔍 Validating generated files..."
-        for file in sbom.json sbom.xml dependencies.txt; do
-          if [ -f "$file" ] && [ -s "$file" ]; then
-            echo "✅ $file: $(wc -c < "$file") bytes"
-          else
-            echo "❌ $file: Missing or empty!"
-            # Create a minimal file to prevent upload errors
-            echo "# Error: $file generation failed" > "$file"
-          fi
-        done
-        
-        # Show file sizes for debugging
-        ls -la sbom.json sbom.xml dependencies.txt
-
-    - name: Upload SBOM artifacts
-      if: matrix.os == 'ubuntu-latest' && matrix.target == 'x86_64-unknown-linux-gnu'
-      uses: actions/upload-artifact@v4
-      with:
-        name: sbom-files
-        path: |
-          sbom.json
-          sbom.xml
-          dependencies.txt
-
     - name: Create archive
       run: |
         cd target/${{ matrix.target }}/release
@@ -194,37 +152,12 @@ jobs:
         find artifacts -type f \( -name "*.tar.gz" -o -name "*.zip" \) -exec mv {} . \;
 
     - name: List files for debugging
-      run: ls -la
-
-    - name: Move SBOM files
-      run: |
-        if [ -d "artifacts/sbom-files" ]; then
-          mv artifacts/sbom-files/* .
-          
-          # Validate SBOM files before upload
-          echo "🔍 Validating SBOM files for upload..."
-          for file in sbom.json sbom.xml dependencies.txt; do
-            if [ -f "$file" ]; then
-              size=$(wc -c < "$file")
-              echo "$file: $size bytes"
-              if [ "$size" -eq 0 ]; then
-                echo "⚠️ $file is empty, removing from upload"
-                rm "$file"
-              fi
-            else
-              echo "⚠️ $file not found"
-            fi
-          done
-        fi
+      run: ls -la *.tar.gz
 
     - name: Create Release
       uses: softprops/action-gh-release@v2.0.8
       with:
-        files: |
-          *.tar.gz
-          sbom.json
-          sbom.xml
-          dependencies.txt
+        files: "*.tar.gz"
         draft: false
         prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') || contains(github.ref, 'rc') }}
         generate_release_notes: true
