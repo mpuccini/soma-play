@@ -305,14 +305,2768 @@ sudo cp target/release/soma-player /usr/local/bin/
 </code></pre>
 <p>This will automatically download and install the latest version.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="usage"><a class="header" href="#usage">Usage</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
+<p>This guide covers how to use SomaFM Player effectively.</p>
+<h2 id="first-run"><a class="header" href="#first-run">First Run</a></h2>
+<p>When you first run <code>soma-player</code>, you'll see the channel selection screen:</p>
+<pre><code class="language-bash">soma-player
+</code></pre>
+<p>The interface will show:</p>
+<ul>
+<li>A list of available SomaFM channels</li>
+<li>Channel descriptions and current listener counts</li>
+<li>Navigation instructions at the bottom</li>
+</ul>
+<h2 id="basic-controls"><a class="header" href="#basic-controls">Basic Controls</a></h2>
+<h3 id="channel-selection-screen"><a class="header" href="#channel-selection-screen">Channel Selection Screen</a></h3>
+<ul>
+<li><strong>↑/↓ Arrow Keys</strong> - Navigate through channels</li>
+<li><strong>Enter</strong> - Select and start playing a channel</li>
+<li><strong>Q</strong> - Quit the application</li>
+</ul>
+<h3 id="playing-mode"><a class="header" href="#playing-mode">Playing Mode</a></h3>
+<p>Once a channel is selected and playing:</p>
+<ul>
+<li><strong>C</strong> - Change channel (opens overlay)</li>
+<li><strong>P</strong> - Pause/Resume playback</li>
+<li><strong>+/=</strong> - Increase volume by 5%</li>
+<li><strong>-/_</strong> - Decrease volume by 5%</li>
+<li><strong>Q/Esc</strong> - Quit application</li>
+</ul>
+<h3 id="channel-selection-overlay"><a class="header" href="#channel-selection-overlay">Channel Selection Overlay</a></h3>
+<p>While music is playing, press <strong>C</strong> to open the channel selection overlay:</p>
+<ul>
+<li><strong>↑/↓ Arrow Keys</strong> - Navigate channels</li>
+<li><strong>Enter</strong> - Switch to selected channel</li>
+<li><strong>Esc</strong> - Cancel and return to playing mode</li>
+<li><strong>Q</strong> - Quit application</li>
+</ul>
+<h2 id="interface-elements"><a class="header" href="#interface-elements">Interface Elements</a></h2>
+<h3 id="main-display"><a class="header" href="#main-display">Main Display</a></h3>
+<p>The playing interface shows:</p>
+<ul>
+<li><strong>Current Channel</strong> - Name and description</li>
+<li><strong>Now Playing</strong> - Artist and track information (when available)</li>
+<li><strong>Volume Level</strong> - Current volume percentage</li>
+<li><strong>Spectrum Visualizer</strong> - Real-time frequency visualization</li>
+<li><strong>Controls</strong> - Available keyboard shortcuts</li>
+</ul>
+<h3 id="spectrum-visualizer"><a class="header" href="#spectrum-visualizer">Spectrum Visualizer</a></h3>
+<p>The built-in spectrum visualizer features:</p>
+<ul>
+<li><strong>Real-time Animation</strong> - Responds to music frequency data</li>
+<li><strong>Auto-scaling</strong> - Adapts to your terminal size</li>
+<li><strong>Color Gradient</strong> - Low frequencies (blue) to high frequencies (red)</li>
+<li><strong>Smart Pausing</strong> - Stops animating when playback is paused</li>
+</ul>
+<h2 id="volume-control"><a class="header" href="#volume-control">Volume Control</a></h2>
+<p>Volume can be adjusted in 5% increments:</p>
+<ul>
+<li><strong>Range</strong>: 0% to 100%</li>
+<li><strong>Default</strong>: 50%</li>
+<li><strong>Persistence</strong>: Volume settings are automatically saved</li>
+<li><strong>Instant</strong>: Changes apply immediately</li>
+</ul>
+<h2 id="popular-channels"><a class="header" href="#popular-channels">Popular Channels</a></h2>
+<p>Some recommended SomaFM channels to try:</p>
+<ul>
+<li><strong>Groove Salad</strong> - Ambient/downtempo perfect for work</li>
+<li><strong>Secret Agent</strong> - Spy jazz and lounge music</li>
+<li><strong>Lush</strong> - Lush, gorgeous vocals</li>
+<li><strong>Drone Zone</strong> - Ambient space music for deep listening</li>
+<li><strong>Beat Blender</strong> - Electronic music</li>
+</ul>
+<h2 id="tips-for-best-experience"><a class="header" href="#tips-for-best-experience">Tips for Best Experience</a></h2>
+<ol>
+<li><strong>Terminal Size</strong>: Use a terminal window at least 80x24 for optimal display</li>
+<li><strong>Audio Quality</strong>: Ensure your system audio is properly configured</li>
+<li><strong>Network</strong>: Stable internet connection recommended for uninterrupted streaming</li>
+<li><strong>Colors</strong>: Enable 256-color support in your terminal for best visuals</li>
+</ol>
+<h2 id="keyboard-shortcuts-quick-reference"><a class="header" href="#keyboard-shortcuts-quick-reference">Keyboard Shortcuts Quick Reference</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Key</th><th>Action</th></tr></thead><tbody>
+<tr><td>↑/↓</td><td>Navigate channels</td></tr>
+<tr><td>Enter</td><td>Select/Switch channel</td></tr>
+<tr><td>C</td><td>Open channel selector</td></tr>
+<tr><td>P</td><td>Pause/Resume</td></tr>
+<tr><td>+/=</td><td>Volume up</td></tr>
+<tr><td>-/_</td><td>Volume down</td></tr>
+<tr><td>Q/Esc</td><td>Quit</td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
+<p>SomaFM Player uses a TOML configuration file to store settings and preferences.</p>
+<h2 id="configuration-file-location"><a class="header" href="#configuration-file-location">Configuration File Location</a></h2>
+<p>The configuration file is automatically created at:</p>
+<pre><code>~/.config/soma-player/config.toml
+</code></pre>
+<p>On different systems:</p>
+<ul>
+<li><strong>Linux</strong>: <code>~/.config/soma-player/config.toml</code></li>
+<li><strong>macOS</strong>: <code>~/.config/soma-player/config.toml</code></li>
+<li><strong>Windows</strong>: <code>%APPDATA%\soma-player\config.toml</code></li>
+</ul>
+<h2 id="default-configuration"><a class="header" href="#default-configuration">Default Configuration</a></h2>
+<p>When you first run the application, it creates a default configuration:</p>
+<pre><code class="language-toml">last_channel_id = ""
+volume = 50
+auto_start = false
+</code></pre>
+<h2 id="configuration-options"><a class="header" href="#configuration-options">Configuration Options</a></h2>
+<h3 id="last_channel_id"><a class="header" href="#last_channel_id"><code>last_channel_id</code></a></h3>
+<ul>
+<li><strong>Type</strong>: String</li>
+<li><strong>Default</strong>: <code>""</code> (empty)</li>
+<li><strong>Description</strong>: ID of the last played channel</li>
+<li><strong>Auto-saved</strong>: Yes, updated automatically when you change channels</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre><code class="language-toml">last_channel_id = "groovesalad"
+</code></pre>
+<h3 id="volume"><a class="header" href="#volume"><code>volume</code></a></h3>
+<ul>
+<li><strong>Type</strong>: Integer</li>
+<li><strong>Range</strong>: 0-100</li>
+<li><strong>Default</strong>: 50</li>
+<li><strong>Description</strong>: Audio volume level as a percentage</li>
+<li><strong>Auto-saved</strong>: Yes, updated when you adjust volume with +/- keys</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre><code class="language-toml">volume = 75
+</code></pre>
+<h3 id="auto_start"><a class="header" href="#auto_start"><code>auto_start</code></a></h3>
+<ul>
+<li><strong>Type</strong>: Boolean</li>
+<li><strong>Default</strong>: <code>false</code></li>
+<li><strong>Description</strong>: Skip channel selection and automatically play the last channel</li>
+<li><strong>Behavior</strong>:
+<ul>
+<li><code>true</code>: Starts playing <code>last_channel_id</code> immediately</li>
+<li><code>false</code>: Shows channel selection screen</li>
+</ul>
+</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre><code class="language-toml">auto_start = true
+</code></pre>
+<h2 id="complete-example-configuration"><a class="header" href="#complete-example-configuration">Complete Example Configuration</a></h2>
+<pre><code class="language-toml"># Last played channel (auto-saved)
+last_channel_id = "groovesalad"
+
+# Volume level (0-100, auto-saved)
+volume = 75
+
+# Auto-start last channel on startup
+auto_start = false
+</code></pre>
+<h2 id="logging-configuration"><a class="header" href="#logging-configuration">Logging Configuration</a></h2>
+<p>Logging behavior can be controlled via environment variables:</p>
+<h3 id="log-levels"><a class="header" href="#log-levels">Log Levels</a></h3>
+<p>Set the <code>RUST_LOG</code> environment variable:</p>
+<pre><code class="language-bash"># Debug level (very verbose)
+RUST_LOG=debug soma-player
+
+# Info level (default)
+RUST_LOG=info soma-player
+
+# Warning level (minimal logging)
+RUST_LOG=warn soma-player
+</code></pre>
+<h3 id="log-files"><a class="header" href="#log-files">Log Files</a></h3>
+<p>Log files are automatically created at:</p>
+<pre><code>~/.config/soma-player/logs/soma-player.log
+</code></pre>
+<p>Features:</p>
+<ul>
+<li><strong>Daily rotation</strong>: New log file each day</li>
+<li><strong>Automatic cleanup</strong>: Old logs are removed</li>
+<li><strong>Size management</strong>: Prevents excessive disk usage</li>
+</ul>
+<h2 id="manual-configuration"><a class="header" href="#manual-configuration">Manual Configuration</a></h2>
+<p>You can manually edit the configuration file while the application is not running:</p>
+<ol>
+<li><strong>Stop the application</strong> (if running)</li>
+<li><strong>Edit the file</strong>:
+<pre><code class="language-bash">nano ~/.config/soma-player/config.toml
+</code></pre>
+</li>
+<li><strong>Save and restart</strong> the application</li>
+</ol>
+<h2 id="troubleshooting-configuration"><a class="header" href="#troubleshooting-configuration">Troubleshooting Configuration</a></h2>
+<h3 id="configuration-not-saving"><a class="header" href="#configuration-not-saving">Configuration Not Saving</a></h3>
+<ul>
+<li>Check file permissions for <code>~/.config/soma-player/</code></li>
+<li>Ensure the directory is writable</li>
+<li>Look for error messages in the logs</li>
+</ul>
+<h3 id="configuration-file-corrupted"><a class="header" href="#configuration-file-corrupted">Configuration File Corrupted</a></h3>
+<p>If the configuration file becomes corrupted:</p>
+<ol>
+<li><strong>Stop the application</strong></li>
+<li><strong>Remove the config file</strong>:
+<pre><code class="language-bash">rm ~/.config/soma-player/config.toml
+</code></pre>
+</li>
+<li><strong>Restart the application</strong> - it will create a new default configuration</li>
+</ol>
+<h3 id="reset-to-defaults"><a class="header" href="#reset-to-defaults">Reset to Defaults</a></h3>
+<p>To reset all settings to defaults:</p>
+<pre><code class="language-bash"># Remove the entire configuration directory
+rm -rf ~/.config/soma-player/
+
+# Restart the application
+soma-player
+</code></pre>
+<h2 id="advanced-configuration"><a class="header" href="#advanced-configuration">Advanced Configuration</a></h2>
+<h3 id="multiple-profiles"><a class="header" href="#multiple-profiles">Multiple Profiles</a></h3>
+<p>While not built-in, you can use different config directories:</p>
+<pre><code class="language-bash"># Use a custom config directory
+XDG_CONFIG_HOME=/path/to/custom/config soma-player
+</code></pre>
+<h3 id="system-wide-configuration"><a class="header" href="#system-wide-configuration">System-wide Configuration</a></h3>
+<p>For system-wide defaults, you could:</p>
+<ol>
+<li>Create a template configuration</li>
+<li>Copy it to user directories as needed</li>
+<li>Use deployment scripts for multiple users</li>
+</ol>
+<h2 id="configuration-schema"><a class="header" href="#configuration-schema">Configuration Schema</a></h2>
+<p>The configuration follows this schema:</p>
+<pre><code class="language-toml"># String: Channel ID from SomaFM API
+last_channel_id = "string"
+
+# Integer: Volume level 0-100
+volume = 50
+
+# Boolean: Auto-start behavior
+auto_start = false
+</code></pre>
+<h2 id="future-configuration-options"><a class="header" href="#future-configuration-options">Future Configuration Options</a></h2>
+<p>Planned configuration options for future releases:</p>
+<ul>
+<li><code>theme</code> - Color theme selection</li>
+<li><code>keybindings</code> - Custom keyboard shortcuts</li>
+<li><code>network_timeout</code> - Connection timeout settings</li>
+<li><code>retry_attempts</code> - Network retry configuration</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h1>
+<p>Common issues and solutions for SomaFM Player.</p>
+<h2 id="installation-issues"><a class="header" href="#installation-issues">Installation Issues</a></h2>
+<h3 id="binary-not-found"><a class="header" href="#binary-not-found">Binary Not Found</a></h3>
+<p><strong>Problem</strong>: <code>soma-player: command not found</code></p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>
+<p><strong>Check PATH</strong>: Ensure <code>~/.local/bin</code> is in your PATH</p>
+<pre><code class="language-bash">echo $PATH | grep -o ~/.local/bin
+</code></pre>
+</li>
+<li>
+<p><strong>Add to PATH</strong> (if missing):</p>
+<pre><code class="language-bash">echo 'export PATH="$HOME/.local/bin:$PATH"' &gt;&gt; ~/.bashrc
+source ~/.bashrc
+</code></pre>
+</li>
+<li>
+<p><strong>Verify installation</strong>:</p>
+<pre><code class="language-bash">ls -la ~/.local/bin/soma-player
+</code></pre>
+</li>
+</ol>
+<h3 id="permission-denied"><a class="header" href="#permission-denied">Permission Denied</a></h3>
+<p><strong>Problem</strong>: <code>Permission denied</code> when running</p>
+<p><strong>Solution</strong>:</p>
+<pre><code class="language-bash">chmod +x ~/.local/bin/soma-player
+</code></pre>
+<h3 id="audio-dependencies-linux"><a class="header" href="#audio-dependencies-linux">Audio Dependencies (Linux)</a></h3>
+<p><strong>Problem</strong>: Audio playback fails on Linux</p>
+<p><strong>Solutions</strong>:</p>
+<pre><code class="language-bash"># Ubuntu/Debian
+sudo apt-get install libasound2-dev
+
+# Fedora/CentOS/RHEL
+sudo dnf install alsa-lib-devel
+
+# Arch Linux
+sudo pacman -S alsa-lib
+</code></pre>
+<h2 id="playback-issues"><a class="header" href="#playback-issues">Playback Issues</a></h2>
+<h3 id="no-audio-output"><a class="header" href="#no-audio-output">No Audio Output</a></h3>
+<p><strong>Symptoms</strong>: Player starts but no sound</p>
+<p><strong>Debugging Steps</strong>:</p>
+<ol>
+<li>
+<p><strong>Check system audio</strong>:</p>
+<pre><code class="language-bash"># Test system audio
+speaker-test -t sine -f 1000 -l 1
+</code></pre>
+</li>
+<li>
+<p><strong>Check volume levels</strong>:</p>
+<ul>
+<li>System volume is not muted</li>
+<li>Player volume is above 0%</li>
+</ul>
+</li>
+<li>
+<p><strong>Audio device selection</strong>:</p>
+<ul>
+<li>Ensure correct audio output device is selected</li>
+<li>Try switching audio devices in system settings</li>
+</ul>
+</li>
+</ol>
+<h3 id="stream-connection-fails"><a class="header" href="#stream-connection-fails">Stream Connection Fails</a></h3>
+<p><strong>Symptoms</strong>: "Failed to connect to stream"</p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>
+<p><strong>Check internet connection</strong>:</p>
+<pre><code class="language-bash">ping somafm.com
+</code></pre>
+</li>
+<li>
+<p><strong>Try different channel</strong>: Some channels may be temporarily unavailable</p>
+</li>
+<li>
+<p><strong>Check firewall</strong>: Ensure outbound HTTP connections are allowed</p>
+</li>
+<li>
+<p><strong>Restart application</strong>: Connection issues may be temporary</p>
+</li>
+</ol>
+<h3 id="stuttering-audio"><a class="header" href="#stuttering-audio">Stuttering Audio</a></h3>
+<p><strong>Symptoms</strong>: Audio cuts out or stutters</p>
+<p><strong>Causes &amp; Solutions</strong>:</p>
+<ol>
+<li><strong>Network issues</strong>: Check internet stability</li>
+<li><strong>High CPU usage</strong>: Close other applications</li>
+<li><strong>Audio buffer issues</strong>: Restart the application</li>
+<li><strong>System audio driver</strong>: Update audio drivers</li>
+</ol>
+<h2 id="interface-issues"><a class="header" href="#interface-issues">Interface Issues</a></h2>
+<h3 id="display-problems"><a class="header" href="#display-problems">Display Problems</a></h3>
+<p><strong>Problem</strong>: Interface looks corrupted or misaligned</p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>
+<p><strong>Terminal size</strong>: Ensure terminal is at least 80x24</p>
+<pre><code class="language-bash">resize -s 24 80
+</code></pre>
+</li>
+<li>
+<p><strong>Terminal compatibility</strong>: Use a modern terminal emulator</p>
+<ul>
+<li>✅ Recommended: Alacritty, Kitty, iTerm2, Windows Terminal</li>
+<li>⚠️ May have issues: Old terminals, basic consoles</li>
+</ul>
+</li>
+<li>
+<p><strong>Color support</strong>: Enable 256-color support</p>
+<pre><code class="language-bash">echo $TERM  # Should show something like xterm-256color
+</code></pre>
+</li>
+</ol>
+<h3 id="spectrum-visualizer-issues"><a class="header" href="#spectrum-visualizer-issues">Spectrum Visualizer Issues</a></h3>
+<p><strong>Problem</strong>: Visualizer not showing or appears static</p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li><strong>Terminal size</strong>: Ensure sufficient space for visualizer</li>
+<li><strong>Color support</strong>: Enable color in terminal</li>
+<li><strong>Refresh rate</strong>: Try resizing terminal window</li>
+</ol>
+<h3 id="keyboard-input-not-working"><a class="header" href="#keyboard-input-not-working">Keyboard Input Not Working</a></h3>
+<p><strong>Problem</strong>: Keys don't respond</p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li><strong>Terminal focus</strong>: Ensure terminal window has focus</li>
+<li><strong>Input capture</strong>: Some terminals may capture certain keys</li>
+<li><strong>Restart</strong>: Try restarting the application</li>
+</ol>
+<h2 id="configuration-issues"><a class="header" href="#configuration-issues">Configuration Issues</a></h2>
+<h3 id="settings-not-saving"><a class="header" href="#settings-not-saving">Settings Not Saving</a></h3>
+<p><strong>Problem</strong>: Volume/channel changes don't persist</p>
+<p><strong>Debugging</strong>:</p>
+<ol>
+<li>
+<p><strong>Check permissions</strong>:</p>
+<pre><code class="language-bash">ls -la ~/.config/soma-player/
+</code></pre>
+</li>
+<li>
+<p><strong>Create directory</strong> (if missing):</p>
+<pre><code class="language-bash">mkdir -p ~/.config/soma-player
+</code></pre>
+</li>
+<li>
+<p><strong>Check disk space</strong>:</p>
+<pre><code class="language-bash">df -h ~/.config
+</code></pre>
+</li>
+</ol>
+<h3 id="configuration-file-corrupted-1"><a class="header" href="#configuration-file-corrupted-1">Configuration File Corrupted</a></h3>
+<p><strong>Problem</strong>: Application fails to start with config error</p>
+<p><strong>Solution</strong>:</p>
+<pre><code class="language-bash"># Backup existing config
+mv ~/.config/soma-player/config.toml ~/.config/soma-player/config.toml.backup
+
+# Restart application (creates new default config)
+soma-player
+</code></pre>
+<h2 id="performance-issues"><a class="header" href="#performance-issues">Performance Issues</a></h2>
+<h3 id="high-cpu-usage"><a class="header" href="#high-cpu-usage">High CPU Usage</a></h3>
+<p><strong>Symptoms</strong>: System becomes slow while playing</p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>
+<p><strong>Check running processes</strong>:</p>
+<pre><code class="language-bash">top | grep soma-player
+</code></pre>
+</li>
+<li>
+<p><strong>Reduce terminal effects</strong>: Use simpler terminal themes</p>
+</li>
+<li>
+<p><strong>Update system</strong>: Ensure OS and drivers are current</p>
+</li>
+</ol>
+<h3 id="memory-usage"><a class="header" href="#memory-usage">Memory Usage</a></h3>
+<p><strong>Symptoms</strong>: Memory usage grows over time</p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li><strong>Restart periodically</strong>: Long-running sessions may accumulate memory</li>
+<li><strong>Check logs</strong>: Look for memory-related errors in logs</li>
+<li><strong>Update</strong>: Ensure you're running the latest version</li>
+</ol>
+<h2 id="network-issues"><a class="header" href="#network-issues">Network Issues</a></h2>
+<h3 id="proxycorporate-network"><a class="header" href="#proxycorporate-network">Proxy/Corporate Network</a></h3>
+<p><strong>Problem</strong>: Cannot connect through corporate proxy</p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>
+<p><strong>HTTP proxy</strong>: Set proxy environment variables</p>
+<pre><code class="language-bash">export http_proxy=http://proxy.company.com:8080
+export https_proxy=http://proxy.company.com:8080
+</code></pre>
+</li>
+<li>
+<p><strong>Direct connection</strong>: Try from personal network to isolate issue</p>
+</li>
+</ol>
+<h3 id="firewall-blocking"><a class="header" href="#firewall-blocking">Firewall Blocking</a></h3>
+<p><strong>Problem</strong>: Connections blocked by firewall</p>
+<p><strong>Required access</strong>:</p>
+<ul>
+<li><strong>Outbound HTTP</strong> (port 80)</li>
+<li><strong>Outbound HTTPS</strong> (port 443)</li>
+<li><strong>Audio streams</strong> (various ports)</li>
+</ul>
+<h2 id="logging-and-debugging"><a class="header" href="#logging-and-debugging">Logging and Debugging</a></h2>
+<h3 id="enable-debug-logging"><a class="header" href="#enable-debug-logging">Enable Debug Logging</a></h3>
+<pre><code class="language-bash">RUST_LOG=debug soma-player
+</code></pre>
+<h3 id="check-log-files"><a class="header" href="#check-log-files">Check Log Files</a></h3>
+<pre><code class="language-bash"># View recent logs
+tail -f ~/.config/soma-player/logs/soma-player.log
+
+# Search for errors
+grep -i error ~/.config/soma-player/logs/soma-player.log
+</code></pre>
+<h3 id="collect-debug-information"><a class="header" href="#collect-debug-information">Collect Debug Information</a></h3>
+<p>For bug reports, collect:</p>
+<ol>
+<li>
+<p><strong>Version information</strong>:</p>
+<pre><code class="language-bash">soma-player --version
+</code></pre>
+</li>
+<li>
+<p><strong>System information</strong>:</p>
+<pre><code class="language-bash">uname -a
+</code></pre>
+</li>
+<li>
+<p><strong>Terminal information</strong>:</p>
+<pre><code class="language-bash">echo $TERM
+tput colors
+</code></pre>
+</li>
+<li>
+<p><strong>Log excerpt</strong> (relevant error messages)</p>
+</li>
+</ol>
+<h2 id="getting-help"><a class="header" href="#getting-help">Getting Help</a></h2>
+<h3 id="before-reporting-issues"><a class="header" href="#before-reporting-issues">Before Reporting Issues</a></h3>
+<ol>
+<li><strong>Check this troubleshooting guide</strong></li>
+<li><strong>Search existing issues</strong> on GitHub</li>
+<li><strong>Try with debug logging</strong> enabled</li>
+<li><strong>Test basic functionality</strong> (can you run <code>soma-player --version</code>?)</li>
+</ol>
+<h3 id="reporting-bugs"><a class="header" href="#reporting-bugs">Reporting Bugs</a></h3>
+<p>Include this information:</p>
+<ul>
+<li><strong>Exact error message</strong></li>
+<li><strong>Steps to reproduce</strong></li>
+<li><strong>System information</strong> (OS, terminal)</li>
+<li><strong>Log files</strong> (with debug enabled)</li>
+<li><strong>Expected vs actual behavior</strong></li>
+</ul>
+<h3 id="community-support"><a class="header" href="#community-support">Community Support</a></h3>
+<ul>
+<li><strong>GitHub Issues</strong>: Technical problems and bugs</li>
+<li><strong>GitHub Discussions</strong>: General questions and usage help</li>
+</ul>
+<h2 id="quick-fixes"><a class="header" href="#quick-fixes">Quick Fixes</a></h2>
+<h3 id="complete-reset"><a class="header" href="#complete-reset">Complete Reset</a></h3>
+<p>If all else fails, completely reset the application:</p>
+<pre><code class="language-bash"># Stop the application
+# Remove all application data
+rm -rf ~/.config/soma-player
+
+# Reinstall (if using install script)
+curl -sSL https://raw.githubusercontent.com/mpuccini/soma-play/main/install.sh | bash
+
+# Or rebuild from source
+git clone https://github.com/mpuccini/soma-play.git
+cd soma-play
+cargo build --release
+cp target/release/soma-player ~/.local/bin/
+</code></pre>
+<h3 id="emergency-commands"><a class="header" href="#emergency-commands">Emergency Commands</a></h3>
+<p>If the interface becomes unresponsive:</p>
+<ul>
+<li><strong>Ctrl+C</strong>: Force quit (may leave terminal in bad state)</li>
+<li><strong>Ctrl+Z</strong>: Suspend (then <code>fg</code> to resume or <code>kill %1</code> to terminate)</li>
+<li><strong>Close terminal</strong>: Last resort</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="architecture"><a class="header" href="#architecture">Architecture</a></h1>
+<p>Technical overview of SomaFM Player's internal structure and design.</p>
+<h2 id="project-structure"><a class="header" href="#project-structure">Project Structure</a></h2>
+<p>SomaFM Player follows a modular architecture with clear separation of concerns:</p>
+<pre><code>src/
+├── main.rs           # Application entry point and CLI handling
+├── lib.rs            # Module declarations and exports
+├── api/              # SomaFM API integration
+│   ├── mod.rs        # API module exports
+│   ├── client.rs     # HTTP client for SomaFM API
+│   └── channels.rs   # Channel data structures and parsing
+├── audio/            # Audio playback engine
+│   ├── mod.rs        # Audio module exports
+│   ├── player.rs     # Main audio player implementation
+│   ├── stream.rs     # Audio stream handling
+│   └── commands.rs   # Player command definitions
+├── config/           # Configuration management
+│   ├── mod.rs        # Config module exports
+│   ├── settings.rs   # Configuration data structures
+│   └── file.rs       # File I/O operations
+├── models/           # Data structures and types
+│   ├── mod.rs        # Models module exports
+│   ├── channel.rs    # Channel data model
+│   ├── player.rs     # Player state model
+│   ├── errors.rs     # Custom error types
+│   └── spectrum.rs   # Spectrum visualizer data
+└── ui/               # Terminal User Interface
+    ├── mod.rs        # UI module exports
+    ├── app.rs        # Main application state
+    ├── player.rs     # Player interface screen
+    ├── channels.rs   # Channel selection screen
+    └── spectrum.rs   # Spectrum visualizer widget
+</code></pre>
+<h2 id="core-components"><a class="header" href="#core-components">Core Components</a></h2>
+<h3 id="1-main-application-mainrs"><a class="header" href="#1-main-application-mainrs">1. Main Application (<code>main.rs</code>)</a></h3>
+<p><strong>Responsibilities:</strong></p>
+<ul>
+<li>Command-line argument parsing</li>
+<li>Logging initialization</li>
+<li>Error handling setup</li>
+<li>Application bootstrap</li>
+</ul>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>Early argument processing (--version, --help)</li>
+<li>Color error reporting with <code>color-eyre</code></li>
+<li>Structured logging with <code>tracing</code></li>
+</ul>
+<pre><pre class="playground"><code class="language-rust">// Simplified flow
+fn main() -&gt; Result&lt;()&gt; {
+    // 1. Parse CLI args
+    // 2. Setup logging
+    // 3. Load configuration
+    // 4. Initialize TUI
+    // 5. Run main loop
+}</code></pre></pre>
+<h3 id="2-api-layer-api"><a class="header" href="#2-api-layer-api">2. API Layer (<code>api/</code>)</a></h3>
+<p><strong>Purpose:</strong> Interface with SomaFM's public API and stream endpoints.</p>
+<h4 id="components"><a class="header" href="#components">Components:</a></h4>
+<ul>
+<li><strong><code>client.rs</code></strong>: HTTP client wrapper around <code>reqwest</code></li>
+<li><strong><code>channels.rs</code></strong>: Channel data parsing and caching</li>
+</ul>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>Async HTTP requests with retry logic</li>
+<li>Channel list caching</li>
+<li>ICY metadata parsing for "now playing" info</li>
+<li>Error handling for network issues</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct SomaClient {
+    client: reqwest::Client,
+    base_url: String,
+}
+
+impl SomaClient {
+    pub async fn get_channels() -&gt; Result&lt;Vec&lt;Channel&gt;&gt;;
+    pub async fn get_stream_url(channel_id: &amp;str) -&gt; Result&lt;String&gt;;
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="3-audio-engine-audio"><a class="header" href="#3-audio-engine-audio">3. Audio Engine (<code>audio/</code>)</a></h3>
+<p><strong>Purpose:</strong> Handle audio streaming and playback control.</p>
+<h4 id="components-1"><a class="header" href="#components-1">Components:</a></h4>
+<ul>
+<li><strong><code>player.rs</code></strong>: Main audio player using <code>rodio</code></li>
+<li><strong><code>stream.rs</code></strong>: Stream management and buffering</li>
+<li><strong><code>commands.rs</code></strong>: Command patterns for player control</li>
+</ul>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>Cross-platform audio output via <code>rodio</code></li>
+<li>Volume control with persistent settings</li>
+<li>Pause/resume functionality</li>
+<li>Stream reconnection handling</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum PlayerCommand {
+    Play(String),      // Stream URL
+    Pause,
+    Resume,
+    SetVolume(f32),
+    Stop,
+}
+
+pub struct AudioPlayer {
+    sink: Option&lt;rodio::Sink&gt;,
+    volume: f32,
+    state: PlayerState,
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="4-configuration-config"><a class="header" href="#4-configuration-config">4. Configuration (<code>config/</code>)</a></h3>
+<p><strong>Purpose:</strong> Manage application settings and persistence.</p>
+<h4 id="components-2"><a class="header" href="#components-2">Components:</a></h4>
+<ul>
+<li><strong><code>settings.rs</code></strong>: Configuration data structures</li>
+<li><strong><code>file.rs</code></strong>: TOML file I/O operations</li>
+</ul>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>TOML-based configuration</li>
+<li>Automatic directory creation</li>
+<li>Default value handling</li>
+<li>Type-safe configuration access</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct Config {
+    pub last_channel_id: Option&lt;String&gt;,
+    pub volume: u8,
+    pub auto_start: bool,
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="5-data-models-models"><a class="header" href="#5-data-models-models">5. Data Models (<code>models/</code>)</a></h3>
+<p><strong>Purpose:</strong> Define core data structures and business logic.</p>
+<h4 id="components-3"><a class="header" href="#components-3">Components:</a></h4>
+<ul>
+<li><strong><code>channel.rs</code></strong>: SomaFM channel representation</li>
+<li><strong><code>player.rs</code></strong>: Player state management</li>
+<li><strong><code>errors.rs</code></strong>: Custom error types with context</li>
+<li><strong><code>spectrum.rs</code></strong>: Spectrum analyzer data structures</li>
+</ul>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>Serde serialization support</li>
+<li>Rich error types with stack traces</li>
+<li>Type safety throughout the application</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Channel {
+    pub id: String,
+    pub title: String,
+    pub description: String,
+    pub listeners: u32,
+    pub genre: String,
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="6-user-interface-ui"><a class="header" href="#6-user-interface-ui">6. User Interface (<code>ui/</code>)</a></h3>
+<p><strong>Purpose:</strong> Terminal-based user interface using <code>ratatui</code>.</p>
+<h4 id="components-4"><a class="header" href="#components-4">Components:</a></h4>
+<ul>
+<li><strong><code>app.rs</code></strong>: Application state machine</li>
+<li><strong><code>player.rs</code></strong>: Main playback interface</li>
+<li><strong><code>channels.rs</code></strong>: Channel selection screens</li>
+<li><strong><code>spectrum.rs</code></strong>: Real-time spectrum visualizer</li>
+</ul>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li>Event-driven architecture</li>
+<li>Responsive layout system</li>
+<li>Real-time spectrum visualization</li>
+<li>Keyboard input handling</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum AppState {
+    ChannelSelection,
+    Playing,
+    ChannelOverlay,
+    Quitting,
+}
+
+pub struct App {
+    pub state: AppState,
+    pub channels: Vec&lt;Channel&gt;,
+    pub selected_channel: Option&lt;usize&gt;,
+    pub player_state: PlayerState,
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="data-flow"><a class="header" href="#data-flow">Data Flow</a></h2>
+<h3 id="application-startup"><a class="header" href="#application-startup">Application Startup</a></h3>
+<ol>
+<li><strong>CLI Parsing</strong> → Parse command-line arguments</li>
+<li><strong>Logging Setup</strong> → Initialize structured logging</li>
+<li><strong>Config Loading</strong> → Load/create configuration file</li>
+<li><strong>API Initialization</strong> → Fetch channel list from SomaFM</li>
+<li><strong>UI Startup</strong> → Initialize terminal interface</li>
+<li><strong>Event Loop</strong> → Start main application loop</li>
+</ol>
+<h3 id="channel-selection-flow"><a class="header" href="#channel-selection-flow">Channel Selection Flow</a></h3>
+<ol>
+<li><strong>User Input</strong> → Keyboard navigation</li>
+<li><strong>UI Update</strong> → Highlight selected channel</li>
+<li><strong>Channel Selection</strong> → User presses Enter</li>
+<li><strong>Stream Resolution</strong> → Get stream URL from API</li>
+<li><strong>Audio Playback</strong> → Start audio player</li>
+<li><strong>State Transition</strong> → Switch to playing mode</li>
+</ol>
+<h3 id="audio-playback-flow"><a class="header" href="#audio-playback-flow">Audio Playback Flow</a></h3>
+<ol>
+<li><strong>Stream Request</strong> → HTTP request to stream URL</li>
+<li><strong>Stream Decoding</strong> → Audio format detection and decoding</li>
+<li><strong>Audio Output</strong> → Platform-specific audio output</li>
+<li><strong>Metadata Parsing</strong> → Extract "now playing" information</li>
+<li><strong>UI Updates</strong> → Display current track info</li>
+<li><strong>Spectrum Analysis</strong> → Generate frequency data for visualizer</li>
+</ol>
+<h2 id="threading-model"><a class="header" href="#threading-model">Threading Model</a></h2>
+<h3 id="main-thread"><a class="header" href="#main-thread">Main Thread</a></h3>
+<ul>
+<li>UI rendering and event handling</li>
+<li>Configuration management</li>
+<li>Application state coordination</li>
+</ul>
+<h3 id="audio-thread-via-rodio"><a class="header" href="#audio-thread-via-rodio">Audio Thread (via <code>rodio</code>)</a></h3>
+<ul>
+<li>Audio decoding and playback</li>
+<li>Stream buffering</li>
+<li>Volume control</li>
+</ul>
+<h3 id="network-thread-via-tokio"><a class="header" href="#network-thread-via-tokio">Network Thread (via <code>tokio</code>)</a></h3>
+<ul>
+<li>HTTP requests to SomaFM API</li>
+<li>Stream data fetching</li>
+<li>Metadata updates</li>
+</ul>
+<h2 id="error-handling-strategy"><a class="header" href="#error-handling-strategy">Error Handling Strategy</a></h2>
+<h3 id="error-types"><a class="header" href="#error-types">Error Types</a></h3>
+<ul>
+<li><strong>Network Errors</strong>: API timeouts, connection failures</li>
+<li><strong>Audio Errors</strong>: Codec issues, hardware problems</li>
+<li><strong>Configuration Errors</strong>: File I/O, parsing failures</li>
+<li><strong>UI Errors</strong>: Terminal capabilities, rendering issues</li>
+</ul>
+<h3 id="error-propagation"><a class="header" href="#error-propagation">Error Propagation</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Custom Result type with context
+pub type Result&lt;T&gt; = std::result::Result&lt;T, SomaError&gt;;
+
+// Rich error context
+#[derive(Debug, thiserror::Error)]
+pub enum SomaError {
+    #[error("Network error: {0}")]
+    Network(#[from] reqwest::Error),
+    
+    #[error("Audio error: {0}")]
+    Audio(String),
+    
+    #[error("Configuration error: {0}")]
+    Config(#[from] toml::de::Error),
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="performance-considerations"><a class="header" href="#performance-considerations">Performance Considerations</a></h2>
+<h3 id="memory-management"><a class="header" href="#memory-management">Memory Management</a></h3>
+<ul>
+<li><strong>Channel List Caching</strong>: Avoid repeated API calls</li>
+<li><strong>Audio Buffering</strong>: Optimal buffer sizes for smooth playback</li>
+<li><strong>UI Rendering</strong>: Efficient terminal updates</li>
+</ul>
+<h3 id="network-optimization"><a class="header" href="#network-optimization">Network Optimization</a></h3>
+<ul>
+<li><strong>Connection Reuse</strong>: HTTP client connection pooling</li>
+<li><strong>Retry Logic</strong>: Exponential backoff for failed requests</li>
+<li><strong>Stream Recovery</strong>: Automatic reconnection on network issues</li>
+</ul>
+<h3 id="cpu-usage"><a class="header" href="#cpu-usage">CPU Usage</a></h3>
+<ul>
+<li><strong>Spectrum Analysis</strong>: Optimized FFT calculations</li>
+<li><strong>UI Updates</strong>: Minimal redraws, only when necessary</li>
+<li><strong>Event Processing</strong>: Efficient input handling</li>
+</ul>
+<h2 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h2>
+<h3 id="core-dependencies"><a class="header" href="#core-dependencies">Core Dependencies</a></h3>
+<ul>
+<li><strong><code>ratatui</code></strong>: Terminal UI framework</li>
+<li><strong><code>rodio</code></strong>: Cross-platform audio playback</li>
+<li><strong><code>reqwest</code></strong>: HTTP client with async support</li>
+<li><strong><code>tokio</code></strong>: Async runtime</li>
+<li><strong><code>serde</code></strong>: Serialization framework</li>
+<li><strong><code>toml</code></strong>: Configuration file format</li>
+</ul>
+<h3 id="development-dependencies"><a class="header" href="#development-dependencies">Development Dependencies</a></h3>
+<ul>
+<li><strong><code>tracing</code></strong>: Structured logging</li>
+<li><strong><code>color-eyre</code></strong>: Enhanced error reporting</li>
+<li><strong><code>tempfile</code></strong>: Testing utilities</li>
+</ul>
+<h2 id="testing-strategy"><a class="header" href="#testing-strategy">Testing Strategy</a></h2>
+<h3 id="unit-tests"><a class="header" href="#unit-tests">Unit Tests</a></h3>
+<ul>
+<li>Configuration loading/saving</li>
+<li>Error type conversions</li>
+<li>Data model validation</li>
+<li>API response parsing</li>
+</ul>
+<h3 id="integration-tests"><a class="header" href="#integration-tests">Integration Tests</a></h3>
+<ul>
+<li>Audio playback scenarios</li>
+<li>UI state transitions</li>
+<li>Configuration persistence</li>
+<li>Network error handling</li>
+</ul>
+<h3 id="test-structure"><a class="header" href="#test-structure">Test Structure</a></h3>
+<pre><code>tests/
+├── integration/
+│   ├── config_tests.rs
+│   ├── audio_tests.rs
+│   └── ui_tests.rs
+└── common/
+    └── test_helpers.rs
+</code></pre>
+<h2 id="future-architecture-considerations"><a class="header" href="#future-architecture-considerations">Future Architecture Considerations</a></h2>
+<h3 id="planned-enhancements"><a class="header" href="#planned-enhancements">Planned Enhancements</a></h3>
+<ol>
+<li><strong>Plugin System</strong>: Extensible architecture for additional features</li>
+<li><strong>Themes Support</strong>: Customizable UI themes and colors</li>
+<li><strong>Keyboard Customization</strong>: User-defined keybindings</li>
+<li><strong>Multi-instance Support</strong>: Multiple concurrent streams</li>
+<li><strong>Remote Control</strong>: HTTP API for external control</li>
+</ol>
+<h3 id="scalability"><a class="header" href="#scalability">Scalability</a></h3>
+<ul>
+<li><strong>Modular Design</strong>: Easy to add new features</li>
+<li><strong>Clear Interfaces</strong>: Well-defined module boundaries</li>
+<li><strong>Minimal Coupling</strong>: Loose dependencies between components</li>
+<li><strong>Testable Code</strong>: Architecture supports comprehensive testing</li>
+</ul>
+<p>This architecture provides a solid foundation for a reliable, maintainable, and extensible audio streaming application.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="api-reference"><a class="header" href="#api-reference">API Reference</a></h1>
+<p>Developer reference for SomaFM Player's internal APIs and data structures.</p>
+<blockquote>
+<p><strong>Note</strong>: This page covers the internal Rust API. For the complete generated API documentation with full type information, see the <a href="../api/">API Documentation</a> section.</p>
+</blockquote>
+<h2 id="core-modules"><a class="header" href="#core-modules">Core Modules</a></h2>
+<h3 id="soma_playerconfig"><a class="header" href="#soma_playerconfig"><code>soma_player::config</code></a></h3>
+<p>Configuration management for persistent settings.</p>
+<h4 id="config"><a class="header" href="#config"><code>Config</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Config {
+    pub last_channel_id: Option&lt;String&gt;,
+    pub volume: u8,
+    pub auto_start: bool,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Methods:</strong></p>
+<ul>
+<li><code>Config::load() -&gt; Result&lt;Config&gt;</code> - Load configuration from file</li>
+<li><code>Config::save(&amp;self) -&gt; Result&lt;()&gt;</code> - Save configuration to file</li>
+<li><code>Config::default_path() -&gt; PathBuf</code> - Get default config file path</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use soma_player::config::Config;
+
+let mut config = Config::load()?;
+config.volume = 75;
+config.save()?;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="soma_playermodels"><a class="header" href="#soma_playermodels"><code>soma_player::models</code></a></h3>
+<p>Core data structures and types.</p>
+<h4 id="channel"><a class="header" href="#channel"><code>Channel</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Channel {
+    pub id: String,
+    pub title: String,
+    pub description: String,
+    pub listeners: u32,
+    pub genre: String,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Represents a SomaFM radio channel with metadata.</p>
+<h4 id="playerstate"><a class="header" href="#playerstate"><code>PlayerState</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum PlayerState {
+    Stopped,
+    Playing,
+    Paused,
+    Buffering,
+    Error(String),
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Current state of the audio player.</p>
+<h4 id="somaerror"><a class="header" href="#somaerror"><code>SomaError</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum SomaError {
+    Network(reqwest::Error),
+    Audio(String),
+    Config(toml::de::Error),
+    Io(std::io::Error),
+    Parse(String),
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Comprehensive error types with context information.</p>
+<h3 id="soma_playerapi"><a class="header" href="#soma_playerapi"><code>soma_player::api</code></a></h3>
+<p>SomaFM API integration and HTTP client.</p>
+<h4 id="somaclient"><a class="header" href="#somaclient"><code>SomaClient</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct SomaClient {
+    // Internal HTTP client
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Methods:</strong></p>
+<ul>
+<li><code>SomaClient::new() -&gt; Self</code> - Create new API client</li>
+<li><code>get_channels(&amp;self) -&gt; Result&lt;Vec&lt;Channel&gt;&gt;</code> - Fetch available channels</li>
+<li><code>get_stream_url(&amp;self, channel_id: &amp;str) -&gt; Result&lt;String&gt;</code> - Get stream URL</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use soma_player::api::SomaClient;
+
+let client = SomaClient::new();
+let channels = client.get_channels().await?;
+let stream_url = client.get_stream_url("groovesalad").await?;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="soma_playeraudio"><a class="header" href="#soma_playeraudio"><code>soma_player::audio</code></a></h3>
+<p>Audio playback engine and controls.</p>
+<h4 id="audioplayer"><a class="header" href="#audioplayer"><code>AudioPlayer</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct AudioPlayer {
+    // Audio sink and state
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Methods:</strong></p>
+<ul>
+<li><code>AudioPlayer::new() -&gt; Result&lt;Self&gt;</code> - Create new audio player</li>
+<li><code>play(&amp;mut self, url: String) -&gt; Result&lt;()&gt;</code> - Start playing stream</li>
+<li><code>pause(&amp;mut self) -&gt; Result&lt;()&gt;</code> - Pause playback</li>
+<li><code>resume(&amp;mut self) -&gt; Result&lt;()&gt;</code> - Resume playback</li>
+<li><code>set_volume(&amp;mut self, volume: f32) -&gt; Result&lt;()&gt;</code> - Set volume (0.0-1.0)</li>
+<li><code>stop(&amp;mut self) -&gt; Result&lt;()&gt;</code> - Stop playback</li>
+</ul>
+<h4 id="playercommand"><a class="header" href="#playercommand"><code>PlayerCommand</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum PlayerCommand {
+    Play(String),
+    Pause,
+    Resume,
+    SetVolume(f32),
+    Stop,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Commands for controlling audio playback.</p>
+<p><strong>Example:</strong></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use soma_player::audio::{AudioPlayer, PlayerCommand};
+
+let mut player = AudioPlayer::new()?;
+player.play("http://stream.url".to_string())?;
+player.set_volume(0.75)?;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="soma_playerui"><a class="header" href="#soma_playerui"><code>soma_player::ui</code></a></h3>
+<p>Terminal user interface components.</p>
+<h4 id="app"><a class="header" href="#app"><code>App</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct App {
+    pub state: AppState,
+    pub channels: Vec&lt;Channel&gt;,
+    pub selected_channel: Option&lt;usize&gt;,
+    // ... other fields
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Main application state container.</p>
+<h4 id="appstate"><a class="header" href="#appstate"><code>AppState</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum AppState {
+    ChannelSelection,
+    Playing,
+    ChannelOverlay,
+    Quitting,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Current UI state for the application.</p>
+<p><strong>Methods:</strong></p>
+<ul>
+<li><code>App::new(channels: Vec&lt;Channel&gt;) -&gt; Self</code> - Create new app instance</li>
+<li><code>handle_input(&amp;mut self, event: KeyEvent) -&gt; Result&lt;()&gt;</code> - Process keyboard input</li>
+<li><code>update(&amp;mut self) -&gt; Result&lt;()&gt;</code> - Update application state</li>
+<li><code>should_quit(&amp;self) -&gt; bool</code> - Check if app should exit</li>
+</ul>
+<h2 id="data-flow-apis"><a class="header" href="#data-flow-apis">Data Flow APIs</a></h2>
+<h3 id="configuration-flow"><a class="header" href="#configuration-flow">Configuration Flow</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Load configuration
+let config = Config::load().unwrap_or_default();
+
+// Use configuration
+if config.auto_start {
+    // Auto-start last channel
+}
+
+// Save changes
+config.volume = new_volume;
+config.save()?;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="channel-management"><a class="header" href="#channel-management">Channel Management</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Fetch channels from API
+let client = SomaClient::new();
+let channels = client.get_channels().await?;
+
+// Select channel
+let selected = &amp;channels[index];
+let stream_url = client.get_stream_url(&amp;selected.id).await?;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="audio-control"><a class="header" href="#audio-control">Audio Control</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Initialize player
+let mut player = AudioPlayer::new()?;
+
+// Control playback
+player.play(stream_url)?;
+player.set_volume(0.8)?;
+player.pause()?;
+player.resume()?;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="ui-event-handling"><a class="header" href="#ui-event-handling">UI Event Handling</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Create app
+let mut app = App::new(channels);
+
+// Main event loop
+loop {
+    if let Ok(event) = event::read() {
+        app.handle_input(event)?;
+        app.update()?;
+        
+        if app.should_quit() {
+            break;
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="error-handling"><a class="header" href="#error-handling">Error Handling</a></h2>
+<h3 id="result-types"><a class="header" href="#result-types">Result Types</a></h3>
+<p>All fallible operations return <code>Result&lt;T, SomaError&gt;</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub type Result&lt;T&gt; = std::result::Result&lt;T, SomaError&gt;;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="error-context"><a class="header" href="#error-context">Error Context</a></h3>
+<p>Errors include rich context information:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use soma_player::Result;
+
+fn example_function() -&gt; Result&lt;()&gt; {
+    config.load()
+        .map_err(|e| SomaError::Config(e))?;
+    Ok(())
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="error-conversion"><a class="header" href="#error-conversion">Error Conversion</a></h3>
+<p>Automatic conversion from standard error types:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl From&lt;std::io::Error&gt; for SomaError {
+    fn from(err: std::io::Error) -&gt; Self {
+        SomaError::Io(err)
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="async-patterns"><a class="header" href="#async-patterns">Async Patterns</a></h2>
+<h3 id="api-calls"><a class="header" href="#api-calls">API Calls</a></h3>
+<pre><pre class="playground"><code class="language-rust">use tokio;
+
+#[tokio::main]
+async fn main() -&gt; Result&lt;()&gt; {
+    let client = SomaClient::new();
+    let channels = client.get_channels().await?;
+    Ok(())
+}</code></pre></pre>
+<h3 id="non-blocking-operations"><a class="header" href="#non-blocking-operations">Non-blocking Operations</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Spawn background task for API calls
+let handle = tokio::spawn(async move {
+    client.get_channels().await
+});
+
+// Continue with UI work
+// ...
+
+// Get result when needed
+let channels = handle.await??;
+<span class="boring">}</span></code></pre></pre>
+<h2 id="testing-apis"><a class="header" href="#testing-apis">Testing APIs</a></h2>
+<h3 id="unit-testing"><a class="header" href="#unit-testing">Unit Testing</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[cfg(test)]
+mod tests {
+    use super::*;
+    use tempfile::tempdir;
+
+    #[test]
+    fn test_config_save_load() {
+        let dir = tempdir().unwrap();
+        let config_path = dir.path().join("config.toml");
+        
+        let config = Config {
+            volume: 75,
+            last_channel_id: Some("groovesalad".to_string()),
+            auto_start: true,
+        };
+        
+        config.save_to_path(&amp;config_path).unwrap();
+        let loaded = Config::load_from_path(&amp;config_path).unwrap();
+        
+        assert_eq!(config.volume, loaded.volume);
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="mock-objects"><a class="header" href="#mock-objects">Mock Objects</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Mock API client for testing
+pub struct MockSomaClient {
+    channels: Vec&lt;Channel&gt;,
+}
+
+impl MockSomaClient {
+    pub fn new(channels: Vec&lt;Channel&gt;) -&gt; Self {
+        Self { channels }
+    }
+}
+
+#[async_trait]
+impl ApiClient for MockSomaClient {
+    async fn get_channels(&amp;self) -&gt; Result&lt;Vec&lt;Channel&gt;&gt; {
+        Ok(self.channels.clone())
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="extension-points"><a class="header" href="#extension-points">Extension Points</a></h2>
+<h3 id="custom-audio-backends"><a class="header" href="#custom-audio-backends">Custom Audio Backends</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait AudioBackend {
+    fn play(&amp;mut self, url: String) -&gt; Result&lt;()&gt;;
+    fn pause(&amp;mut self) -&gt; Result&lt;()&gt;;
+    fn set_volume(&amp;mut self, volume: f32) -&gt; Result&lt;()&gt;;
+}
+
+// Implement for different audio systems
+impl AudioBackend for RodioBackend { /* ... */ }
+impl AudioBackend for PulseAudioBackend { /* ... */ }
+<span class="boring">}</span></code></pre></pre>
+<h3 id="custom-ui-themes"><a class="header" href="#custom-ui-themes">Custom UI Themes</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Theme {
+    pub primary_color: Color,
+    pub secondary_color: Color,
+    pub background_color: Color,
+    pub accent_color: Color,
+}
+
+impl App {
+    pub fn set_theme(&amp;mut self, theme: Theme) {
+        self.theme = theme;
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="performance-apis"><a class="header" href="#performance-apis">Performance APIs</a></h2>
+<h3 id="caching"><a class="header" href="#caching">Caching</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::collections::HashMap;
+
+pub struct ChannelCache {
+    cache: HashMap&lt;String, Vec&lt;Channel&gt;&gt;,
+    ttl: Duration,
+}
+
+impl ChannelCache {
+    pub fn get_or_fetch(&amp;mut self, key: &amp;str) -&gt; Result&lt;Vec&lt;Channel&gt;&gt; {
+        // Return cached data or fetch new
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="metrics"><a class="header" href="#metrics">Metrics</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Metrics {
+    pub api_calls: u64,
+    pub cache_hits: u64,
+    pub audio_buffer_underruns: u64,
+}
+
+impl App {
+    pub fn get_metrics(&amp;self) -&gt; Metrics {
+        // Return current metrics
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="constants-and-configuration"><a class="header" href="#constants-and-configuration">Constants and Configuration</a></h2>
+<h3 id="default-values"><a class="header" href="#default-values">Default Values</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub const DEFAULT_VOLUME: u8 = 50;
+pub const DEFAULT_CONFIG_DIR: &amp;str = ".config/soma-player";
+pub const API_BASE_URL: &amp;str = "https://somafm.com";
+pub const STREAM_TIMEOUT: Duration = Duration::from_secs(30);
+<span class="boring">}</span></code></pre></pre>
+<h3 id="build-information"><a class="header" href="#build-information">Build Information</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub const VERSION: &amp;str = env!("CARGO_PKG_VERSION");
+pub const BUILD_TARGET: &amp;str = env!("TARGET");
+pub const BUILD_TIMESTAMP: &amp;str = env!("BUILD_TIMESTAMP");
+<span class="boring">}</span></code></pre></pre>
+<h2 id="feature-flags"><a class="header" href="#feature-flags">Feature Flags</a></h2>
+<h3 id="conditional-compilation"><a class="header" href="#conditional-compilation">Conditional Compilation</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[cfg(feature = "spectrum-analyzer")]
+pub mod spectrum {
+    // Spectrum analyzer functionality
+}
+
+#[cfg(not(feature = "spectrum-analyzer"))]
+pub mod spectrum {
+    // Stub implementation
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This API reference provides the essential interfaces for working with SomaFM Player's codebase. For complete type information and implementation details, refer to the generated <a href="../api/">API Documentation</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="contributing"><a class="header" href="#contributing">Contributing</a></h1>
+<p>Welcome to SomaFM Player! We're excited to have you contribute to this project.</p>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<h3 id="prerequisites-1"><a class="header" href="#prerequisites-1">Prerequisites</a></h3>
+<p>Before you begin, ensure you have the following installed:</p>
+<ol>
+<li>
+<p><strong>Rust</strong> (1.70 or later)</p>
+<pre><code class="language-bash">curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+</code></pre>
+</li>
+<li>
+<p><strong>System Dependencies</strong> (Linux only)</p>
+<pre><code class="language-bash"># Ubuntu/Debian
+sudo apt-get install libasound2-dev pkg-config
+
+# Fedora/CentOS/RHEL
+sudo dnf install alsa-lib-devel pkg-config
+
+# Arch Linux
+sudo pacman -S alsa-lib pkg-config
+</code></pre>
+</li>
+<li>
+<p><strong>Git</strong></p>
+<pre><code class="language-bash">git --version
+</code></pre>
+</li>
+</ol>
+<h3 id="development-setup"><a class="header" href="#development-setup">Development Setup</a></h3>
+<ol>
+<li>
+<p><strong>Fork the repository</strong> on GitHub</p>
+</li>
+<li>
+<p><strong>Clone your fork</strong></p>
+<pre><code class="language-bash">git clone https://github.com/yourusername/soma-play.git
+cd soma-play
+</code></pre>
+</li>
+<li>
+<p><strong>Add upstream remote</strong></p>
+<pre><code class="language-bash">git remote add upstream https://github.com/mpuccini/soma-play.git
+</code></pre>
+</li>
+<li>
+<p><strong>Install development tools</strong></p>
+<pre><code class="language-bash"># Code formatting
+rustup component add rustfmt
+
+# Linting
+rustup component add clippy
+
+# Documentation
+cargo install mdbook
+
+# Security auditing
+cargo install cargo-audit
+
+# Test coverage
+cargo install cargo-tarpaulin
+</code></pre>
+</li>
+<li>
+<p><strong>Build and test</strong></p>
+<pre><code class="language-bash">cargo build
+cargo test
+cargo run
+</code></pre>
+</li>
+</ol>
+<h2 id="development-workflow"><a class="header" href="#development-workflow">Development Workflow</a></h2>
+<h3 id="1-create-a-feature-branch"><a class="header" href="#1-create-a-feature-branch">1. Create a Feature Branch</a></h3>
+<pre><code class="language-bash">git checkout -b feature/your-feature-name
+</code></pre>
+<p><strong>Branch Naming Conventions:</strong></p>
+<ul>
+<li><code>feature/</code> - New features</li>
+<li><code>fix/</code> - Bug fixes</li>
+<li><code>docs/</code> - Documentation updates</li>
+<li><code>refactor/</code> - Code refactoring</li>
+<li><code>test/</code> - Test improvements</li>
+</ul>
+<h3 id="2-make-your-changes"><a class="header" href="#2-make-your-changes">2. Make Your Changes</a></h3>
+<p>Follow our coding standards and guidelines (see below).</p>
+<h3 id="3-test-your-changes"><a class="header" href="#3-test-your-changes">3. Test Your Changes</a></h3>
+<pre><code class="language-bash"># Run all tests
+cargo test
+
+# Run tests with output
+cargo test -- --nocapture
+
+# Run specific test module
+cargo test config::tests
+
+# Check code formatting
+cargo fmt --check
+
+# Run linter
+cargo clippy -- -D warnings
+
+# Generate test coverage
+cargo tarpaulin --out Html
+</code></pre>
+<h3 id="4-commit-your-changes"><a class="header" href="#4-commit-your-changes">4. Commit Your Changes</a></h3>
+<p><strong>Commit Message Format:</strong></p>
+<pre><code>&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;
+
+&lt;body&gt;
+
+&lt;footer&gt;
+</code></pre>
+<p><strong>Types:</strong></p>
+<ul>
+<li><code>feat</code> - New feature</li>
+<li><code>fix</code> - Bug fix</li>
+<li><code>docs</code> - Documentation</li>
+<li><code>style</code> - Code style changes</li>
+<li><code>refactor</code> - Code refactoring</li>
+<li><code>test</code> - Test additions/improvements</li>
+<li><code>chore</code> - Maintenance tasks</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-bash">git commit -m "feat(audio): add volume fade transitions"
+git commit -m "fix(ui): resolve channel list scrolling issue"
+git commit -m "docs(api): update configuration examples"
+</code></pre>
+<h3 id="5-push-and-create-pull-request"><a class="header" href="#5-push-and-create-pull-request">5. Push and Create Pull Request</a></h3>
+<pre><code class="language-bash">git push origin feature/your-feature-name
+</code></pre>
+<p>Then create a pull request on GitHub.</p>
+<h2 id="coding-standards"><a class="header" href="#coding-standards">Coding Standards</a></h2>
+<h3 id="rust-code-style"><a class="header" href="#rust-code-style">Rust Code Style</a></h3>
+<ol>
+<li>
+<p><strong>Use <code>cargo fmt</code></strong> for consistent formatting</p>
+</li>
+<li>
+<p><strong>Follow Rust naming conventions</strong></p>
+<ul>
+<li><code>snake_case</code> for functions and variables</li>
+<li><code>PascalCase</code> for types and structs</li>
+<li><code>SCREAMING_SNAKE_CASE</code> for constants</li>
+</ul>
+</li>
+<li>
+<p><strong>Add documentation comments</strong></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// Plays audio from the specified stream URL.
+///
+/// # Arguments
+/// * `url` - The stream URL to play from
+///
+/// # Examples
+/// ```
+/// let mut player = AudioPlayer::new()?;
+/// player.play("http://stream.somafm.com/groovesalad".to_string())?;
+/// ```
+pub fn play(&amp;mut self, url: String) -&gt; Result&lt;()&gt; {
+    // Implementation
+}
+<span class="boring">}</span></code></pre></pre>
+</li>
+<li>
+<p><strong>Handle errors properly</strong></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Good: Use Result types and proper error handling
+fn load_config() -&gt; Result&lt;Config, ConfigError&gt; {
+    let content = fs::read_to_string(&amp;path)
+        .map_err(ConfigError::FileRead)?;
+    toml::from_str(&amp;content)
+        .map_err(ConfigError::Parse)
+}
+
+// Avoid: Using unwrap() or expect() in library code
+<span class="boring">}</span></code></pre></pre>
+</li>
+<li>
+<p><strong>Use meaningful variable names</strong></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Good
+let selected_channel_index = 0;
+let stream_url = "http://...";
+
+// Avoid
+let i = 0;
+let url = "http://...";
+<span class="boring">}</span></code></pre></pre>
+</li>
+</ol>
+<h3 id="module-organization"><a class="header" href="#module-organization">Module Organization</a></h3>
+<ol>
+<li><strong>Keep modules focused</strong> - Each module should have a single responsibility</li>
+<li><strong>Use clear imports</strong> - Prefer explicit imports over glob imports</li>
+<li><strong>Organize by feature</strong> - Group related functionality together</li>
+</ol>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Good: Explicit imports
+use crate::config::Config;
+use crate::models::{Channel, PlayerState};
+
+// Avoid: Glob imports (in most cases)
+use crate::models::*;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="error-handling-1"><a class="header" href="#error-handling-1">Error Handling</a></h3>
+<ol>
+<li><strong>Use custom error types</strong> with <code>thiserror</code></li>
+<li><strong>Provide context</strong> for errors</li>
+<li><strong>Convert errors at module boundaries</strong></li>
+</ol>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug, thiserror::Error)]
+pub enum AudioError {
+    #[error("Failed to initialize audio device: {0}")]
+    DeviceInit(String),
+    
+    #[error("Stream error: {0}")]
+    Stream(#[from] StreamError),
+    
+    #[error("Invalid volume level: {level} (must be 0-100)")]
+    InvalidVolume { level: u8 },
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="testing-guidelines"><a class="header" href="#testing-guidelines">Testing Guidelines</a></h3>
+<ol>
+<li><strong>Write unit tests</strong> for all public functions</li>
+<li><strong>Use integration tests</strong> for complex workflows</li>
+<li><strong>Mock external dependencies</strong> in tests</li>
+<li><strong>Test error conditions</strong> as well as success cases</li>
+</ol>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[cfg(test)]
+mod tests {
+    use super::*;
+    use tempfile::tempdir;
+
+    #[test]
+    fn test_config_save_and_load() {
+        let dir = tempdir().unwrap();
+        let config_path = dir.path().join("config.toml");
+        
+        let original_config = Config {
+            volume: 75,
+            last_channel_id: Some("groovesalad".to_string()),
+            auto_start: true,
+        };
+        
+        // Test save
+        original_config.save_to_path(&amp;config_path).unwrap();
+        
+        // Test load
+        let loaded_config = Config::load_from_path(&amp;config_path).unwrap();
+        
+        assert_eq!(original_config.volume, loaded_config.volume);
+        assert_eq!(original_config.last_channel_id, loaded_config.last_channel_id);
+        assert_eq!(original_config.auto_start, loaded_config.auto_start);
+    }
+    
+    #[test]
+    fn test_invalid_volume_returns_error() {
+        let mut player = AudioPlayer::new().unwrap();
+        let result = player.set_volume(150); // Invalid volume &gt; 100
+        assert!(result.is_err());
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="documentation"><a class="header" href="#documentation">Documentation</a></h2>
+<h3 id="code-documentation"><a class="header" href="#code-documentation">Code Documentation</a></h3>
+<ol>
+<li><strong>Document all public APIs</strong> with examples</li>
+<li><strong>Include usage examples</strong> in documentation</li>
+<li><strong>Document error conditions</strong> and return types</li>
+<li><strong>Keep documentation up to date</strong> with code changes</li>
+</ol>
+<h3 id="user-documentation"><a class="header" href="#user-documentation">User Documentation</a></h3>
+<ol>
+<li><strong>Update relevant guide sections</strong> when adding features</li>
+<li><strong>Include configuration examples</strong> for new settings</li>
+<li><strong>Add troubleshooting entries</strong> for known issues</li>
+<li><strong>Update the changelog</strong> with user-facing changes</li>
+</ol>
+<h3 id="building-documentation"><a class="header" href="#building-documentation">Building Documentation</a></h3>
+<pre><code class="language-bash"># Generate API documentation
+cargo doc --open
+
+# Build user guide
+cd docs &amp;&amp; mdbook serve --open
+
+# Build all documentation
+./build-docs.sh
+</code></pre>
+<h2 id="feature-development"><a class="header" href="#feature-development">Feature Development</a></h2>
+<h3 id="adding-new-features"><a class="header" href="#adding-new-features">Adding New Features</a></h3>
+<ol>
+<li><strong>Create an issue</strong> describing the feature</li>
+<li><strong>Discuss the approach</strong> with maintainers</li>
+<li><strong>Start with tests</strong> (TDD approach when possible)</li>
+<li><strong>Implement incrementally</strong> with small, focused commits</li>
+<li><strong>Update documentation</strong> before marking as complete</li>
+</ol>
+<h3 id="feature-guidelines"><a class="header" href="#feature-guidelines">Feature Guidelines</a></h3>
+<ol>
+<li><strong>Maintain backward compatibility</strong> when possible</li>
+<li><strong>Add configuration options</strong> for user preferences</li>
+<li><strong>Consider performance impact</strong> of new features</li>
+<li><strong>Ensure cross-platform compatibility</strong></li>
+</ol>
+<h3 id="example-adding-a-new-feature"><a class="header" href="#example-adding-a-new-feature">Example: Adding a New Feature</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// 1. Define the feature interface
+pub trait Equalizer {
+    fn set_bands(&amp;mut self, bands: Vec&lt;f32&gt;) -&gt; Result&lt;()&gt;;
+    fn get_bands(&amp;self) -&gt; Vec&lt;f32&gt;;
+}
+
+// 2. Add configuration support
+#[derive(Serialize, Deserialize)]
+pub struct EqualizerConfig {
+    pub enabled: bool,
+    pub bands: Vec&lt;f32&gt;,
+}
+
+// 3. Implement the feature
+pub struct GraphicEqualizer {
+    bands: Vec&lt;f32&gt;,
+    enabled: bool,
+}
+
+// 4. Add tests
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_equalizer_bands() {
+        let mut eq = GraphicEqualizer::new();
+        let bands = vec![0.0, 2.0, 4.0, 2.0, 0.0];
+        eq.set_bands(bands.clone()).unwrap();
+        assert_eq!(eq.get_bands(), bands);
+    }
+}
+
+// 5. Update UI integration
+impl App {
+    pub fn toggle_equalizer(&amp;mut self) -&gt; Result&lt;()&gt; {
+        // Implementation
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="bug-fixes"><a class="header" href="#bug-fixes">Bug Fixes</a></h2>
+<h3 id="finding-and-reporting-bugs"><a class="header" href="#finding-and-reporting-bugs">Finding and Reporting Bugs</a></h3>
+<ol>
+<li><strong>Search existing issues</strong> before creating new ones</li>
+<li><strong>Provide detailed reproduction steps</strong></li>
+<li><strong>Include system information</strong> (OS, Rust version, etc.)</li>
+<li><strong>Add logs or error messages</strong> when applicable</li>
+</ol>
+<h3 id="fixing-bugs"><a class="header" href="#fixing-bugs">Fixing Bugs</a></h3>
+<ol>
+<li><strong>Write a test</strong> that reproduces the bug</li>
+<li><strong>Fix the issue</strong> with minimal changes</li>
+<li><strong>Verify the test passes</strong> with your fix</li>
+<li><strong>Check for similar issues</strong> in related code</li>
+</ol>
+<h2 id="performance-considerations-1"><a class="header" href="#performance-considerations-1">Performance Considerations</a></h2>
+<h3 id="optimization-guidelines"><a class="header" href="#optimization-guidelines">Optimization Guidelines</a></h3>
+<ol>
+<li><strong>Profile before optimizing</strong> - Measure, don't guess</li>
+<li><strong>Focus on hot paths</strong> - Audio playback, UI rendering</li>
+<li><strong>Consider memory usage</strong> - Avoid unnecessary allocations</li>
+<li><strong>Benchmark changes</strong> - Ensure improvements are real</li>
+</ol>
+<h3 id="performance-testing"><a class="header" href="#performance-testing">Performance Testing</a></h3>
+<pre><code class="language-bash"># Run benchmarks (if available)
+cargo bench
+
+# Profile memory usage
+cargo run --release -- --log-level=debug
+
+# Monitor resource usage during development
+htop  # or similar system monitor
+</code></pre>
+<h2 id="security"><a class="header" href="#security">Security</a></h2>
+<h3 id="security-guidelines"><a class="header" href="#security-guidelines">Security Guidelines</a></h3>
+<ol>
+<li><strong>Validate all inputs</strong> from external sources</li>
+<li><strong>Use secure HTTP</strong> for API communications</li>
+<li><strong>Handle credentials safely</strong> (if any)</li>
+<li><strong>Audit dependencies</strong> regularly</li>
+</ol>
+<pre><code class="language-bash"># Run security audit
+cargo audit
+
+# Check for known vulnerabilities
+cargo audit --database advisory
+</code></pre>
+<h2 id="release-process"><a class="header" href="#release-process">Release Process</a></h2>
+<h3 id="preparing-a-release"><a class="header" href="#preparing-a-release">Preparing a Release</a></h3>
+<ol>
+<li><strong>Update version numbers</strong> in <code>Cargo.toml</code></li>
+<li><strong>Update CHANGELOG.md</strong> with new features and fixes</li>
+<li><strong>Run full test suite</strong> with <code>cargo test</code></li>
+<li><strong>Generate and review documentation</strong></li>
+<li><strong>Test on target platforms</strong></li>
+</ol>
+<h3 id="release-checklist"><a class="header" href="#release-checklist">Release Checklist</a></h3>
+<ul>
+<li><input disabled="" type="checkbox"/>
+All tests pass</li>
+<li><input disabled="" type="checkbox"/>
+Documentation is up to date</li>
+<li><input disabled="" type="checkbox"/>
+Changelog is updated</li>
+<li><input disabled="" type="checkbox"/>
+Version numbers are bumped</li>
+<li><input disabled="" type="checkbox"/>
+No security vulnerabilities</li>
+<li><input disabled="" type="checkbox"/>
+Performance regressions checked</li>
+<li><input disabled="" type="checkbox"/>
+Cross-platform compatibility verified</li>
+</ul>
+<h2 id="community-guidelines"><a class="header" href="#community-guidelines">Community Guidelines</a></h2>
+<h3 id="communication"><a class="header" href="#communication">Communication</a></h3>
+<ol>
+<li><strong>Be respectful</strong> and inclusive</li>
+<li><strong>Ask questions</strong> when you're unsure</li>
+<li><strong>Provide constructive feedback</strong> in reviews</li>
+<li><strong>Help newcomers</strong> get started</li>
+</ol>
+<h3 id="code-reviews"><a class="header" href="#code-reviews">Code Reviews</a></h3>
+<ol>
+<li><strong>Review for correctness</strong> and style</li>
+<li><strong>Suggest improvements</strong> rather than just pointing out problems</li>
+<li><strong>Acknowledge good work</strong> and clever solutions</li>
+<li><strong>Be open to feedback</strong> on your own code</li>
+</ol>
+<h3 id="issue-management"><a class="header" href="#issue-management">Issue Management</a></h3>
+<ol>
+<li><strong>Provide clear descriptions</strong> for issues and PRs</li>
+<li><strong>Link related issues</strong> and PRs</li>
+<li><strong>Update status</strong> as work progresses</li>
+<li><strong>Close issues</strong> when resolved</li>
+</ol>
+<h2 id="getting-help-1"><a class="header" href="#getting-help-1">Getting Help</a></h2>
+<h3 id="resources"><a class="header" href="#resources">Resources</a></h3>
+<ul>
+<li><strong>Documentation</strong>: <a href="../introduction.html">User Guide</a> and <a href="../api.html">API Reference</a></li>
+<li><strong>Source Code</strong>: Well-commented and documented</li>
+<li><strong>Issues</strong>: Check existing issues for similar problems</li>
+<li><strong>Discussions</strong>: GitHub Discussions for questions and ideas</li>
+</ul>
+<h3 id="contact"><a class="header" href="#contact">Contact</a></h3>
+<ul>
+<li><strong>GitHub Issues</strong>: For bugs and feature requests</li>
+<li><strong>GitHub Discussions</strong>: For questions and general discussion</li>
+<li><strong>Pull Requests</strong>: For code contributions and reviews</li>
+</ul>
+<p>Thank you for contributing to SomaFM Player! Your efforts help make this project better for everyone. 🎵</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="controls-reference"><a class="header" href="#controls-reference">Controls Reference</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="configuration-options"><a class="header" href="#configuration-options">Configuration Options</a></h1>
+<p>Complete keyboard controls for SomaFM Player.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>SomaFM Player has three main interface modes, each with its own set of controls:</p>
+<ol>
+<li><strong>Channel Selection Screen</strong> - Initial startup screen</li>
+<li><strong>Playing Mode</strong> - Main playback interface</li>
+<li><strong>Channel Selection Overlay</strong> - Quick channel switching while playing</li>
+</ol>
+<h2 id="channel-selection-screen-1"><a class="header" href="#channel-selection-screen-1">Channel Selection Screen</a></h2>
+<p>This is the first screen you see when starting the application.</p>
+<div class="table-wrapper"><table><thead><tr><th>Key</th><th>Action</th><th>Description</th></tr></thead><tbody>
+<tr><td>↑</td><td>Navigate Up</td><td>Move selection to previous channel</td></tr>
+<tr><td>↓</td><td>Navigate Down</td><td>Move selection to next channel</td></tr>
+<tr><td>Enter</td><td>Select Channel</td><td>Start playing the selected channel</td></tr>
+<tr><td>Q</td><td>Quit</td><td>Exit the application</td></tr>
+</tbody></table>
+</div>
+<h3 id="mouse-support"><a class="header" href="#mouse-support">Mouse Support</a></h3>
+<ul>
+<li><strong>Scroll Wheel</strong>: Navigate through channels (if terminal supports it)</li>
+<li><strong>Click</strong>: Select channel (if terminal supports it)</li>
+</ul>
+<h2 id="playing-mode-1"><a class="header" href="#playing-mode-1">Playing Mode</a></h2>
+<p>Once you've selected a channel and music is playing.</p>
+<h3 id="playback-controls"><a class="header" href="#playback-controls">Playback Controls</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Key</th><th>Action</th><th>Description</th></tr></thead><tbody>
+<tr><td>P</td><td>Pause/Resume</td><td>Toggle playback state</td></tr>
+<tr><td>Q</td><td>Quit</td><td>Exit the application</td></tr>
+<tr><td>Esc</td><td>Quit</td><td>Alternative quit key</td></tr>
+</tbody></table>
+</div>
+<h3 id="volume-controls"><a class="header" href="#volume-controls">Volume Controls</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Key</th><th>Action</th><th>Description</th></tr></thead><tbody>
+<tr><td>+</td><td>Volume Up</td><td>Increase volume by 5%</td></tr>
+<tr><td>=</td><td>Volume Up</td><td>Alternative volume up key</td></tr>
+<tr><td>-</td><td>Volume Down</td><td>Decrease volume by 5%</td></tr>
+<tr><td>_</td><td>Volume Down</td><td>Alternative volume down key</td></tr>
+</tbody></table>
+</div>
+<p><strong>Volume Range</strong>: 0% to 100%<br />
+<strong>Volume Step</strong>: 5% per key press<br />
+<strong>Auto-save</strong>: Volume changes are automatically saved</p>
+<h3 id="channel-controls"><a class="header" href="#channel-controls">Channel Controls</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Key</th><th>Action</th><th>Description</th></tr></thead><tbody>
+<tr><td>C</td><td>Change Channel</td><td>Open channel selection overlay</td></tr>
+</tbody></table>
+</div>
+<h2 id="channel-selection-overlay-1"><a class="header" href="#channel-selection-overlay-1">Channel Selection Overlay</a></h2>
+<p>Accessible by pressing <strong>C</strong> while in playing mode.</p>
+<div class="table-wrapper"><table><thead><tr><th>Key</th><th>Action</th><th>Description</th></tr></thead><tbody>
+<tr><td>↑</td><td>Navigate Up</td><td>Move selection to previous channel</td></tr>
+<tr><td>↓</td><td>Navigate Down</td><td>Move selection to next channel</td></tr>
+<tr><td>Enter</td><td>Switch Channel</td><td>Change to selected channel and close overlay</td></tr>
+<tr><td>Esc</td><td>Cancel</td><td>Close overlay without changing channel</td></tr>
+<tr><td>Q</td><td>Quit</td><td>Exit the application</td></tr>
+</tbody></table>
+</div>
+<h3 id="behavior-notes"><a class="header" href="#behavior-notes">Behavior Notes</a></h3>
+<ul>
+<li><strong>Seamless switching</strong>: Audio continues playing while browsing</li>
+<li><strong>Instant change</strong>: New channel starts immediately when selected</li>
+<li><strong>Previous state</strong>: If cancelled, returns to current playing channel</li>
+</ul>
+<h2 id="special-key-combinations"><a class="header" href="#special-key-combinations">Special Key Combinations</a></h2>
+<h3 id="force-quit"><a class="header" href="#force-quit">Force Quit</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Key Combination</th><th>Action</th><th>When to Use</th></tr></thead><tbody>
+<tr><td>Ctrl+C</td><td>Force Quit</td><td>If application becomes unresponsive</td></tr>
+<tr><td>Ctrl+Z</td><td>Suspend</td><td>Pause process (use <code>fg</code> to resume)</td></tr>
+</tbody></table>
+</div>
+<p>⚠️ <strong>Note</strong>: Force quit may leave your terminal in an inconsistent state. Use normal quit (Q) when possible.</p>
+<h2 id="universal-controls"><a class="header" href="#universal-controls">Universal Controls</a></h2>
+<p>These keys work in all modes:</p>
+<div class="table-wrapper"><table><thead><tr><th>Key</th><th>Available In</th><th>Action</th></tr></thead><tbody>
+<tr><td>Q</td><td>All modes</td><td>Quit application</td></tr>
+<tr><td>Ctrl+C</td><td>All modes</td><td>Force quit</td></tr>
+</tbody></table>
+</div>
+<h2 id="key-behavior-details"><a class="header" href="#key-behavior-details">Key Behavior Details</a></h2>
+<h3 id="navigation-keys"><a class="header" href="#navigation-keys">Navigation Keys</a></h3>
+<ul>
+<li><strong>Continuous scrolling</strong>: Hold arrow keys to scroll quickly</li>
+<li><strong>Wrap-around</strong>: Navigation wraps from bottom to top and vice versa</li>
+<li><strong>Visual feedback</strong>: Current selection is highlighted</li>
+</ul>
+<h3 id="volume-keys"><a class="header" href="#volume-keys">Volume Keys</a></h3>
+<ul>
+<li><strong>Immediate effect</strong>: Volume changes apply instantly</li>
+<li><strong>Visual feedback</strong>: Volume level displayed in interface</li>
+<li><strong>Bounds checking</strong>: Cannot go below 0% or above 100%</li>
+<li><strong>Persistence</strong>: Settings saved automatically</li>
+</ul>
+<h3 id="response-time"><a class="header" href="#response-time">Response Time</a></h3>
+<ul>
+<li><strong>Instant</strong>: All key presses register immediately</li>
+<li><strong>No delay</strong>: No artificial delays or key repeat issues</li>
+<li><strong>Reliable</strong>: Input processing is prioritized</li>
+</ul>
+<h2 id="accessibility-features"><a class="header" href="#accessibility-features">Accessibility Features</a></h2>
+<h3 id="keyboard-only-operation"><a class="header" href="#keyboard-only-operation">Keyboard-Only Operation</a></h3>
+<ul>
+<li><strong>No mouse required</strong>: Full functionality via keyboard</li>
+<li><strong>Clear navigation</strong>: Obvious visual indicators for current selection</li>
+<li><strong>Consistent patterns</strong>: Similar controls across all modes</li>
+</ul>
+<h3 id="visual-indicators"><a class="header" href="#visual-indicators">Visual Indicators</a></h3>
+<ul>
+<li><strong>Highlighted selection</strong>: Current item clearly marked</li>
+<li><strong>Status display</strong>: Current channel, volume, and playback state visible</li>
+<li><strong>Color coding</strong>: Different colors for different interface elements</li>
+</ul>
+<h2 id="terminal-compatibility"><a class="header" href="#terminal-compatibility">Terminal Compatibility</a></h2>
+<h3 id="recommended-terminals"><a class="header" href="#recommended-terminals">Recommended Terminals</a></h3>
+<ul>
+<li>✅ <strong>Alacritty</strong>: Full compatibility</li>
+<li>✅ <strong>Kitty</strong>: Full compatibility</li>
+<li>✅ <strong>iTerm2</strong> (macOS): Full compatibility</li>
+<li>✅ <strong>Windows Terminal</strong>: Full compatibility</li>
+<li>✅ <strong>GNOME Terminal</strong>: Full compatibility</li>
+</ul>
+<h3 id="key-support-notes"><a class="header" href="#key-support-notes">Key Support Notes</a></h3>
+<ul>
+<li><strong>Function keys</strong>: Not used (for maximum compatibility)</li>
+<li><strong>Alt combinations</strong>: Not used (may conflict with terminal)</li>
+<li><strong>Standard keys only</strong>: Uses only common, reliable key codes</li>
+</ul>
+<h2 id="customization"><a class="header" href="#customization">Customization</a></h2>
+<h3 id="current-limitations"><a class="header" href="#current-limitations">Current Limitations</a></h3>
+<ul>
+<li><strong>Fixed keybindings</strong>: Keys cannot be customized currently</li>
+<li><strong>Future feature</strong>: Customizable controls planned for future release</li>
+</ul>
+<h3 id="workarounds"><a class="header" href="#workarounds">Workarounds</a></h3>
+<ul>
+<li><strong>Terminal keybinding</strong>: Some terminals allow key remapping</li>
+<li><strong>Screen/tmux</strong>: Can provide additional key handling if needed</li>
+</ul>
+<h2 id="quick-reference-card"><a class="header" href="#quick-reference-card">Quick Reference Card</a></h2>
+<h3 id="essential-keys"><a class="header" href="#essential-keys">Essential Keys</a></h3>
+<pre><code>Playing Mode:
+  P = Pause/Resume    C = Change Channel
+  + = Volume Up       - = Volume Down
+  Q = Quit
+
+Channel Selection:
+  ↑↓ = Navigate      Enter = Select
+  Q = Quit
+
+Channel Overlay:
+  ↑↓ = Navigate      Enter = Switch
+  Esc = Cancel       Q = Quit
+</code></pre>
+<h3 id="memory-tips"><a class="header" href="#memory-tips">Memory Tips</a></h3>
+<ul>
+<li><strong>P</strong>ause for <strong>P</strong>layback control</li>
+<li><strong>C</strong>hange for <strong>C</strong>hannel selection</li>
+<li><strong>+/-</strong> for volume (like calculator)</li>
+<li><strong>Q</strong>uit to <strong>Q</strong>uit (universal)</li>
+<li><strong>Esc</strong>ape to cancel overlay</li>
+</ul>
+<p>This control scheme is designed to be intuitive and memorable while providing full functionality through the keyboard interface.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="configuration-options-1"><a class="header" href="#configuration-options-1">Configuration Options</a></h1>
+<p>Complete reference for all configuration options in SomaFM Player.</p>
+<h2 id="configuration-file"><a class="header" href="#configuration-file">Configuration File</a></h2>
+<h3 id="location"><a class="header" href="#location">Location</a></h3>
+<pre><code>~/.config/soma-player/config.toml
+</code></pre>
+<h3 id="format"><a class="header" href="#format">Format</a></h3>
+<p>The configuration file uses TOML format for human-readable settings.</p>
+<h3 id="example-configuration"><a class="header" href="#example-configuration">Example Configuration</a></h3>
+<pre><code class="language-toml"># SomaFM Player Configuration
+
+# Last played channel (auto-saved)
+last_channel_id = "groovesalad"
+
+# Audio volume (0-100)
+volume = 75
+
+# Skip channel selection on startup
+auto_start = false
+
+# Logging configuration
+[logging]
+level = "info"
+file_rotation = true
+max_files = 7
+
+# User interface settings
+[ui]
+show_spectrum = true
+spectrum_style = "bars"
+color_scheme = "default"
+
+# Audio settings
+[audio]
+buffer_size = 4096
+sample_rate = 44100
+reconnect_attempts = 3
+</code></pre>
+<h2 id="core-options"><a class="header" href="#core-options">Core Options</a></h2>
+<h3 id="last_channel_id-1"><a class="header" href="#last_channel_id-1"><code>last_channel_id</code></a></h3>
+<p><strong>Type:</strong> <code>String</code> (optional)<br />
+<strong>Default:</strong> <code>None</code><br />
+<strong>Auto-managed:</strong> Yes</p>
+<p>The ID of the last played channel. This is automatically saved when you switch channels and used to restore your session.</p>
+<p><strong>Valid Values:</strong></p>
+<ul>
+<li>Any valid SomaFM channel ID (e.g., "groovesalad", "dronezone", "lush")</li>
+<li><code>null</code> or empty for no default channel</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">last_channel_id = "groovesalad"
+</code></pre>
+<h3 id="volume-1"><a class="header" href="#volume-1"><code>volume</code></a></h3>
+<p><strong>Type:</strong> <code>Integer</code><br />
+<strong>Default:</strong> <code>50</code><br />
+<strong>Range:</strong> <code>0-100</code><br />
+<strong>Auto-managed:</strong> Yes</p>
+<p>Audio volume level as a percentage. Changes are automatically saved when you adjust volume during playback.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">volume = 75
+</code></pre>
+<h3 id="auto_start-1"><a class="header" href="#auto_start-1"><code>auto_start</code></a></h3>
+<p><strong>Type:</strong> <code>Boolean</code><br />
+<strong>Default:</strong> <code>false</code></p>
+<p>Skip the channel selection screen and automatically start playing the last channel on startup.</p>
+<p><strong>Behavior:</strong></p>
+<ul>
+<li><code>true</code>: Immediately start playing <code>last_channel_id</code> (if set)</li>
+<li><code>false</code>: Show channel selection screen (default behavior)</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">auto_start = true
+</code></pre>
+<h2 id="logging-options"><a class="header" href="#logging-options">Logging Options</a></h2>
+<h3 id="logging-section"><a class="header" href="#logging-section"><code>[logging]</code> Section</a></h3>
+<p>Configure logging behavior and output.</p>
+<h4 id="level"><a class="header" href="#level"><code>level</code></a></h4>
+<p><strong>Type:</strong> <code>String</code><br />
+<strong>Default:</strong> <code>"info"</code><br />
+<strong>Values:</strong> <code>"error"</code>, <code>"warn"</code>, <code>"info"</code>, <code>"debug"</code>, <code>"trace"</code></p>
+<p>Sets the minimum log level for file and console output.</p>
+<p><strong>Log Levels:</strong></p>
+<ul>
+<li><code>error</code>: Only critical errors</li>
+<li><code>warn</code>: Warnings and errors</li>
+<li><code>info</code>: General information (recommended)</li>
+<li><code>debug</code>: Detailed debugging information</li>
+<li><code>trace</code>: Very verbose tracing (development only)</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[logging]
+level = "debug"
+</code></pre>
+<h4 id="file_rotation"><a class="header" href="#file_rotation"><code>file_rotation</code></a></h4>
+<p><strong>Type:</strong> <code>Boolean</code><br />
+<strong>Default:</strong> <code>true</code></p>
+<p>Enable automatic log file rotation to prevent disk space issues.</p>
+<p><strong>Behavior:</strong></p>
+<ul>
+<li><code>true</code>: Rotate logs daily, keep last 7 days</li>
+<li><code>false</code>: Single log file (grows indefinitely)</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[logging]
+file_rotation = true
+</code></pre>
+<h4 id="max_files"><a class="header" href="#max_files"><code>max_files</code></a></h4>
+<p><strong>Type:</strong> <code>Integer</code><br />
+<strong>Default:</strong> <code>7</code><br />
+<strong>Range:</strong> <code>1-365</code></p>
+<p>Number of rotated log files to keep when <code>file_rotation</code> is enabled.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[logging]
+max_files = 14  # Keep 2 weeks of logs
+</code></pre>
+<h2 id="user-interface-options"><a class="header" href="#user-interface-options">User Interface Options</a></h2>
+<h3 id="ui-section"><a class="header" href="#ui-section"><code>[ui]</code> Section</a></h3>
+<p>Configure the terminal user interface appearance and behavior.</p>
+<h4 id="show_spectrum"><a class="header" href="#show_spectrum"><code>show_spectrum</code></a></h4>
+<p><strong>Type:</strong> <code>Boolean</code><br />
+<strong>Default:</strong> <code>true</code></p>
+<p>Enable or disable the spectrum visualizer display.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[ui]
+show_spectrum = false
+</code></pre>
+<h4 id="spectrum_style"><a class="header" href="#spectrum_style"><code>spectrum_style</code></a></h4>
+<p><strong>Type:</strong> <code>String</code><br />
+<strong>Default:</strong> <code>"bars"</code><br />
+<strong>Values:</strong> <code>"bars"</code>, <code>"line"</code>, <code>"minimal"</code></p>
+<p>Visual style for the spectrum analyzer.</p>
+<p><strong>Styles:</strong></p>
+<ul>
+<li><code>bars</code>: Vertical bars (default)</li>
+<li><code>line</code>: Connected line graph</li>
+<li><code>minimal</code>: Simple dots/characters</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[ui]
+spectrum_style = "line"
+</code></pre>
+<h4 id="color_scheme"><a class="header" href="#color_scheme"><code>color_scheme</code></a></h4>
+<p><strong>Type:</strong> <code>String</code><br />
+<strong>Default:</strong> <code>"default"</code><br />
+<strong>Values:</strong> <code>"default"</code>, <code>"dark"</code>, <code>"light"</code>, <code>"monochrome"</code></p>
+<p>Color scheme for the user interface.</p>
+<p><strong>Schemes:</strong></p>
+<ul>
+<li><code>default</code>: Standard colors</li>
+<li><code>dark</code>: Dark theme optimized for dark terminals</li>
+<li><code>light</code>: Light theme optimized for light terminals</li>
+<li><code>monochrome</code>: No colors (accessibility)</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[ui]
+color_scheme = "dark"
+</code></pre>
+<h2 id="audio-options"><a class="header" href="#audio-options">Audio Options</a></h2>
+<h3 id="audio-section"><a class="header" href="#audio-section"><code>[audio]</code> Section</a></h3>
+<p>Configure audio playback and streaming behavior.</p>
+<h4 id="buffer_size"><a class="header" href="#buffer_size"><code>buffer_size</code></a></h4>
+<p><strong>Type:</strong> <code>Integer</code><br />
+<strong>Default:</strong> <code>4096</code><br />
+<strong>Range:</strong> <code>1024-16384</code></p>
+<p>Audio buffer size in samples. Larger buffers reduce skipping but increase latency.</p>
+<p><strong>Recommendations:</strong></p>
+<ul>
+<li><code>1024-2048</code>: Low latency, may skip on slow systems</li>
+<li><code>4096</code>: Balanced (recommended)</li>
+<li><code>8192-16384</code>: High latency, very stable</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[audio]
+buffer_size = 8192
+</code></pre>
+<h4 id="sample_rate"><a class="header" href="#sample_rate"><code>sample_rate</code></a></h4>
+<p><strong>Type:</strong> <code>Integer</code><br />
+<strong>Default:</strong> <code>44100</code><br />
+<strong>Values:</strong> <code>22050</code>, <code>44100</code>, <code>48000</code></p>
+<p>Preferred audio sample rate in Hz.</p>
+<p><strong>Common Rates:</strong></p>
+<ul>
+<li><code>22050</code>: Lower quality, lower bandwidth</li>
+<li><code>44100</code>: CD quality (recommended)</li>
+<li><code>48000</code>: Professional audio quality</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[audio]
+sample_rate = 48000
+</code></pre>
+<h4 id="reconnect_attempts"><a class="header" href="#reconnect_attempts"><code>reconnect_attempts</code></a></h4>
+<p><strong>Type:</strong> <code>Integer</code><br />
+<strong>Default:</strong> <code>3</code><br />
+<strong>Range:</strong> <code>0-10</code></p>
+<p>Number of automatic reconnection attempts when stream is lost.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[audio]
+reconnect_attempts = 5
+</code></pre>
+<h2 id="network-options"><a class="header" href="#network-options">Network Options</a></h2>
+<h3 id="network-section"><a class="header" href="#network-section"><code>[network]</code> Section</a></h3>
+<p>Configure network and streaming behavior.</p>
+<h4 id="timeout"><a class="header" href="#timeout"><code>timeout</code></a></h4>
+<p><strong>Type:</strong> <code>Integer</code><br />
+<strong>Default:</strong> <code>30</code><br />
+<strong>Range:</strong> <code>5-300</code></p>
+<p>Network timeout in seconds for API requests and stream connections.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[network]
+timeout = 60
+</code></pre>
+<h4 id="user_agent"><a class="header" href="#user_agent"><code>user_agent</code></a></h4>
+<p><strong>Type:</strong> <code>String</code><br />
+<strong>Default:</strong> <code>"SomaFM-Player/{version}"</code></p>
+<p>Custom User-Agent string for HTTP requests.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[network]
+user_agent = "MyCustomPlayer/1.0"
+</code></pre>
+<h4 id="proxy"><a class="header" href="#proxy"><code>proxy</code></a></h4>
+<p><strong>Type:</strong> <code>String</code> (optional)<br />
+<strong>Default:</strong> <code>None</code></p>
+<p>HTTP proxy URL for network requests.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[network]
+proxy = "http://proxy.example.com:8080"
+</code></pre>
+<h2 id="advanced-options"><a class="header" href="#advanced-options">Advanced Options</a></h2>
+<h3 id="advanced-section"><a class="header" href="#advanced-section"><code>[advanced]</code> Section</a></h3>
+<p>Advanced configuration options for power users.</p>
+<h4 id="config_reload_interval"><a class="header" href="#config_reload_interval"><code>config_reload_interval</code></a></h4>
+<p><strong>Type:</strong> <code>Integer</code><br />
+<strong>Default:</strong> <code>0</code><br />
+<strong>Range:</strong> <code>0-3600</code></p>
+<p>Automatic configuration reload interval in seconds. <code>0</code> disables auto-reload.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[advanced]
+config_reload_interval = 300  # Reload every 5 minutes
+</code></pre>
+<h4 id="memory_limit"><a class="header" href="#memory_limit"><code>memory_limit</code></a></h4>
+<p><strong>Type:</strong> <code>Integer</code><br />
+<strong>Default:</strong> <code>100</code><br />
+<strong>Range:</strong> <code>50-1000</code></p>
+<p>Memory usage limit in MB for caching and buffers.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[advanced]
+memory_limit = 200
+</code></pre>
+<h2 id="environment-variable-overrides"><a class="header" href="#environment-variable-overrides">Environment Variable Overrides</a></h2>
+<h3 id="logging"><a class="header" href="#logging">Logging</a></h3>
+<ul>
+<li><code>RUST_LOG</code>: Override log level (e.g., <code>RUST_LOG=debug</code>)</li>
+<li><code>SOMA_LOG_FILE</code>: Custom log file path</li>
+</ul>
+<h3 id="configuration-1"><a class="header" href="#configuration-1">Configuration</a></h3>
+<ul>
+<li><code>SOMA_CONFIG_DIR</code>: Custom configuration directory</li>
+<li><code>SOMA_CONFIG_FILE</code>: Custom configuration file path</li>
+</ul>
+<h3 id="audio"><a class="header" href="#audio">Audio</a></h3>
+<ul>
+<li><code>SOMA_AUDIO_BACKEND</code>: Force specific audio backend</li>
+<li><code>SOMA_SAMPLE_RATE</code>: Override sample rate</li>
+</ul>
+<h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
+<pre><code class="language-bash"># Debug logging
+RUST_LOG=debug soma-player
+
+# Custom config location
+SOMA_CONFIG_DIR=~/.soma soma-player
+
+# Force sample rate
+SOMA_SAMPLE_RATE=48000 soma-player
+</code></pre>
+<h2 id="configuration-validation"><a class="header" href="#configuration-validation">Configuration Validation</a></h2>
+<h3 id="automatic-validation"><a class="header" href="#automatic-validation">Automatic Validation</a></h3>
+<p>The application validates all configuration values on startup:</p>
+<ul>
+<li><strong>Range Checks</strong>: Numeric values within valid ranges</li>
+<li><strong>Type Validation</strong>: Correct data types for all options</li>
+<li><strong>Enum Validation</strong>: Valid choices for string options</li>
+<li><strong>Path Validation</strong>: Writeable paths for logs and cache</li>
+</ul>
+<h3 id="error-handling-2"><a class="header" href="#error-handling-2">Error Handling</a></h3>
+<p>Invalid configuration values result in:</p>
+<ol>
+<li><strong>Warning Message</strong>: Logged to console and file</li>
+<li><strong>Default Fallback</strong>: Invalid values replaced with defaults</li>
+<li><strong>Graceful Degradation</strong>: Application continues with valid settings</li>
+</ol>
+<h3 id="example-validation-error"><a class="header" href="#example-validation-error">Example Validation Error</a></h3>
+<pre><code>WARNING: Invalid volume value '150' (must be 0-100), using default: 50
+WARNING: Unknown color_scheme 'rainbow', using default: 'default'
+</code></pre>
+<h2 id="configuration-file-management"><a class="header" href="#configuration-file-management">Configuration File Management</a></h2>
+<h3 id="automatic-creation"><a class="header" href="#automatic-creation">Automatic Creation</a></h3>
+<p>If no configuration file exists, one is created with default values on first run.</p>
+<h3 id="backup-and-restore"><a class="header" href="#backup-and-restore">Backup and Restore</a></h3>
+<pre><code class="language-bash"># Backup current configuration
+cp ~/.config/soma-player/config.toml ~/.config/soma-player/config.toml.backup
+
+# Restore from backup
+cp ~/.config/soma-player/config.toml.backup ~/.config/soma-player/config.toml
+
+# Reset to defaults (delete config file)
+rm ~/.config/soma-player/config.toml
+</code></pre>
+<h3 id="migration"><a class="header" href="#migration">Migration</a></h3>
+<p>Configuration is automatically migrated when upgrading between versions:</p>
+<ul>
+<li><strong>Backward Compatibility</strong>: Old configurations continue to work</li>
+<li><strong>New Options</strong>: Added with default values</li>
+<li><strong>Deprecated Options</strong>: Ignored with warnings</li>
+</ul>
+<h2 id="security-considerations"><a class="header" href="#security-considerations">Security Considerations</a></h2>
+<h3 id="file-permissions"><a class="header" href="#file-permissions">File Permissions</a></h3>
+<p>Configuration files are created with user-only permissions (<code>600</code>):</p>
+<pre><code class="language-bash"># Check permissions
+ls -la ~/.config/soma-player/config.toml
+# Should show: -rw------- (user read/write only)
+</code></pre>
+<h3 id="sensitive-data"><a class="header" href="#sensitive-data">Sensitive Data</a></h3>
+<p>The configuration file contains no sensitive information:</p>
+<ul>
+<li>✅ <strong>Safe</strong>: Volume levels, UI preferences, channel history</li>
+<li>❌ <strong>Never Stored</strong>: Passwords, tokens, personal data</li>
+</ul>
+<h3 id="network-settings"><a class="header" href="#network-settings">Network Settings</a></h3>
+<p>When using proxy settings:</p>
+<ul>
+<li><strong>HTTP Proxies</strong>: Supported for SomaFM API requests</li>
+<li><strong>Authentication</strong>: Not currently supported in proxy URLs</li>
+<li><strong>HTTPS</strong>: All SomaFM communication uses HTTPS when available</li>
+</ul>
+<h2 id="troubleshooting-configuration-1"><a class="header" href="#troubleshooting-configuration-1">Troubleshooting Configuration</a></h2>
+<h3 id="common-issues"><a class="header" href="#common-issues">Common Issues</a></h3>
+<h4 id="configuration-not-loading"><a class="header" href="#configuration-not-loading">Configuration Not Loading</a></h4>
+<pre><code class="language-bash"># Check file exists
+ls ~/.config/soma-player/config.toml
+
+# Check file permissions
+ls -la ~/.config/soma-player/config.toml
+
+# Check syntax with TOML validator
+python3 -c "import toml; toml.load(open('~/.config/soma-player/config.toml'))"
+</code></pre>
+<h4 id="settings-not-persisting"><a class="header" href="#settings-not-persisting">Settings Not Persisting</a></h4>
+<ol>
+<li><strong>Check directory permissions</strong>: <code>~/.config/soma-player/</code> must be writable</li>
+<li><strong>Check disk space</strong>: Ensure sufficient space for config file</li>
+<li><strong>Check file locks</strong>: No other processes accessing the file</li>
+</ol>
+<h4 id="invalid-values-ignored"><a class="header" href="#invalid-values-ignored">Invalid Values Ignored</a></h4>
+<ul>
+<li>Check logs for validation warnings</li>
+<li>Verify values are within valid ranges</li>
+<li>Ensure correct TOML syntax and types</li>
+</ul>
+<h3 id="reset-configuration"><a class="header" href="#reset-configuration">Reset Configuration</a></h3>
+<pre><code class="language-bash"># Remove config file to reset to defaults
+rm ~/.config/soma-player/config.toml
+
+# Or rename to backup and recreate
+mv ~/.config/soma-player/config.toml ~/.config/soma-player/config.toml.old
+</code></pre>
+<h2 id="configuration-examples"><a class="header" href="#configuration-examples">Configuration Examples</a></h2>
+<h3 id="minimal-configuration"><a class="header" href="#minimal-configuration">Minimal Configuration</a></h3>
+<pre><code class="language-toml"># Basic setup - most users
+volume = 70
+auto_start = false
+</code></pre>
+<h3 id="power-user-configuration"><a class="header" href="#power-user-configuration">Power User Configuration</a></h3>
+<pre><code class="language-toml"># Advanced setup with all options
+last_channel_id = "dronezone"
+volume = 80
+auto_start = true
+
+[logging]
+level = "info"
+file_rotation = true
+max_files = 14
+
+[ui]
+show_spectrum = true
+spectrum_style = "bars"
+color_scheme = "dark"
+
+[audio]
+buffer_size = 8192
+sample_rate = 48000
+reconnect_attempts = 5
+
+[network]
+timeout = 45
+user_agent = "SomaPlayer-Custom/1.0"
+
+[advanced]
+config_reload_interval = 300
+memory_limit = 150
+</code></pre>
+<h3 id="development-configuration"><a class="header" href="#development-configuration">Development Configuration</a></h3>
+<pre><code class="language-toml"># Setup for development and debugging
+volume = 50
+auto_start = false
+
+[logging]
+level = "debug"
+file_rotation = false
+max_files = 1
+
+[ui]
+show_spectrum = true
+spectrum_style = "minimal"
+color_scheme = "default"
+
+[audio]
+buffer_size = 2048
+reconnect_attempts = 1
+
+[advanced]
+config_reload_interval = 60
+memory_limit = 50
+</code></pre>
+<p>This comprehensive configuration reference covers all available options for customizing SomaFM Player to your preferences.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="command-line"><a class="header" href="#command-line">Command Line</a></h1>
+<p>Command-line interface and options for SomaFM Player.</p>
+<h2 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h2>
+<h3 id="start-the-application"><a class="header" href="#start-the-application">Start the Application</a></h3>
+<pre><code class="language-bash">soma-player
+</code></pre>
+<p>This starts the application with the default terminal user interface.</p>
+<h3 id="quick-help"><a class="header" href="#quick-help">Quick Help</a></h3>
+<pre><code class="language-bash">soma-player --help
+</code></pre>
+<h3 id="version-information"><a class="header" href="#version-information">Version Information</a></h3>
+<pre><code class="language-bash">soma-player --version
+</code></pre>
+<h2 id="command-line-options"><a class="header" href="#command-line-options">Command-Line Options</a></h2>
+<h3 id="global-options"><a class="header" href="#global-options">Global Options</a></h3>
+<h4 id="--help--h"><a class="header" href="#--help--h"><code>--help</code>, <code>-h</code></a></h4>
+<p>Display help information and exit.</p>
+<pre><code class="language-bash">soma-player --help
+soma-player -h
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>SomaFM Player 0.1.6
+A terminal-based music player for SomaFM internet radio
+
+USAGE:
+    soma-player [OPTIONS] [COMMAND]
+
+OPTIONS:
+    -h, --help       Print help information
+    -v, --version    Print version information
+    -c, --config     Custom configuration file path
+    -l, --log-level  Override log level [debug|info|warn|error]
+    -q, --quiet      Suppress non-essential output
+    -V, --verbose    Enable verbose output
+
+COMMANDS:
+    play     Start playing a specific channel
+    list     List available channels
+    config   Manage configuration
+    help     Print this message or the help of a given subcommand
+</code></pre>
+<h4 id="--version--v"><a class="header" href="#--version--v"><code>--version</code>, <code>-v</code></a></h4>
+<p>Display version information and build details.</p>
+<pre><code class="language-bash">soma-player --version
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>soma-player 0.1.6
+Build: release
+Target: x86_64-unknown-linux-gnu
+Rustc: 1.75.0
+</code></pre>
+<h4 id="--config--c"><a class="header" href="#--config--c"><code>--config</code>, <code>-c</code></a></h4>
+<p>Specify a custom configuration file path.</p>
+<pre><code class="language-bash">soma-player --config /path/to/custom/config.toml
+soma-player -c ~/.config/soma-alt/config.toml
+</code></pre>
+<p><strong>Default:</strong> <code>~/.config/soma-player/config.toml</code></p>
+<h4 id="--log-level--l"><a class="header" href="#--log-level--l"><code>--log-level</code>, <code>-l</code></a></h4>
+<p>Override the log level for this session.</p>
+<pre><code class="language-bash">soma-player --log-level debug
+soma-player -l warn
+</code></pre>
+<p><strong>Valid Levels:</strong> <code>error</code>, <code>warn</code>, <code>info</code>, <code>debug</code>, <code>trace</code></p>
+<h4 id="--quiet--q"><a class="header" href="#--quiet--q"><code>--quiet</code>, <code>-q</code></a></h4>
+<p>Suppress non-essential output (warnings, info messages).</p>
+<pre><code class="language-bash">soma-player --quiet
+</code></pre>
+<p><strong>Effect:</strong> Only errors are displayed to the console.</p>
+<h4 id="--verbose--v"><a class="header" href="#--verbose--v"><code>--verbose</code>, <code>-V</code></a></h4>
+<p>Enable verbose output for debugging.</p>
+<pre><code class="language-bash">soma-player --verbose
+</code></pre>
+<p><strong>Effect:</strong> Equivalent to <code>--log-level debug</code> with additional startup information.</p>
+<h2 id="subcommands"><a class="header" href="#subcommands">Subcommands</a></h2>
+<h3 id="play---direct-channel-playback"><a class="header" href="#play---direct-channel-playback"><code>play</code> - Direct Channel Playback</a></h3>
+<p>Start playing a specific channel immediately without the UI.</p>
+<pre><code class="language-bash">soma-player play &lt;CHANNEL_ID&gt;
+</code></pre>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-bash"># Play Groove Salad
+soma-player play groovesalad
+
+# Play Drone Zone
+soma-player play dronezone
+
+# Play with custom volume
+soma-player play groovesalad --volume 75
+</code></pre>
+<h4 id="options-for-play"><a class="header" href="#options-for-play">Options for <code>play</code></a></h4>
+<h5 id="--volume--v"><a class="header" href="#--volume--v"><code>--volume</code>, <code>-V</code></a></h5>
+<p>Set initial volume level (0-100).</p>
+<pre><code class="language-bash">soma-player play groovesalad --volume 80
+soma-player play dronezone -V 60
+</code></pre>
+<h5 id="--no-ui"><a class="header" href="#--no-ui"><code>--no-ui</code></a></h5>
+<p>Play without launching the terminal interface (headless mode).</p>
+<pre><code class="language-bash">soma-player play groovesalad --no-ui
+</code></pre>
+<p><strong>Use Cases:</strong></p>
+<ul>
+<li>Background music in scripts</li>
+<li>System service integration</li>
+<li>Remote/headless servers</li>
+</ul>
+<h5 id="--duration--d"><a class="header" href="#--duration--d"><code>--duration</code>, <code>-d</code></a></h5>
+<p>Play for a specific duration then exit.</p>
+<pre><code class="language-bash">soma-player play groovesalad --duration 30m
+soma-player play dronezone -d 1h
+</code></pre>
+<p><strong>Time Formats:</strong></p>
+<ul>
+<li><code>30s</code> - 30 seconds</li>
+<li><code>5m</code> - 5 minutes</li>
+<li><code>2h</code> - 2 hours</li>
+<li><code>90</code> - 90 seconds (default unit)</li>
+</ul>
+<h3 id="list---channel-information"><a class="header" href="#list---channel-information"><code>list</code> - Channel Information</a></h3>
+<p>Display available SomaFM channels.</p>
+<pre><code class="language-bash">soma-player list
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Available SomaFM Channels:
+
+groovesalad     Groove Salad              1,234 listeners
+dronezone       Drone Zone                  987 listeners
+lush            Lush                        756 listeners
+folkfwd         Folk Forward                543 listeners
+...
+</code></pre>
+<h4 id="options-for-list"><a class="header" href="#options-for-list">Options for <code>list</code></a></h4>
+<h5 id="--format--f"><a class="header" href="#--format--f"><code>--format</code>, <code>-f</code></a></h5>
+<p>Specify output format.</p>
+<pre><code class="language-bash">soma-player list --format json
+soma-player list --format csv
+soma-player list -f table
+</code></pre>
+<p><strong>Formats:</strong></p>
+<ul>
+<li><code>table</code> - Human-readable table (default)</li>
+<li><code>json</code> - JSON format for scripting</li>
+<li><code>csv</code> - CSV format for spreadsheets</li>
+<li><code>simple</code> - Simple list of channel IDs</li>
+</ul>
+<h5 id="--filter--f"><a class="header" href="#--filter--f"><code>--filter</code>, <code>-F</code></a></h5>
+<p>Filter channels by genre or keyword.</p>
+<pre><code class="language-bash">soma-player list --filter electronic
+soma-player list --filter ambient
+soma-player list -F jazz
+</code></pre>
+<h5 id="--sort--s"><a class="header" href="#--sort--s"><code>--sort</code>, <code>-s</code></a></h5>
+<p>Sort channels by criteria.</p>
+<pre><code class="language-bash">soma-player list --sort listeners
+soma-player list --sort name
+soma-player list -s genre
+</code></pre>
+<p><strong>Sort Options:</strong></p>
+<ul>
+<li><code>name</code> - Alphabetical by channel name</li>
+<li><code>listeners</code> - By listener count (descending)</li>
+<li><code>genre</code> - By genre, then name</li>
+<li><code>id</code> - By channel ID</li>
+</ul>
+<h3 id="config---configuration-management"><a class="header" href="#config---configuration-management"><code>config</code> - Configuration Management</a></h3>
+<p>Manage application configuration.</p>
+<h4 id="config-show"><a class="header" href="#config-show"><code>config show</code></a></h4>
+<p>Display current configuration.</p>
+<pre><code class="language-bash">soma-player config show
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code class="language-toml">last_channel_id = "groovesalad"
+volume = 75
+auto_start = false
+
+[logging]
+level = "info"
+file_rotation = true
+</code></pre>
+<h4 id="config-get"><a class="header" href="#config-get"><code>config get</code></a></h4>
+<p>Get a specific configuration value.</p>
+<pre><code class="language-bash">soma-player config get volume
+soma-player config get logging.level
+</code></pre>
+<h4 id="config-set"><a class="header" href="#config-set"><code>config set</code></a></h4>
+<p>Set a configuration value.</p>
+<pre><code class="language-bash">soma-player config set volume 80
+soma-player config set auto_start true
+soma-player config set logging.level debug
+</code></pre>
+<h4 id="config-reset"><a class="header" href="#config-reset"><code>config reset</code></a></h4>
+<p>Reset configuration to defaults.</p>
+<pre><code class="language-bash"># Reset all settings
+soma-player config reset
+
+# Reset specific section
+soma-player config reset logging
+
+# Reset specific key
+soma-player config reset volume
+</code></pre>
+<h4 id="config-validate"><a class="header" href="#config-validate"><code>config validate</code></a></h4>
+<p>Validate configuration file syntax and values.</p>
+<pre><code class="language-bash">soma-player config validate
+</code></pre>
+<p><strong>Output on success:</strong></p>
+<pre><code>Configuration is valid ✓
+</code></pre>
+<p><strong>Output on errors:</strong></p>
+<pre><code>Configuration errors:
+- Invalid volume value '150' (must be 0-100)
+- Unknown color_scheme 'rainbow'
+</code></pre>
+<h4 id="config-backup"><a class="header" href="#config-backup"><code>config backup</code></a></h4>
+<p>Create a backup of the current configuration.</p>
+<pre><code class="language-bash">soma-player config backup
+soma-player config backup --file /path/to/backup.toml
+</code></pre>
+<h4 id="config-restore"><a class="header" href="#config-restore"><code>config restore</code></a></h4>
+<p>Restore configuration from a backup.</p>
+<pre><code class="language-bash">soma-player config restore
+soma-player config restore --file /path/to/backup.toml
+</code></pre>
+<h2 id="environment-variables"><a class="header" href="#environment-variables">Environment Variables</a></h2>
+<h3 id="logging-control"><a class="header" href="#logging-control">Logging Control</a></h3>
+<h4 id="rust_log"><a class="header" href="#rust_log"><code>RUST_LOG</code></a></h4>
+<p>Override log level and filtering.</p>
+<pre><code class="language-bash"># Debug level for all modules
+RUST_LOG=debug soma-player
+
+# Specific module debugging
+RUST_LOG=soma_player::audio=debug soma-player
+
+# Multiple modules
+RUST_LOG=soma_player::audio=debug,soma_player::ui=info soma-player
+</code></pre>
+<h4 id="soma_log_file"><a class="header" href="#soma_log_file"><code>SOMA_LOG_FILE</code></a></h4>
+<p>Custom log file location.</p>
+<pre><code class="language-bash">SOMA_LOG_FILE=/tmp/soma-debug.log soma-player
+</code></pre>
+<h3 id="configuration-override"><a class="header" href="#configuration-override">Configuration Override</a></h3>
+<h4 id="soma_config_dir"><a class="header" href="#soma_config_dir"><code>SOMA_CONFIG_DIR</code></a></h4>
+<p>Custom configuration directory.</p>
+<pre><code class="language-bash">SOMA_CONFIG_DIR=~/.soma soma-player
+</code></pre>
+<h4 id="soma_config_file"><a class="header" href="#soma_config_file"><code>SOMA_CONFIG_FILE</code></a></h4>
+<p>Custom configuration file.</p>
+<pre><code class="language-bash">SOMA_CONFIG_FILE=/etc/soma-player.toml soma-player
+</code></pre>
+<h3 id="audio-settings"><a class="header" href="#audio-settings">Audio Settings</a></h3>
+<h4 id="soma_audio_backend"><a class="header" href="#soma_audio_backend"><code>SOMA_AUDIO_BACKEND</code></a></h4>
+<p>Force specific audio backend.</p>
+<pre><code class="language-bash"># Linux: Force ALSA
+SOMA_AUDIO_BACKEND=alsa soma-player
+
+# macOS: Force Core Audio
+SOMA_AUDIO_BACKEND=coreaudio soma-player
+</code></pre>
+<h4 id="soma_sample_rate"><a class="header" href="#soma_sample_rate"><code>SOMA_SAMPLE_RATE</code></a></h4>
+<p>Override audio sample rate.</p>
+<pre><code class="language-bash">SOMA_SAMPLE_RATE=48000 soma-player
+</code></pre>
+<h3 id="network-settings-1"><a class="header" href="#network-settings-1">Network Settings</a></h3>
+<h4 id="soma_proxy"><a class="header" href="#soma_proxy"><code>SOMA_PROXY</code></a></h4>
+<p>HTTP proxy for all requests.</p>
+<pre><code class="language-bash">SOMA_PROXY=http://proxy.example.com:8080 soma-player
+</code></pre>
+<h4 id="soma_timeout"><a class="header" href="#soma_timeout"><code>SOMA_TIMEOUT</code></a></h4>
+<p>Network timeout in seconds.</p>
+<pre><code class="language-bash">SOMA_TIMEOUT=60 soma-player
+</code></pre>
+<h2 id="exit-codes"><a class="header" href="#exit-codes">Exit Codes</a></h2>
+<h3 id="standard-exit-codes"><a class="header" href="#standard-exit-codes">Standard Exit Codes</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Code</th><th>Meaning</th><th>Description</th></tr></thead><tbody>
+<tr><td>0</td><td>Success</td><td>Normal exit</td></tr>
+<tr><td>1</td><td>General Error</td><td>Unspecified error</td></tr>
+<tr><td>2</td><td>Argument Error</td><td>Invalid command-line arguments</td></tr>
+<tr><td>3</td><td>Config Error</td><td>Configuration file issues</td></tr>
+<tr><td>4</td><td>Network Error</td><td>Network connectivity problems</td></tr>
+<tr><td>5</td><td>Audio Error</td><td>Audio system issues</td></tr>
+<tr><td>130</td><td>Interrupted</td><td>Ctrl+C or SIGINT received</td></tr>
+</tbody></table>
+</div>
+<h3 id="examples-1"><a class="header" href="#examples-1">Examples</a></h3>
+<pre><code class="language-bash"># Check exit code
+soma-player play invalid_channel
+echo $?  # Outputs: 4 (network error - channel not found)
+
+# Use in scripts
+if soma-player list --quiet; then
+    echo "Channels available"
+else
+    echo "Failed to fetch channels"
+fi
+</code></pre>
+<h2 id="scripting-and-automation"><a class="header" href="#scripting-and-automation">Scripting and Automation</a></h2>
+<h3 id="background-playback"><a class="header" href="#background-playback">Background Playback</a></h3>
+<pre><code class="language-bash"># Start playing in background
+nohup soma-player play groovesalad --no-ui &gt; /dev/null 2&gt;&amp;1 &amp;
+
+# Save the process ID
+echo $! &gt; soma-player.pid
+
+# Stop later
+kill $(cat soma-player.pid)
+</code></pre>
+<h3 id="system-service-integration"><a class="header" href="#system-service-integration">System Service Integration</a></h3>
+<pre><code class="language-bash"># systemd service example
+[Unit]
+Description=SomaFM Player
+After=network.target
+
+[Service]
+Type=simple
+User=music
+ExecStart=/usr/local/bin/soma-player play groovesalad --no-ui
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<h3 id="scheduled-playback"><a class="header" href="#scheduled-playback">Scheduled Playback</a></h3>
+<pre><code class="language-bash"># cron job to play during work hours
+# Play Mon-Fri 9 AM to 5 PM
+0 9 * * 1-5 /usr/local/bin/soma-player play groovesalad --duration 8h --no-ui
+</code></pre>
+<h3 id="integration-with-other-tools"><a class="header" href="#integration-with-other-tools">Integration with Other Tools</a></h3>
+<h4 id="i3polybar-integration"><a class="header" href="#i3polybar-integration">i3/Polybar Integration</a></h4>
+<pre><code class="language-bash"># Get current playing status
+soma-player status --format=json | jq -r '.channel.title'
+
+# Volume control
+soma-player volume +5
+soma-player volume -5
+</code></pre>
+<h4 id="dmenurofi-channel-selection"><a class="header" href="#dmenurofi-channel-selection">dmenu/rofi Channel Selection</a></h4>
+<pre><code class="language-bash"># Channel selection menu
+channel=$(soma-player list --format=simple | dmenu -p "Channel:")
+if [ -n "$channel" ]; then
+    soma-player play "$channel"
+fi
+</code></pre>
+<h2 id="troubleshooting-command-line-issues"><a class="header" href="#troubleshooting-command-line-issues">Troubleshooting Command-Line Issues</a></h2>
+<h3 id="common-problems"><a class="header" href="#common-problems">Common Problems</a></h3>
+<h4 id="command-not-found"><a class="header" href="#command-not-found">Command Not Found</a></h4>
+<pre><code class="language-bash"># Check if installed
+which soma-player
+
+# Check PATH
+echo $PATH
+
+# Add to PATH if needed
+export PATH="$HOME/.local/bin:$PATH"
+</code></pre>
+<h4 id="permission-denied-1"><a class="header" href="#permission-denied-1">Permission Denied</a></h4>
+<pre><code class="language-bash"># Check file permissions
+ls -la $(which soma-player)
+
+# Make executable if needed
+chmod +x ~/.local/bin/soma-player
+</code></pre>
+<h4 id="configuration-errors"><a class="header" href="#configuration-errors">Configuration Errors</a></h4>
+<pre><code class="language-bash"># Validate configuration
+soma-player config validate
+
+# Reset if corrupted
+soma-player config reset
+
+# Use custom config temporarily
+soma-player --config /dev/null
+</code></pre>
+<h4 id="audio-issues"><a class="header" href="#audio-issues">Audio Issues</a></h4>
+<pre><code class="language-bash"># Test audio system
+soma-player play groovesalad --log-level debug
+
+# Try different backend
+SOMA_AUDIO_BACKEND=pulse soma-player
+
+# Check audio permissions
+groups $USER | grep -E "(audio|pulse-access)"
+</code></pre>
+<h3 id="debug-mode"><a class="header" href="#debug-mode">Debug Mode</a></h3>
+<pre><code class="language-bash"># Full debug information
+RUST_LOG=debug soma-player --verbose
+
+# Save debug log
+RUST_LOG=debug soma-player --verbose 2&gt; debug.log
+</code></pre>
+<h2 id="integration-examples"><a class="header" href="#integration-examples">Integration Examples</a></h2>
+<h3 id="shell-functions"><a class="header" href="#shell-functions">Shell Functions</a></h3>
+<pre><code class="language-bash"># Add to ~/.bashrc or ~/.zshrc
+
+# Quick channel switching
+soma() {
+    if [ $# -eq 0 ]; then
+        soma-player
+    else
+        soma-player play "$1"
+    fi
+}
+
+# Channel search
+soma-search() {
+    soma-player list --filter "$1"
+}
+
+# Current status
+soma-status() {
+    soma-player status --format=simple
+}
+</code></pre>
+<h3 id="fish-shell-completions"><a class="header" href="#fish-shell-completions">Fish Shell Completions</a></h3>
+<pre><code class="language-fish"># ~/.config/fish/completions/soma-player.fish
+complete -c soma-player -n '__fish_use_subcommand' -a 'play list config help'
+complete -c soma-player -n '__fish_seen_subcommand_from play' -a '(soma-player list --format=simple)'
+</code></pre>
+<h3 id="zsh-completions"><a class="header" href="#zsh-completions">Zsh Completions</a></h3>
+<pre><code class="language-zsh"># Add to ~/.zshrc
+compdef '_files -W ~/.config/soma-player' soma-player --config
+</code></pre>
+<p>This comprehensive command-line reference covers all aspects of using SomaFM Player from the terminal and in automated scenarios.</p>
 
                     </main>
 

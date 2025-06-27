@@ -170,6 +170,296 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h1>
+<p>Common issues and solutions for SomaFM Player.</p>
+<h2 id="installation-issues"><a class="header" href="#installation-issues">Installation Issues</a></h2>
+<h3 id="binary-not-found"><a class="header" href="#binary-not-found">Binary Not Found</a></h3>
+<p><strong>Problem</strong>: <code>soma-player: command not found</code></p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>
+<p><strong>Check PATH</strong>: Ensure <code>~/.local/bin</code> is in your PATH</p>
+<pre><code class="language-bash">echo $PATH | grep -o ~/.local/bin
+</code></pre>
+</li>
+<li>
+<p><strong>Add to PATH</strong> (if missing):</p>
+<pre><code class="language-bash">echo 'export PATH="$HOME/.local/bin:$PATH"' &gt;&gt; ~/.bashrc
+source ~/.bashrc
+</code></pre>
+</li>
+<li>
+<p><strong>Verify installation</strong>:</p>
+<pre><code class="language-bash">ls -la ~/.local/bin/soma-player
+</code></pre>
+</li>
+</ol>
+<h3 id="permission-denied"><a class="header" href="#permission-denied">Permission Denied</a></h3>
+<p><strong>Problem</strong>: <code>Permission denied</code> when running</p>
+<p><strong>Solution</strong>:</p>
+<pre><code class="language-bash">chmod +x ~/.local/bin/soma-player
+</code></pre>
+<h3 id="audio-dependencies-linux"><a class="header" href="#audio-dependencies-linux">Audio Dependencies (Linux)</a></h3>
+<p><strong>Problem</strong>: Audio playback fails on Linux</p>
+<p><strong>Solutions</strong>:</p>
+<pre><code class="language-bash"># Ubuntu/Debian
+sudo apt-get install libasound2-dev
+
+# Fedora/CentOS/RHEL
+sudo dnf install alsa-lib-devel
+
+# Arch Linux
+sudo pacman -S alsa-lib
+</code></pre>
+<h2 id="playback-issues"><a class="header" href="#playback-issues">Playback Issues</a></h2>
+<h3 id="no-audio-output"><a class="header" href="#no-audio-output">No Audio Output</a></h3>
+<p><strong>Symptoms</strong>: Player starts but no sound</p>
+<p><strong>Debugging Steps</strong>:</p>
+<ol>
+<li>
+<p><strong>Check system audio</strong>:</p>
+<pre><code class="language-bash"># Test system audio
+speaker-test -t sine -f 1000 -l 1
+</code></pre>
+</li>
+<li>
+<p><strong>Check volume levels</strong>:</p>
+<ul>
+<li>System volume is not muted</li>
+<li>Player volume is above 0%</li>
+</ul>
+</li>
+<li>
+<p><strong>Audio device selection</strong>:</p>
+<ul>
+<li>Ensure correct audio output device is selected</li>
+<li>Try switching audio devices in system settings</li>
+</ul>
+</li>
+</ol>
+<h3 id="stream-connection-fails"><a class="header" href="#stream-connection-fails">Stream Connection Fails</a></h3>
+<p><strong>Symptoms</strong>: "Failed to connect to stream"</p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>
+<p><strong>Check internet connection</strong>:</p>
+<pre><code class="language-bash">ping somafm.com
+</code></pre>
+</li>
+<li>
+<p><strong>Try different channel</strong>: Some channels may be temporarily unavailable</p>
+</li>
+<li>
+<p><strong>Check firewall</strong>: Ensure outbound HTTP connections are allowed</p>
+</li>
+<li>
+<p><strong>Restart application</strong>: Connection issues may be temporary</p>
+</li>
+</ol>
+<h3 id="stuttering-audio"><a class="header" href="#stuttering-audio">Stuttering Audio</a></h3>
+<p><strong>Symptoms</strong>: Audio cuts out or stutters</p>
+<p><strong>Causes &amp; Solutions</strong>:</p>
+<ol>
+<li><strong>Network issues</strong>: Check internet stability</li>
+<li><strong>High CPU usage</strong>: Close other applications</li>
+<li><strong>Audio buffer issues</strong>: Restart the application</li>
+<li><strong>System audio driver</strong>: Update audio drivers</li>
+</ol>
+<h2 id="interface-issues"><a class="header" href="#interface-issues">Interface Issues</a></h2>
+<h3 id="display-problems"><a class="header" href="#display-problems">Display Problems</a></h3>
+<p><strong>Problem</strong>: Interface looks corrupted or misaligned</p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>
+<p><strong>Terminal size</strong>: Ensure terminal is at least 80x24</p>
+<pre><code class="language-bash">resize -s 24 80
+</code></pre>
+</li>
+<li>
+<p><strong>Terminal compatibility</strong>: Use a modern terminal emulator</p>
+<ul>
+<li>✅ Recommended: Alacritty, Kitty, iTerm2, Windows Terminal</li>
+<li>⚠️ May have issues: Old terminals, basic consoles</li>
+</ul>
+</li>
+<li>
+<p><strong>Color support</strong>: Enable 256-color support</p>
+<pre><code class="language-bash">echo $TERM  # Should show something like xterm-256color
+</code></pre>
+</li>
+</ol>
+<h3 id="spectrum-visualizer-issues"><a class="header" href="#spectrum-visualizer-issues">Spectrum Visualizer Issues</a></h3>
+<p><strong>Problem</strong>: Visualizer not showing or appears static</p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li><strong>Terminal size</strong>: Ensure sufficient space for visualizer</li>
+<li><strong>Color support</strong>: Enable color in terminal</li>
+<li><strong>Refresh rate</strong>: Try resizing terminal window</li>
+</ol>
+<h3 id="keyboard-input-not-working"><a class="header" href="#keyboard-input-not-working">Keyboard Input Not Working</a></h3>
+<p><strong>Problem</strong>: Keys don't respond</p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li><strong>Terminal focus</strong>: Ensure terminal window has focus</li>
+<li><strong>Input capture</strong>: Some terminals may capture certain keys</li>
+<li><strong>Restart</strong>: Try restarting the application</li>
+</ol>
+<h2 id="configuration-issues"><a class="header" href="#configuration-issues">Configuration Issues</a></h2>
+<h3 id="settings-not-saving"><a class="header" href="#settings-not-saving">Settings Not Saving</a></h3>
+<p><strong>Problem</strong>: Volume/channel changes don't persist</p>
+<p><strong>Debugging</strong>:</p>
+<ol>
+<li>
+<p><strong>Check permissions</strong>:</p>
+<pre><code class="language-bash">ls -la ~/.config/soma-player/
+</code></pre>
+</li>
+<li>
+<p><strong>Create directory</strong> (if missing):</p>
+<pre><code class="language-bash">mkdir -p ~/.config/soma-player
+</code></pre>
+</li>
+<li>
+<p><strong>Check disk space</strong>:</p>
+<pre><code class="language-bash">df -h ~/.config
+</code></pre>
+</li>
+</ol>
+<h3 id="configuration-file-corrupted"><a class="header" href="#configuration-file-corrupted">Configuration File Corrupted</a></h3>
+<p><strong>Problem</strong>: Application fails to start with config error</p>
+<p><strong>Solution</strong>:</p>
+<pre><code class="language-bash"># Backup existing config
+mv ~/.config/soma-player/config.toml ~/.config/soma-player/config.toml.backup
+
+# Restart application (creates new default config)
+soma-player
+</code></pre>
+<h2 id="performance-issues"><a class="header" href="#performance-issues">Performance Issues</a></h2>
+<h3 id="high-cpu-usage"><a class="header" href="#high-cpu-usage">High CPU Usage</a></h3>
+<p><strong>Symptoms</strong>: System becomes slow while playing</p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>
+<p><strong>Check running processes</strong>:</p>
+<pre><code class="language-bash">top | grep soma-player
+</code></pre>
+</li>
+<li>
+<p><strong>Reduce terminal effects</strong>: Use simpler terminal themes</p>
+</li>
+<li>
+<p><strong>Update system</strong>: Ensure OS and drivers are current</p>
+</li>
+</ol>
+<h3 id="memory-usage"><a class="header" href="#memory-usage">Memory Usage</a></h3>
+<p><strong>Symptoms</strong>: Memory usage grows over time</p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li><strong>Restart periodically</strong>: Long-running sessions may accumulate memory</li>
+<li><strong>Check logs</strong>: Look for memory-related errors in logs</li>
+<li><strong>Update</strong>: Ensure you're running the latest version</li>
+</ol>
+<h2 id="network-issues"><a class="header" href="#network-issues">Network Issues</a></h2>
+<h3 id="proxycorporate-network"><a class="header" href="#proxycorporate-network">Proxy/Corporate Network</a></h3>
+<p><strong>Problem</strong>: Cannot connect through corporate proxy</p>
+<p><strong>Solutions</strong>:</p>
+<ol>
+<li>
+<p><strong>HTTP proxy</strong>: Set proxy environment variables</p>
+<pre><code class="language-bash">export http_proxy=http://proxy.company.com:8080
+export https_proxy=http://proxy.company.com:8080
+</code></pre>
+</li>
+<li>
+<p><strong>Direct connection</strong>: Try from personal network to isolate issue</p>
+</li>
+</ol>
+<h3 id="firewall-blocking"><a class="header" href="#firewall-blocking">Firewall Blocking</a></h3>
+<p><strong>Problem</strong>: Connections blocked by firewall</p>
+<p><strong>Required access</strong>:</p>
+<ul>
+<li><strong>Outbound HTTP</strong> (port 80)</li>
+<li><strong>Outbound HTTPS</strong> (port 443)</li>
+<li><strong>Audio streams</strong> (various ports)</li>
+</ul>
+<h2 id="logging-and-debugging"><a class="header" href="#logging-and-debugging">Logging and Debugging</a></h2>
+<h3 id="enable-debug-logging"><a class="header" href="#enable-debug-logging">Enable Debug Logging</a></h3>
+<pre><code class="language-bash">RUST_LOG=debug soma-player
+</code></pre>
+<h3 id="check-log-files"><a class="header" href="#check-log-files">Check Log Files</a></h3>
+<pre><code class="language-bash"># View recent logs
+tail -f ~/.config/soma-player/logs/soma-player.log
+
+# Search for errors
+grep -i error ~/.config/soma-player/logs/soma-player.log
+</code></pre>
+<h3 id="collect-debug-information"><a class="header" href="#collect-debug-information">Collect Debug Information</a></h3>
+<p>For bug reports, collect:</p>
+<ol>
+<li>
+<p><strong>Version information</strong>:</p>
+<pre><code class="language-bash">soma-player --version
+</code></pre>
+</li>
+<li>
+<p><strong>System information</strong>:</p>
+<pre><code class="language-bash">uname -a
+</code></pre>
+</li>
+<li>
+<p><strong>Terminal information</strong>:</p>
+<pre><code class="language-bash">echo $TERM
+tput colors
+</code></pre>
+</li>
+<li>
+<p><strong>Log excerpt</strong> (relevant error messages)</p>
+</li>
+</ol>
+<h2 id="getting-help"><a class="header" href="#getting-help">Getting Help</a></h2>
+<h3 id="before-reporting-issues"><a class="header" href="#before-reporting-issues">Before Reporting Issues</a></h3>
+<ol>
+<li><strong>Check this troubleshooting guide</strong></li>
+<li><strong>Search existing issues</strong> on GitHub</li>
+<li><strong>Try with debug logging</strong> enabled</li>
+<li><strong>Test basic functionality</strong> (can you run <code>soma-player --version</code>?)</li>
+</ol>
+<h3 id="reporting-bugs"><a class="header" href="#reporting-bugs">Reporting Bugs</a></h3>
+<p>Include this information:</p>
+<ul>
+<li><strong>Exact error message</strong></li>
+<li><strong>Steps to reproduce</strong></li>
+<li><strong>System information</strong> (OS, terminal)</li>
+<li><strong>Log files</strong> (with debug enabled)</li>
+<li><strong>Expected vs actual behavior</strong></li>
+</ul>
+<h3 id="community-support"><a class="header" href="#community-support">Community Support</a></h3>
+<ul>
+<li><strong>GitHub Issues</strong>: Technical problems and bugs</li>
+<li><strong>GitHub Discussions</strong>: General questions and usage help</li>
+</ul>
+<h2 id="quick-fixes"><a class="header" href="#quick-fixes">Quick Fixes</a></h2>
+<h3 id="complete-reset"><a class="header" href="#complete-reset">Complete Reset</a></h3>
+<p>If all else fails, completely reset the application:</p>
+<pre><code class="language-bash"># Stop the application
+# Remove all application data
+rm -rf ~/.config/soma-player
+
+# Reinstall (if using install script)
+curl -sSL https://raw.githubusercontent.com/mpuccini/soma-play/main/install.sh | bash
+
+# Or rebuild from source
+git clone https://github.com/mpuccini/soma-play.git
+cd soma-play
+cargo build --release
+cp target/release/soma-player ~/.local/bin/
+</code></pre>
+<h3 id="emergency-commands"><a class="header" href="#emergency-commands">Emergency Commands</a></h3>
+<p>If the interface becomes unresponsive:</p>
+<ul>
+<li><strong>Ctrl+C</strong>: Force quit (may leave terminal in bad state)</li>
+<li><strong>Ctrl+Z</strong>: Suspend (then <code>fg</code> to resume or <code>kill %1</code> to terminate)</li>
+<li><strong>Close terminal</strong>: Last resort</li>
+</ul>
 
                     </main>
 

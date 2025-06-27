@@ -170,6 +170,429 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="configuration-options"><a class="header" href="#configuration-options">Configuration Options</a></h1>
+<p>Complete reference for all configuration options in SomaFM Player.</p>
+<h2 id="configuration-file"><a class="header" href="#configuration-file">Configuration File</a></h2>
+<h3 id="location"><a class="header" href="#location">Location</a></h3>
+<pre><code>~/.config/soma-player/config.toml
+</code></pre>
+<h3 id="format"><a class="header" href="#format">Format</a></h3>
+<p>The configuration file uses TOML format for human-readable settings.</p>
+<h3 id="example-configuration"><a class="header" href="#example-configuration">Example Configuration</a></h3>
+<pre><code class="language-toml"># SomaFM Player Configuration
+
+# Last played channel (auto-saved)
+last_channel_id = "groovesalad"
+
+# Audio volume (0-100)
+volume = 75
+
+# Skip channel selection on startup
+auto_start = false
+
+# Logging configuration
+[logging]
+level = "info"
+file_rotation = true
+max_files = 7
+
+# User interface settings
+[ui]
+show_spectrum = true
+spectrum_style = "bars"
+color_scheme = "default"
+
+# Audio settings
+[audio]
+buffer_size = 4096
+sample_rate = 44100
+reconnect_attempts = 3
+</code></pre>
+<h2 id="core-options"><a class="header" href="#core-options">Core Options</a></h2>
+<h3 id="last_channel_id"><a class="header" href="#last_channel_id"><code>last_channel_id</code></a></h3>
+<p><strong>Type:</strong> <code>String</code> (optional)<br />
+<strong>Default:</strong> <code>None</code><br />
+<strong>Auto-managed:</strong> Yes</p>
+<p>The ID of the last played channel. This is automatically saved when you switch channels and used to restore your session.</p>
+<p><strong>Valid Values:</strong></p>
+<ul>
+<li>Any valid SomaFM channel ID (e.g., "groovesalad", "dronezone", "lush")</li>
+<li><code>null</code> or empty for no default channel</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">last_channel_id = "groovesalad"
+</code></pre>
+<h3 id="volume"><a class="header" href="#volume"><code>volume</code></a></h3>
+<p><strong>Type:</strong> <code>Integer</code><br />
+<strong>Default:</strong> <code>50</code><br />
+<strong>Range:</strong> <code>0-100</code><br />
+<strong>Auto-managed:</strong> Yes</p>
+<p>Audio volume level as a percentage. Changes are automatically saved when you adjust volume during playback.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">volume = 75
+</code></pre>
+<h3 id="auto_start"><a class="header" href="#auto_start"><code>auto_start</code></a></h3>
+<p><strong>Type:</strong> <code>Boolean</code><br />
+<strong>Default:</strong> <code>false</code></p>
+<p>Skip the channel selection screen and automatically start playing the last channel on startup.</p>
+<p><strong>Behavior:</strong></p>
+<ul>
+<li><code>true</code>: Immediately start playing <code>last_channel_id</code> (if set)</li>
+<li><code>false</code>: Show channel selection screen (default behavior)</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">auto_start = true
+</code></pre>
+<h2 id="logging-options"><a class="header" href="#logging-options">Logging Options</a></h2>
+<h3 id="logging-section"><a class="header" href="#logging-section"><code>[logging]</code> Section</a></h3>
+<p>Configure logging behavior and output.</p>
+<h4 id="level"><a class="header" href="#level"><code>level</code></a></h4>
+<p><strong>Type:</strong> <code>String</code><br />
+<strong>Default:</strong> <code>"info"</code><br />
+<strong>Values:</strong> <code>"error"</code>, <code>"warn"</code>, <code>"info"</code>, <code>"debug"</code>, <code>"trace"</code></p>
+<p>Sets the minimum log level for file and console output.</p>
+<p><strong>Log Levels:</strong></p>
+<ul>
+<li><code>error</code>: Only critical errors</li>
+<li><code>warn</code>: Warnings and errors</li>
+<li><code>info</code>: General information (recommended)</li>
+<li><code>debug</code>: Detailed debugging information</li>
+<li><code>trace</code>: Very verbose tracing (development only)</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[logging]
+level = "debug"
+</code></pre>
+<h4 id="file_rotation"><a class="header" href="#file_rotation"><code>file_rotation</code></a></h4>
+<p><strong>Type:</strong> <code>Boolean</code><br />
+<strong>Default:</strong> <code>true</code></p>
+<p>Enable automatic log file rotation to prevent disk space issues.</p>
+<p><strong>Behavior:</strong></p>
+<ul>
+<li><code>true</code>: Rotate logs daily, keep last 7 days</li>
+<li><code>false</code>: Single log file (grows indefinitely)</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[logging]
+file_rotation = true
+</code></pre>
+<h4 id="max_files"><a class="header" href="#max_files"><code>max_files</code></a></h4>
+<p><strong>Type:</strong> <code>Integer</code><br />
+<strong>Default:</strong> <code>7</code><br />
+<strong>Range:</strong> <code>1-365</code></p>
+<p>Number of rotated log files to keep when <code>file_rotation</code> is enabled.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[logging]
+max_files = 14  # Keep 2 weeks of logs
+</code></pre>
+<h2 id="user-interface-options"><a class="header" href="#user-interface-options">User Interface Options</a></h2>
+<h3 id="ui-section"><a class="header" href="#ui-section"><code>[ui]</code> Section</a></h3>
+<p>Configure the terminal user interface appearance and behavior.</p>
+<h4 id="show_spectrum"><a class="header" href="#show_spectrum"><code>show_spectrum</code></a></h4>
+<p><strong>Type:</strong> <code>Boolean</code><br />
+<strong>Default:</strong> <code>true</code></p>
+<p>Enable or disable the spectrum visualizer display.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[ui]
+show_spectrum = false
+</code></pre>
+<h4 id="spectrum_style"><a class="header" href="#spectrum_style"><code>spectrum_style</code></a></h4>
+<p><strong>Type:</strong> <code>String</code><br />
+<strong>Default:</strong> <code>"bars"</code><br />
+<strong>Values:</strong> <code>"bars"</code>, <code>"line"</code>, <code>"minimal"</code></p>
+<p>Visual style for the spectrum analyzer.</p>
+<p><strong>Styles:</strong></p>
+<ul>
+<li><code>bars</code>: Vertical bars (default)</li>
+<li><code>line</code>: Connected line graph</li>
+<li><code>minimal</code>: Simple dots/characters</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[ui]
+spectrum_style = "line"
+</code></pre>
+<h4 id="color_scheme"><a class="header" href="#color_scheme"><code>color_scheme</code></a></h4>
+<p><strong>Type:</strong> <code>String</code><br />
+<strong>Default:</strong> <code>"default"</code><br />
+<strong>Values:</strong> <code>"default"</code>, <code>"dark"</code>, <code>"light"</code>, <code>"monochrome"</code></p>
+<p>Color scheme for the user interface.</p>
+<p><strong>Schemes:</strong></p>
+<ul>
+<li><code>default</code>: Standard colors</li>
+<li><code>dark</code>: Dark theme optimized for dark terminals</li>
+<li><code>light</code>: Light theme optimized for light terminals</li>
+<li><code>monochrome</code>: No colors (accessibility)</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[ui]
+color_scheme = "dark"
+</code></pre>
+<h2 id="audio-options"><a class="header" href="#audio-options">Audio Options</a></h2>
+<h3 id="audio-section"><a class="header" href="#audio-section"><code>[audio]</code> Section</a></h3>
+<p>Configure audio playback and streaming behavior.</p>
+<h4 id="buffer_size"><a class="header" href="#buffer_size"><code>buffer_size</code></a></h4>
+<p><strong>Type:</strong> <code>Integer</code><br />
+<strong>Default:</strong> <code>4096</code><br />
+<strong>Range:</strong> <code>1024-16384</code></p>
+<p>Audio buffer size in samples. Larger buffers reduce skipping but increase latency.</p>
+<p><strong>Recommendations:</strong></p>
+<ul>
+<li><code>1024-2048</code>: Low latency, may skip on slow systems</li>
+<li><code>4096</code>: Balanced (recommended)</li>
+<li><code>8192-16384</code>: High latency, very stable</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[audio]
+buffer_size = 8192
+</code></pre>
+<h4 id="sample_rate"><a class="header" href="#sample_rate"><code>sample_rate</code></a></h4>
+<p><strong>Type:</strong> <code>Integer</code><br />
+<strong>Default:</strong> <code>44100</code><br />
+<strong>Values:</strong> <code>22050</code>, <code>44100</code>, <code>48000</code></p>
+<p>Preferred audio sample rate in Hz.</p>
+<p><strong>Common Rates:</strong></p>
+<ul>
+<li><code>22050</code>: Lower quality, lower bandwidth</li>
+<li><code>44100</code>: CD quality (recommended)</li>
+<li><code>48000</code>: Professional audio quality</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[audio]
+sample_rate = 48000
+</code></pre>
+<h4 id="reconnect_attempts"><a class="header" href="#reconnect_attempts"><code>reconnect_attempts</code></a></h4>
+<p><strong>Type:</strong> <code>Integer</code><br />
+<strong>Default:</strong> <code>3</code><br />
+<strong>Range:</strong> <code>0-10</code></p>
+<p>Number of automatic reconnection attempts when stream is lost.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[audio]
+reconnect_attempts = 5
+</code></pre>
+<h2 id="network-options"><a class="header" href="#network-options">Network Options</a></h2>
+<h3 id="network-section"><a class="header" href="#network-section"><code>[network]</code> Section</a></h3>
+<p>Configure network and streaming behavior.</p>
+<h4 id="timeout"><a class="header" href="#timeout"><code>timeout</code></a></h4>
+<p><strong>Type:</strong> <code>Integer</code><br />
+<strong>Default:</strong> <code>30</code><br />
+<strong>Range:</strong> <code>5-300</code></p>
+<p>Network timeout in seconds for API requests and stream connections.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[network]
+timeout = 60
+</code></pre>
+<h4 id="user_agent"><a class="header" href="#user_agent"><code>user_agent</code></a></h4>
+<p><strong>Type:</strong> <code>String</code><br />
+<strong>Default:</strong> <code>"SomaFM-Player/{version}"</code></p>
+<p>Custom User-Agent string for HTTP requests.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[network]
+user_agent = "MyCustomPlayer/1.0"
+</code></pre>
+<h4 id="proxy"><a class="header" href="#proxy"><code>proxy</code></a></h4>
+<p><strong>Type:</strong> <code>String</code> (optional)<br />
+<strong>Default:</strong> <code>None</code></p>
+<p>HTTP proxy URL for network requests.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[network]
+proxy = "http://proxy.example.com:8080"
+</code></pre>
+<h2 id="advanced-options"><a class="header" href="#advanced-options">Advanced Options</a></h2>
+<h3 id="advanced-section"><a class="header" href="#advanced-section"><code>[advanced]</code> Section</a></h3>
+<p>Advanced configuration options for power users.</p>
+<h4 id="config_reload_interval"><a class="header" href="#config_reload_interval"><code>config_reload_interval</code></a></h4>
+<p><strong>Type:</strong> <code>Integer</code><br />
+<strong>Default:</strong> <code>0</code><br />
+<strong>Range:</strong> <code>0-3600</code></p>
+<p>Automatic configuration reload interval in seconds. <code>0</code> disables auto-reload.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[advanced]
+config_reload_interval = 300  # Reload every 5 minutes
+</code></pre>
+<h4 id="memory_limit"><a class="header" href="#memory_limit"><code>memory_limit</code></a></h4>
+<p><strong>Type:</strong> <code>Integer</code><br />
+<strong>Default:</strong> <code>100</code><br />
+<strong>Range:</strong> <code>50-1000</code></p>
+<p>Memory usage limit in MB for caching and buffers.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-toml">[advanced]
+memory_limit = 200
+</code></pre>
+<h2 id="environment-variable-overrides"><a class="header" href="#environment-variable-overrides">Environment Variable Overrides</a></h2>
+<h3 id="logging"><a class="header" href="#logging">Logging</a></h3>
+<ul>
+<li><code>RUST_LOG</code>: Override log level (e.g., <code>RUST_LOG=debug</code>)</li>
+<li><code>SOMA_LOG_FILE</code>: Custom log file path</li>
+</ul>
+<h3 id="configuration"><a class="header" href="#configuration">Configuration</a></h3>
+<ul>
+<li><code>SOMA_CONFIG_DIR</code>: Custom configuration directory</li>
+<li><code>SOMA_CONFIG_FILE</code>: Custom configuration file path</li>
+</ul>
+<h3 id="audio"><a class="header" href="#audio">Audio</a></h3>
+<ul>
+<li><code>SOMA_AUDIO_BACKEND</code>: Force specific audio backend</li>
+<li><code>SOMA_SAMPLE_RATE</code>: Override sample rate</li>
+</ul>
+<h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
+<pre><code class="language-bash"># Debug logging
+RUST_LOG=debug soma-player
+
+# Custom config location
+SOMA_CONFIG_DIR=~/.soma soma-player
+
+# Force sample rate
+SOMA_SAMPLE_RATE=48000 soma-player
+</code></pre>
+<h2 id="configuration-validation"><a class="header" href="#configuration-validation">Configuration Validation</a></h2>
+<h3 id="automatic-validation"><a class="header" href="#automatic-validation">Automatic Validation</a></h3>
+<p>The application validates all configuration values on startup:</p>
+<ul>
+<li><strong>Range Checks</strong>: Numeric values within valid ranges</li>
+<li><strong>Type Validation</strong>: Correct data types for all options</li>
+<li><strong>Enum Validation</strong>: Valid choices for string options</li>
+<li><strong>Path Validation</strong>: Writeable paths for logs and cache</li>
+</ul>
+<h3 id="error-handling"><a class="header" href="#error-handling">Error Handling</a></h3>
+<p>Invalid configuration values result in:</p>
+<ol>
+<li><strong>Warning Message</strong>: Logged to console and file</li>
+<li><strong>Default Fallback</strong>: Invalid values replaced with defaults</li>
+<li><strong>Graceful Degradation</strong>: Application continues with valid settings</li>
+</ol>
+<h3 id="example-validation-error"><a class="header" href="#example-validation-error">Example Validation Error</a></h3>
+<pre><code>WARNING: Invalid volume value '150' (must be 0-100), using default: 50
+WARNING: Unknown color_scheme 'rainbow', using default: 'default'
+</code></pre>
+<h2 id="configuration-file-management"><a class="header" href="#configuration-file-management">Configuration File Management</a></h2>
+<h3 id="automatic-creation"><a class="header" href="#automatic-creation">Automatic Creation</a></h3>
+<p>If no configuration file exists, one is created with default values on first run.</p>
+<h3 id="backup-and-restore"><a class="header" href="#backup-and-restore">Backup and Restore</a></h3>
+<pre><code class="language-bash"># Backup current configuration
+cp ~/.config/soma-player/config.toml ~/.config/soma-player/config.toml.backup
+
+# Restore from backup
+cp ~/.config/soma-player/config.toml.backup ~/.config/soma-player/config.toml
+
+# Reset to defaults (delete config file)
+rm ~/.config/soma-player/config.toml
+</code></pre>
+<h3 id="migration"><a class="header" href="#migration">Migration</a></h3>
+<p>Configuration is automatically migrated when upgrading between versions:</p>
+<ul>
+<li><strong>Backward Compatibility</strong>: Old configurations continue to work</li>
+<li><strong>New Options</strong>: Added with default values</li>
+<li><strong>Deprecated Options</strong>: Ignored with warnings</li>
+</ul>
+<h2 id="security-considerations"><a class="header" href="#security-considerations">Security Considerations</a></h2>
+<h3 id="file-permissions"><a class="header" href="#file-permissions">File Permissions</a></h3>
+<p>Configuration files are created with user-only permissions (<code>600</code>):</p>
+<pre><code class="language-bash"># Check permissions
+ls -la ~/.config/soma-player/config.toml
+# Should show: -rw------- (user read/write only)
+</code></pre>
+<h3 id="sensitive-data"><a class="header" href="#sensitive-data">Sensitive Data</a></h3>
+<p>The configuration file contains no sensitive information:</p>
+<ul>
+<li>✅ <strong>Safe</strong>: Volume levels, UI preferences, channel history</li>
+<li>❌ <strong>Never Stored</strong>: Passwords, tokens, personal data</li>
+</ul>
+<h3 id="network-settings"><a class="header" href="#network-settings">Network Settings</a></h3>
+<p>When using proxy settings:</p>
+<ul>
+<li><strong>HTTP Proxies</strong>: Supported for SomaFM API requests</li>
+<li><strong>Authentication</strong>: Not currently supported in proxy URLs</li>
+<li><strong>HTTPS</strong>: All SomaFM communication uses HTTPS when available</li>
+</ul>
+<h2 id="troubleshooting-configuration"><a class="header" href="#troubleshooting-configuration">Troubleshooting Configuration</a></h2>
+<h3 id="common-issues"><a class="header" href="#common-issues">Common Issues</a></h3>
+<h4 id="configuration-not-loading"><a class="header" href="#configuration-not-loading">Configuration Not Loading</a></h4>
+<pre><code class="language-bash"># Check file exists
+ls ~/.config/soma-player/config.toml
+
+# Check file permissions
+ls -la ~/.config/soma-player/config.toml
+
+# Check syntax with TOML validator
+python3 -c "import toml; toml.load(open('~/.config/soma-player/config.toml'))"
+</code></pre>
+<h4 id="settings-not-persisting"><a class="header" href="#settings-not-persisting">Settings Not Persisting</a></h4>
+<ol>
+<li><strong>Check directory permissions</strong>: <code>~/.config/soma-player/</code> must be writable</li>
+<li><strong>Check disk space</strong>: Ensure sufficient space for config file</li>
+<li><strong>Check file locks</strong>: No other processes accessing the file</li>
+</ol>
+<h4 id="invalid-values-ignored"><a class="header" href="#invalid-values-ignored">Invalid Values Ignored</a></h4>
+<ul>
+<li>Check logs for validation warnings</li>
+<li>Verify values are within valid ranges</li>
+<li>Ensure correct TOML syntax and types</li>
+</ul>
+<h3 id="reset-configuration"><a class="header" href="#reset-configuration">Reset Configuration</a></h3>
+<pre><code class="language-bash"># Remove config file to reset to defaults
+rm ~/.config/soma-player/config.toml
+
+# Or rename to backup and recreate
+mv ~/.config/soma-player/config.toml ~/.config/soma-player/config.toml.old
+</code></pre>
+<h2 id="configuration-examples"><a class="header" href="#configuration-examples">Configuration Examples</a></h2>
+<h3 id="minimal-configuration"><a class="header" href="#minimal-configuration">Minimal Configuration</a></h3>
+<pre><code class="language-toml"># Basic setup - most users
+volume = 70
+auto_start = false
+</code></pre>
+<h3 id="power-user-configuration"><a class="header" href="#power-user-configuration">Power User Configuration</a></h3>
+<pre><code class="language-toml"># Advanced setup with all options
+last_channel_id = "dronezone"
+volume = 80
+auto_start = true
+
+[logging]
+level = "info"
+file_rotation = true
+max_files = 14
+
+[ui]
+show_spectrum = true
+spectrum_style = "bars"
+color_scheme = "dark"
+
+[audio]
+buffer_size = 8192
+sample_rate = 48000
+reconnect_attempts = 5
+
+[network]
+timeout = 45
+user_agent = "SomaPlayer-Custom/1.0"
+
+[advanced]
+config_reload_interval = 300
+memory_limit = 150
+</code></pre>
+<h3 id="development-configuration"><a class="header" href="#development-configuration">Development Configuration</a></h3>
+<pre><code class="language-toml"># Setup for development and debugging
+volume = 50
+auto_start = false
+
+[logging]
+level = "debug"
+file_rotation = false
+max_files = 1
+
+[ui]
+show_spectrum = true
+spectrum_style = "minimal"
+color_scheme = "default"
+
+[audio]
+buffer_size = 2048
+reconnect_attempts = 1
+
+[advanced]
+config_reload_interval = 60
+memory_limit = 50
+</code></pre>
+<p>This comprehensive configuration reference covers all available options for customizing SomaFM Player to your preferences.</p>
 
                     </main>
 

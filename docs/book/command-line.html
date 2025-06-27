@@ -170,6 +170,425 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="command-line"><a class="header" href="#command-line">Command Line</a></h1>
+<p>Command-line interface and options for SomaFM Player.</p>
+<h2 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h2>
+<h3 id="start-the-application"><a class="header" href="#start-the-application">Start the Application</a></h3>
+<pre><code class="language-bash">soma-player
+</code></pre>
+<p>This starts the application with the default terminal user interface.</p>
+<h3 id="quick-help"><a class="header" href="#quick-help">Quick Help</a></h3>
+<pre><code class="language-bash">soma-player --help
+</code></pre>
+<h3 id="version-information"><a class="header" href="#version-information">Version Information</a></h3>
+<pre><code class="language-bash">soma-player --version
+</code></pre>
+<h2 id="command-line-options"><a class="header" href="#command-line-options">Command-Line Options</a></h2>
+<h3 id="global-options"><a class="header" href="#global-options">Global Options</a></h3>
+<h4 id="--help--h"><a class="header" href="#--help--h"><code>--help</code>, <code>-h</code></a></h4>
+<p>Display help information and exit.</p>
+<pre><code class="language-bash">soma-player --help
+soma-player -h
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>SomaFM Player 0.1.6
+A terminal-based music player for SomaFM internet radio
+
+USAGE:
+    soma-player [OPTIONS] [COMMAND]
+
+OPTIONS:
+    -h, --help       Print help information
+    -v, --version    Print version information
+    -c, --config     Custom configuration file path
+    -l, --log-level  Override log level [debug|info|warn|error]
+    -q, --quiet      Suppress non-essential output
+    -V, --verbose    Enable verbose output
+
+COMMANDS:
+    play     Start playing a specific channel
+    list     List available channels
+    config   Manage configuration
+    help     Print this message or the help of a given subcommand
+</code></pre>
+<h4 id="--version--v"><a class="header" href="#--version--v"><code>--version</code>, <code>-v</code></a></h4>
+<p>Display version information and build details.</p>
+<pre><code class="language-bash">soma-player --version
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>soma-player 0.1.6
+Build: release
+Target: x86_64-unknown-linux-gnu
+Rustc: 1.75.0
+</code></pre>
+<h4 id="--config--c"><a class="header" href="#--config--c"><code>--config</code>, <code>-c</code></a></h4>
+<p>Specify a custom configuration file path.</p>
+<pre><code class="language-bash">soma-player --config /path/to/custom/config.toml
+soma-player -c ~/.config/soma-alt/config.toml
+</code></pre>
+<p><strong>Default:</strong> <code>~/.config/soma-player/config.toml</code></p>
+<h4 id="--log-level--l"><a class="header" href="#--log-level--l"><code>--log-level</code>, <code>-l</code></a></h4>
+<p>Override the log level for this session.</p>
+<pre><code class="language-bash">soma-player --log-level debug
+soma-player -l warn
+</code></pre>
+<p><strong>Valid Levels:</strong> <code>error</code>, <code>warn</code>, <code>info</code>, <code>debug</code>, <code>trace</code></p>
+<h4 id="--quiet--q"><a class="header" href="#--quiet--q"><code>--quiet</code>, <code>-q</code></a></h4>
+<p>Suppress non-essential output (warnings, info messages).</p>
+<pre><code class="language-bash">soma-player --quiet
+</code></pre>
+<p><strong>Effect:</strong> Only errors are displayed to the console.</p>
+<h4 id="--verbose--v"><a class="header" href="#--verbose--v"><code>--verbose</code>, <code>-V</code></a></h4>
+<p>Enable verbose output for debugging.</p>
+<pre><code class="language-bash">soma-player --verbose
+</code></pre>
+<p><strong>Effect:</strong> Equivalent to <code>--log-level debug</code> with additional startup information.</p>
+<h2 id="subcommands"><a class="header" href="#subcommands">Subcommands</a></h2>
+<h3 id="play---direct-channel-playback"><a class="header" href="#play---direct-channel-playback"><code>play</code> - Direct Channel Playback</a></h3>
+<p>Start playing a specific channel immediately without the UI.</p>
+<pre><code class="language-bash">soma-player play &lt;CHANNEL_ID&gt;
+</code></pre>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-bash"># Play Groove Salad
+soma-player play groovesalad
+
+# Play Drone Zone
+soma-player play dronezone
+
+# Play with custom volume
+soma-player play groovesalad --volume 75
+</code></pre>
+<h4 id="options-for-play"><a class="header" href="#options-for-play">Options for <code>play</code></a></h4>
+<h5 id="--volume--v"><a class="header" href="#--volume--v"><code>--volume</code>, <code>-V</code></a></h5>
+<p>Set initial volume level (0-100).</p>
+<pre><code class="language-bash">soma-player play groovesalad --volume 80
+soma-player play dronezone -V 60
+</code></pre>
+<h5 id="--no-ui"><a class="header" href="#--no-ui"><code>--no-ui</code></a></h5>
+<p>Play without launching the terminal interface (headless mode).</p>
+<pre><code class="language-bash">soma-player play groovesalad --no-ui
+</code></pre>
+<p><strong>Use Cases:</strong></p>
+<ul>
+<li>Background music in scripts</li>
+<li>System service integration</li>
+<li>Remote/headless servers</li>
+</ul>
+<h5 id="--duration--d"><a class="header" href="#--duration--d"><code>--duration</code>, <code>-d</code></a></h5>
+<p>Play for a specific duration then exit.</p>
+<pre><code class="language-bash">soma-player play groovesalad --duration 30m
+soma-player play dronezone -d 1h
+</code></pre>
+<p><strong>Time Formats:</strong></p>
+<ul>
+<li><code>30s</code> - 30 seconds</li>
+<li><code>5m</code> - 5 minutes</li>
+<li><code>2h</code> - 2 hours</li>
+<li><code>90</code> - 90 seconds (default unit)</li>
+</ul>
+<h3 id="list---channel-information"><a class="header" href="#list---channel-information"><code>list</code> - Channel Information</a></h3>
+<p>Display available SomaFM channels.</p>
+<pre><code class="language-bash">soma-player list
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code>Available SomaFM Channels:
+
+groovesalad     Groove Salad              1,234 listeners
+dronezone       Drone Zone                  987 listeners
+lush            Lush                        756 listeners
+folkfwd         Folk Forward                543 listeners
+...
+</code></pre>
+<h4 id="options-for-list"><a class="header" href="#options-for-list">Options for <code>list</code></a></h4>
+<h5 id="--format--f"><a class="header" href="#--format--f"><code>--format</code>, <code>-f</code></a></h5>
+<p>Specify output format.</p>
+<pre><code class="language-bash">soma-player list --format json
+soma-player list --format csv
+soma-player list -f table
+</code></pre>
+<p><strong>Formats:</strong></p>
+<ul>
+<li><code>table</code> - Human-readable table (default)</li>
+<li><code>json</code> - JSON format for scripting</li>
+<li><code>csv</code> - CSV format for spreadsheets</li>
+<li><code>simple</code> - Simple list of channel IDs</li>
+</ul>
+<h5 id="--filter--f"><a class="header" href="#--filter--f"><code>--filter</code>, <code>-F</code></a></h5>
+<p>Filter channels by genre or keyword.</p>
+<pre><code class="language-bash">soma-player list --filter electronic
+soma-player list --filter ambient
+soma-player list -F jazz
+</code></pre>
+<h5 id="--sort--s"><a class="header" href="#--sort--s"><code>--sort</code>, <code>-s</code></a></h5>
+<p>Sort channels by criteria.</p>
+<pre><code class="language-bash">soma-player list --sort listeners
+soma-player list --sort name
+soma-player list -s genre
+</code></pre>
+<p><strong>Sort Options:</strong></p>
+<ul>
+<li><code>name</code> - Alphabetical by channel name</li>
+<li><code>listeners</code> - By listener count (descending)</li>
+<li><code>genre</code> - By genre, then name</li>
+<li><code>id</code> - By channel ID</li>
+</ul>
+<h3 id="config---configuration-management"><a class="header" href="#config---configuration-management"><code>config</code> - Configuration Management</a></h3>
+<p>Manage application configuration.</p>
+<h4 id="config-show"><a class="header" href="#config-show"><code>config show</code></a></h4>
+<p>Display current configuration.</p>
+<pre><code class="language-bash">soma-player config show
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code class="language-toml">last_channel_id = "groovesalad"
+volume = 75
+auto_start = false
+
+[logging]
+level = "info"
+file_rotation = true
+</code></pre>
+<h4 id="config-get"><a class="header" href="#config-get"><code>config get</code></a></h4>
+<p>Get a specific configuration value.</p>
+<pre><code class="language-bash">soma-player config get volume
+soma-player config get logging.level
+</code></pre>
+<h4 id="config-set"><a class="header" href="#config-set"><code>config set</code></a></h4>
+<p>Set a configuration value.</p>
+<pre><code class="language-bash">soma-player config set volume 80
+soma-player config set auto_start true
+soma-player config set logging.level debug
+</code></pre>
+<h4 id="config-reset"><a class="header" href="#config-reset"><code>config reset</code></a></h4>
+<p>Reset configuration to defaults.</p>
+<pre><code class="language-bash"># Reset all settings
+soma-player config reset
+
+# Reset specific section
+soma-player config reset logging
+
+# Reset specific key
+soma-player config reset volume
+</code></pre>
+<h4 id="config-validate"><a class="header" href="#config-validate"><code>config validate</code></a></h4>
+<p>Validate configuration file syntax and values.</p>
+<pre><code class="language-bash">soma-player config validate
+</code></pre>
+<p><strong>Output on success:</strong></p>
+<pre><code>Configuration is valid ✓
+</code></pre>
+<p><strong>Output on errors:</strong></p>
+<pre><code>Configuration errors:
+- Invalid volume value '150' (must be 0-100)
+- Unknown color_scheme 'rainbow'
+</code></pre>
+<h4 id="config-backup"><a class="header" href="#config-backup"><code>config backup</code></a></h4>
+<p>Create a backup of the current configuration.</p>
+<pre><code class="language-bash">soma-player config backup
+soma-player config backup --file /path/to/backup.toml
+</code></pre>
+<h4 id="config-restore"><a class="header" href="#config-restore"><code>config restore</code></a></h4>
+<p>Restore configuration from a backup.</p>
+<pre><code class="language-bash">soma-player config restore
+soma-player config restore --file /path/to/backup.toml
+</code></pre>
+<h2 id="environment-variables"><a class="header" href="#environment-variables">Environment Variables</a></h2>
+<h3 id="logging-control"><a class="header" href="#logging-control">Logging Control</a></h3>
+<h4 id="rust_log"><a class="header" href="#rust_log"><code>RUST_LOG</code></a></h4>
+<p>Override log level and filtering.</p>
+<pre><code class="language-bash"># Debug level for all modules
+RUST_LOG=debug soma-player
+
+# Specific module debugging
+RUST_LOG=soma_player::audio=debug soma-player
+
+# Multiple modules
+RUST_LOG=soma_player::audio=debug,soma_player::ui=info soma-player
+</code></pre>
+<h4 id="soma_log_file"><a class="header" href="#soma_log_file"><code>SOMA_LOG_FILE</code></a></h4>
+<p>Custom log file location.</p>
+<pre><code class="language-bash">SOMA_LOG_FILE=/tmp/soma-debug.log soma-player
+</code></pre>
+<h3 id="configuration-override"><a class="header" href="#configuration-override">Configuration Override</a></h3>
+<h4 id="soma_config_dir"><a class="header" href="#soma_config_dir"><code>SOMA_CONFIG_DIR</code></a></h4>
+<p>Custom configuration directory.</p>
+<pre><code class="language-bash">SOMA_CONFIG_DIR=~/.soma soma-player
+</code></pre>
+<h4 id="soma_config_file"><a class="header" href="#soma_config_file"><code>SOMA_CONFIG_FILE</code></a></h4>
+<p>Custom configuration file.</p>
+<pre><code class="language-bash">SOMA_CONFIG_FILE=/etc/soma-player.toml soma-player
+</code></pre>
+<h3 id="audio-settings"><a class="header" href="#audio-settings">Audio Settings</a></h3>
+<h4 id="soma_audio_backend"><a class="header" href="#soma_audio_backend"><code>SOMA_AUDIO_BACKEND</code></a></h4>
+<p>Force specific audio backend.</p>
+<pre><code class="language-bash"># Linux: Force ALSA
+SOMA_AUDIO_BACKEND=alsa soma-player
+
+# macOS: Force Core Audio
+SOMA_AUDIO_BACKEND=coreaudio soma-player
+</code></pre>
+<h4 id="soma_sample_rate"><a class="header" href="#soma_sample_rate"><code>SOMA_SAMPLE_RATE</code></a></h4>
+<p>Override audio sample rate.</p>
+<pre><code class="language-bash">SOMA_SAMPLE_RATE=48000 soma-player
+</code></pre>
+<h3 id="network-settings"><a class="header" href="#network-settings">Network Settings</a></h3>
+<h4 id="soma_proxy"><a class="header" href="#soma_proxy"><code>SOMA_PROXY</code></a></h4>
+<p>HTTP proxy for all requests.</p>
+<pre><code class="language-bash">SOMA_PROXY=http://proxy.example.com:8080 soma-player
+</code></pre>
+<h4 id="soma_timeout"><a class="header" href="#soma_timeout"><code>SOMA_TIMEOUT</code></a></h4>
+<p>Network timeout in seconds.</p>
+<pre><code class="language-bash">SOMA_TIMEOUT=60 soma-player
+</code></pre>
+<h2 id="exit-codes"><a class="header" href="#exit-codes">Exit Codes</a></h2>
+<h3 id="standard-exit-codes"><a class="header" href="#standard-exit-codes">Standard Exit Codes</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Code</th><th>Meaning</th><th>Description</th></tr></thead><tbody>
+<tr><td>0</td><td>Success</td><td>Normal exit</td></tr>
+<tr><td>1</td><td>General Error</td><td>Unspecified error</td></tr>
+<tr><td>2</td><td>Argument Error</td><td>Invalid command-line arguments</td></tr>
+<tr><td>3</td><td>Config Error</td><td>Configuration file issues</td></tr>
+<tr><td>4</td><td>Network Error</td><td>Network connectivity problems</td></tr>
+<tr><td>5</td><td>Audio Error</td><td>Audio system issues</td></tr>
+<tr><td>130</td><td>Interrupted</td><td>Ctrl+C or SIGINT received</td></tr>
+</tbody></table>
+</div>
+<h3 id="examples"><a class="header" href="#examples">Examples</a></h3>
+<pre><code class="language-bash"># Check exit code
+soma-player play invalid_channel
+echo $?  # Outputs: 4 (network error - channel not found)
+
+# Use in scripts
+if soma-player list --quiet; then
+    echo "Channels available"
+else
+    echo "Failed to fetch channels"
+fi
+</code></pre>
+<h2 id="scripting-and-automation"><a class="header" href="#scripting-and-automation">Scripting and Automation</a></h2>
+<h3 id="background-playback"><a class="header" href="#background-playback">Background Playback</a></h3>
+<pre><code class="language-bash"># Start playing in background
+nohup soma-player play groovesalad --no-ui &gt; /dev/null 2&gt;&amp;1 &amp;
+
+# Save the process ID
+echo $! &gt; soma-player.pid
+
+# Stop later
+kill $(cat soma-player.pid)
+</code></pre>
+<h3 id="system-service-integration"><a class="header" href="#system-service-integration">System Service Integration</a></h3>
+<pre><code class="language-bash"># systemd service example
+[Unit]
+Description=SomaFM Player
+After=network.target
+
+[Service]
+Type=simple
+User=music
+ExecStart=/usr/local/bin/soma-player play groovesalad --no-ui
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<h3 id="scheduled-playback"><a class="header" href="#scheduled-playback">Scheduled Playback</a></h3>
+<pre><code class="language-bash"># cron job to play during work hours
+# Play Mon-Fri 9 AM to 5 PM
+0 9 * * 1-5 /usr/local/bin/soma-player play groovesalad --duration 8h --no-ui
+</code></pre>
+<h3 id="integration-with-other-tools"><a class="header" href="#integration-with-other-tools">Integration with Other Tools</a></h3>
+<h4 id="i3polybar-integration"><a class="header" href="#i3polybar-integration">i3/Polybar Integration</a></h4>
+<pre><code class="language-bash"># Get current playing status
+soma-player status --format=json | jq -r '.channel.title'
+
+# Volume control
+soma-player volume +5
+soma-player volume -5
+</code></pre>
+<h4 id="dmenurofi-channel-selection"><a class="header" href="#dmenurofi-channel-selection">dmenu/rofi Channel Selection</a></h4>
+<pre><code class="language-bash"># Channel selection menu
+channel=$(soma-player list --format=simple | dmenu -p "Channel:")
+if [ -n "$channel" ]; then
+    soma-player play "$channel"
+fi
+</code></pre>
+<h2 id="troubleshooting-command-line-issues"><a class="header" href="#troubleshooting-command-line-issues">Troubleshooting Command-Line Issues</a></h2>
+<h3 id="common-problems"><a class="header" href="#common-problems">Common Problems</a></h3>
+<h4 id="command-not-found"><a class="header" href="#command-not-found">Command Not Found</a></h4>
+<pre><code class="language-bash"># Check if installed
+which soma-player
+
+# Check PATH
+echo $PATH
+
+# Add to PATH if needed
+export PATH="$HOME/.local/bin:$PATH"
+</code></pre>
+<h4 id="permission-denied"><a class="header" href="#permission-denied">Permission Denied</a></h4>
+<pre><code class="language-bash"># Check file permissions
+ls -la $(which soma-player)
+
+# Make executable if needed
+chmod +x ~/.local/bin/soma-player
+</code></pre>
+<h4 id="configuration-errors"><a class="header" href="#configuration-errors">Configuration Errors</a></h4>
+<pre><code class="language-bash"># Validate configuration
+soma-player config validate
+
+# Reset if corrupted
+soma-player config reset
+
+# Use custom config temporarily
+soma-player --config /dev/null
+</code></pre>
+<h4 id="audio-issues"><a class="header" href="#audio-issues">Audio Issues</a></h4>
+<pre><code class="language-bash"># Test audio system
+soma-player play groovesalad --log-level debug
+
+# Try different backend
+SOMA_AUDIO_BACKEND=pulse soma-player
+
+# Check audio permissions
+groups $USER | grep -E "(audio|pulse-access)"
+</code></pre>
+<h3 id="debug-mode"><a class="header" href="#debug-mode">Debug Mode</a></h3>
+<pre><code class="language-bash"># Full debug information
+RUST_LOG=debug soma-player --verbose
+
+# Save debug log
+RUST_LOG=debug soma-player --verbose 2&gt; debug.log
+</code></pre>
+<h2 id="integration-examples"><a class="header" href="#integration-examples">Integration Examples</a></h2>
+<h3 id="shell-functions"><a class="header" href="#shell-functions">Shell Functions</a></h3>
+<pre><code class="language-bash"># Add to ~/.bashrc or ~/.zshrc
+
+# Quick channel switching
+soma() {
+    if [ $# -eq 0 ]; then
+        soma-player
+    else
+        soma-player play "$1"
+    fi
+}
+
+# Channel search
+soma-search() {
+    soma-player list --filter "$1"
+}
+
+# Current status
+soma-status() {
+    soma-player status --format=simple
+}
+</code></pre>
+<h3 id="fish-shell-completions"><a class="header" href="#fish-shell-completions">Fish Shell Completions</a></h3>
+<pre><code class="language-fish"># ~/.config/fish/completions/soma-player.fish
+complete -c soma-player -n '__fish_use_subcommand' -a 'play list config help'
+complete -c soma-player -n '__fish_seen_subcommand_from play' -a '(soma-player list --format=simple)'
+</code></pre>
+<h3 id="zsh-completions"><a class="header" href="#zsh-completions">Zsh Completions</a></h3>
+<pre><code class="language-zsh"># Add to ~/.zshrc
+compdef '_files -W ~/.config/soma-player' soma-player --config
+</code></pre>
+<p>This comprehensive command-line reference covers all aspects of using SomaFM Player from the terminal and in automated scenarios.</p>
 
                     </main>
 

@@ -170,6 +170,420 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="api-reference"><a class="header" href="#api-reference">API Reference</a></h1>
+<p>Developer reference for SomaFM Player's internal APIs and data structures.</p>
+<blockquote>
+<p><strong>Note</strong>: This page covers the internal Rust API. For the complete generated API documentation with full type information, see the <a href="../api/">API Documentation</a> section.</p>
+</blockquote>
+<h2 id="core-modules"><a class="header" href="#core-modules">Core Modules</a></h2>
+<h3 id="soma_playerconfig"><a class="header" href="#soma_playerconfig"><code>soma_player::config</code></a></h3>
+<p>Configuration management for persistent settings.</p>
+<h4 id="config"><a class="header" href="#config"><code>Config</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Config {
+    pub last_channel_id: Option&lt;String&gt;,
+    pub volume: u8,
+    pub auto_start: bool,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Methods:</strong></p>
+<ul>
+<li><code>Config::load() -&gt; Result&lt;Config&gt;</code> - Load configuration from file</li>
+<li><code>Config::save(&amp;self) -&gt; Result&lt;()&gt;</code> - Save configuration to file</li>
+<li><code>Config::default_path() -&gt; PathBuf</code> - Get default config file path</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use soma_player::config::Config;
+
+let mut config = Config::load()?;
+config.volume = 75;
+config.save()?;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="soma_playermodels"><a class="header" href="#soma_playermodels"><code>soma_player::models</code></a></h3>
+<p>Core data structures and types.</p>
+<h4 id="channel"><a class="header" href="#channel"><code>Channel</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Channel {
+    pub id: String,
+    pub title: String,
+    pub description: String,
+    pub listeners: u32,
+    pub genre: String,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Represents a SomaFM radio channel with metadata.</p>
+<h4 id="playerstate"><a class="header" href="#playerstate"><code>PlayerState</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum PlayerState {
+    Stopped,
+    Playing,
+    Paused,
+    Buffering,
+    Error(String),
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Current state of the audio player.</p>
+<h4 id="somaerror"><a class="header" href="#somaerror"><code>SomaError</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum SomaError {
+    Network(reqwest::Error),
+    Audio(String),
+    Config(toml::de::Error),
+    Io(std::io::Error),
+    Parse(String),
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Comprehensive error types with context information.</p>
+<h3 id="soma_playerapi"><a class="header" href="#soma_playerapi"><code>soma_player::api</code></a></h3>
+<p>SomaFM API integration and HTTP client.</p>
+<h4 id="somaclient"><a class="header" href="#somaclient"><code>SomaClient</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct SomaClient {
+    // Internal HTTP client
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Methods:</strong></p>
+<ul>
+<li><code>SomaClient::new() -&gt; Self</code> - Create new API client</li>
+<li><code>get_channels(&amp;self) -&gt; Result&lt;Vec&lt;Channel&gt;&gt;</code> - Fetch available channels</li>
+<li><code>get_stream_url(&amp;self, channel_id: &amp;str) -&gt; Result&lt;String&gt;</code> - Get stream URL</li>
+</ul>
+<p><strong>Example:</strong></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use soma_player::api::SomaClient;
+
+let client = SomaClient::new();
+let channels = client.get_channels().await?;
+let stream_url = client.get_stream_url("groovesalad").await?;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="soma_playeraudio"><a class="header" href="#soma_playeraudio"><code>soma_player::audio</code></a></h3>
+<p>Audio playback engine and controls.</p>
+<h4 id="audioplayer"><a class="header" href="#audioplayer"><code>AudioPlayer</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct AudioPlayer {
+    // Audio sink and state
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Methods:</strong></p>
+<ul>
+<li><code>AudioPlayer::new() -&gt; Result&lt;Self&gt;</code> - Create new audio player</li>
+<li><code>play(&amp;mut self, url: String) -&gt; Result&lt;()&gt;</code> - Start playing stream</li>
+<li><code>pause(&amp;mut self) -&gt; Result&lt;()&gt;</code> - Pause playback</li>
+<li><code>resume(&amp;mut self) -&gt; Result&lt;()&gt;</code> - Resume playback</li>
+<li><code>set_volume(&amp;mut self, volume: f32) -&gt; Result&lt;()&gt;</code> - Set volume (0.0-1.0)</li>
+<li><code>stop(&amp;mut self) -&gt; Result&lt;()&gt;</code> - Stop playback</li>
+</ul>
+<h4 id="playercommand"><a class="header" href="#playercommand"><code>PlayerCommand</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum PlayerCommand {
+    Play(String),
+    Pause,
+    Resume,
+    SetVolume(f32),
+    Stop,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Commands for controlling audio playback.</p>
+<p><strong>Example:</strong></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use soma_player::audio::{AudioPlayer, PlayerCommand};
+
+let mut player = AudioPlayer::new()?;
+player.play("http://stream.url".to_string())?;
+player.set_volume(0.75)?;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="soma_playerui"><a class="header" href="#soma_playerui"><code>soma_player::ui</code></a></h3>
+<p>Terminal user interface components.</p>
+<h4 id="app"><a class="header" href="#app"><code>App</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct App {
+    pub state: AppState,
+    pub channels: Vec&lt;Channel&gt;,
+    pub selected_channel: Option&lt;usize&gt;,
+    // ... other fields
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Main application state container.</p>
+<h4 id="appstate"><a class="header" href="#appstate"><code>AppState</code></a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum AppState {
+    ChannelSelection,
+    Playing,
+    ChannelOverlay,
+    Quitting,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Current UI state for the application.</p>
+<p><strong>Methods:</strong></p>
+<ul>
+<li><code>App::new(channels: Vec&lt;Channel&gt;) -&gt; Self</code> - Create new app instance</li>
+<li><code>handle_input(&amp;mut self, event: KeyEvent) -&gt; Result&lt;()&gt;</code> - Process keyboard input</li>
+<li><code>update(&amp;mut self) -&gt; Result&lt;()&gt;</code> - Update application state</li>
+<li><code>should_quit(&amp;self) -&gt; bool</code> - Check if app should exit</li>
+</ul>
+<h2 id="data-flow-apis"><a class="header" href="#data-flow-apis">Data Flow APIs</a></h2>
+<h3 id="configuration-flow"><a class="header" href="#configuration-flow">Configuration Flow</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Load configuration
+let config = Config::load().unwrap_or_default();
+
+// Use configuration
+if config.auto_start {
+    // Auto-start last channel
+}
+
+// Save changes
+config.volume = new_volume;
+config.save()?;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="channel-management"><a class="header" href="#channel-management">Channel Management</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Fetch channels from API
+let client = SomaClient::new();
+let channels = client.get_channels().await?;
+
+// Select channel
+let selected = &amp;channels[index];
+let stream_url = client.get_stream_url(&amp;selected.id).await?;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="audio-control"><a class="header" href="#audio-control">Audio Control</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Initialize player
+let mut player = AudioPlayer::new()?;
+
+// Control playback
+player.play(stream_url)?;
+player.set_volume(0.8)?;
+player.pause()?;
+player.resume()?;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="ui-event-handling"><a class="header" href="#ui-event-handling">UI Event Handling</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Create app
+let mut app = App::new(channels);
+
+// Main event loop
+loop {
+    if let Ok(event) = event::read() {
+        app.handle_input(event)?;
+        app.update()?;
+        
+        if app.should_quit() {
+            break;
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="error-handling"><a class="header" href="#error-handling">Error Handling</a></h2>
+<h3 id="result-types"><a class="header" href="#result-types">Result Types</a></h3>
+<p>All fallible operations return <code>Result&lt;T, SomaError&gt;</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub type Result&lt;T&gt; = std::result::Result&lt;T, SomaError&gt;;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="error-context"><a class="header" href="#error-context">Error Context</a></h3>
+<p>Errors include rich context information:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use soma_player::Result;
+
+fn example_function() -&gt; Result&lt;()&gt; {
+    config.load()
+        .map_err(|e| SomaError::Config(e))?;
+    Ok(())
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="error-conversion"><a class="header" href="#error-conversion">Error Conversion</a></h3>
+<p>Automatic conversion from standard error types:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl From&lt;std::io::Error&gt; for SomaError {
+    fn from(err: std::io::Error) -&gt; Self {
+        SomaError::Io(err)
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="async-patterns"><a class="header" href="#async-patterns">Async Patterns</a></h2>
+<h3 id="api-calls"><a class="header" href="#api-calls">API Calls</a></h3>
+<pre><pre class="playground"><code class="language-rust">use tokio;
+
+#[tokio::main]
+async fn main() -&gt; Result&lt;()&gt; {
+    let client = SomaClient::new();
+    let channels = client.get_channels().await?;
+    Ok(())
+}</code></pre></pre>
+<h3 id="non-blocking-operations"><a class="header" href="#non-blocking-operations">Non-blocking Operations</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Spawn background task for API calls
+let handle = tokio::spawn(async move {
+    client.get_channels().await
+});
+
+// Continue with UI work
+// ...
+
+// Get result when needed
+let channels = handle.await??;
+<span class="boring">}</span></code></pre></pre>
+<h2 id="testing-apis"><a class="header" href="#testing-apis">Testing APIs</a></h2>
+<h3 id="unit-testing"><a class="header" href="#unit-testing">Unit Testing</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[cfg(test)]
+mod tests {
+    use super::*;
+    use tempfile::tempdir;
+
+    #[test]
+    fn test_config_save_load() {
+        let dir = tempdir().unwrap();
+        let config_path = dir.path().join("config.toml");
+        
+        let config = Config {
+            volume: 75,
+            last_channel_id: Some("groovesalad".to_string()),
+            auto_start: true,
+        };
+        
+        config.save_to_path(&amp;config_path).unwrap();
+        let loaded = Config::load_from_path(&amp;config_path).unwrap();
+        
+        assert_eq!(config.volume, loaded.volume);
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="mock-objects"><a class="header" href="#mock-objects">Mock Objects</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Mock API client for testing
+pub struct MockSomaClient {
+    channels: Vec&lt;Channel&gt;,
+}
+
+impl MockSomaClient {
+    pub fn new(channels: Vec&lt;Channel&gt;) -&gt; Self {
+        Self { channels }
+    }
+}
+
+#[async_trait]
+impl ApiClient for MockSomaClient {
+    async fn get_channels(&amp;self) -&gt; Result&lt;Vec&lt;Channel&gt;&gt; {
+        Ok(self.channels.clone())
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="extension-points"><a class="header" href="#extension-points">Extension Points</a></h2>
+<h3 id="custom-audio-backends"><a class="header" href="#custom-audio-backends">Custom Audio Backends</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait AudioBackend {
+    fn play(&amp;mut self, url: String) -&gt; Result&lt;()&gt;;
+    fn pause(&amp;mut self) -&gt; Result&lt;()&gt;;
+    fn set_volume(&amp;mut self, volume: f32) -&gt; Result&lt;()&gt;;
+}
+
+// Implement for different audio systems
+impl AudioBackend for RodioBackend { /* ... */ }
+impl AudioBackend for PulseAudioBackend { /* ... */ }
+<span class="boring">}</span></code></pre></pre>
+<h3 id="custom-ui-themes"><a class="header" href="#custom-ui-themes">Custom UI Themes</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Theme {
+    pub primary_color: Color,
+    pub secondary_color: Color,
+    pub background_color: Color,
+    pub accent_color: Color,
+}
+
+impl App {
+    pub fn set_theme(&amp;mut self, theme: Theme) {
+        self.theme = theme;
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="performance-apis"><a class="header" href="#performance-apis">Performance APIs</a></h2>
+<h3 id="caching"><a class="header" href="#caching">Caching</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>use std::collections::HashMap;
+
+pub struct ChannelCache {
+    cache: HashMap&lt;String, Vec&lt;Channel&gt;&gt;,
+    ttl: Duration,
+}
+
+impl ChannelCache {
+    pub fn get_or_fetch(&amp;mut self, key: &amp;str) -&gt; Result&lt;Vec&lt;Channel&gt;&gt; {
+        // Return cached data or fetch new
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="metrics"><a class="header" href="#metrics">Metrics</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Metrics {
+    pub api_calls: u64,
+    pub cache_hits: u64,
+    pub audio_buffer_underruns: u64,
+}
+
+impl App {
+    pub fn get_metrics(&amp;self) -&gt; Metrics {
+        // Return current metrics
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="constants-and-configuration"><a class="header" href="#constants-and-configuration">Constants and Configuration</a></h2>
+<h3 id="default-values"><a class="header" href="#default-values">Default Values</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub const DEFAULT_VOLUME: u8 = 50;
+pub const DEFAULT_CONFIG_DIR: &amp;str = ".config/soma-player";
+pub const API_BASE_URL: &amp;str = "https://somafm.com";
+pub const STREAM_TIMEOUT: Duration = Duration::from_secs(30);
+<span class="boring">}</span></code></pre></pre>
+<h3 id="build-information"><a class="header" href="#build-information">Build Information</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub const VERSION: &amp;str = env!("CARGO_PKG_VERSION");
+pub const BUILD_TARGET: &amp;str = env!("TARGET");
+pub const BUILD_TIMESTAMP: &amp;str = env!("BUILD_TIMESTAMP");
+<span class="boring">}</span></code></pre></pre>
+<h2 id="feature-flags"><a class="header" href="#feature-flags">Feature Flags</a></h2>
+<h3 id="conditional-compilation"><a class="header" href="#conditional-compilation">Conditional Compilation</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[cfg(feature = "spectrum-analyzer")]
+pub mod spectrum {
+    // Spectrum analyzer functionality
+}
+
+#[cfg(not(feature = "spectrum-analyzer"))]
+pub mod spectrum {
+    // Stub implementation
+}
+<span class="boring">}</span></code></pre></pre>
+<p>This API reference provides the essential interfaces for working with SomaFM Player's codebase. For complete type information and implementation details, refer to the generated <a href="../api/">API Documentation</a>.</p>
 
                     </main>
 

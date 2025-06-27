@@ -170,6 +170,469 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="contributing"><a class="header" href="#contributing">Contributing</a></h1>
+<p>Welcome to SomaFM Player! We're excited to have you contribute to this project.</p>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<h3 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h3>
+<p>Before you begin, ensure you have the following installed:</p>
+<ol>
+<li>
+<p><strong>Rust</strong> (1.70 or later)</p>
+<pre><code class="language-bash">curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+</code></pre>
+</li>
+<li>
+<p><strong>System Dependencies</strong> (Linux only)</p>
+<pre><code class="language-bash"># Ubuntu/Debian
+sudo apt-get install libasound2-dev pkg-config
+
+# Fedora/CentOS/RHEL
+sudo dnf install alsa-lib-devel pkg-config
+
+# Arch Linux
+sudo pacman -S alsa-lib pkg-config
+</code></pre>
+</li>
+<li>
+<p><strong>Git</strong></p>
+<pre><code class="language-bash">git --version
+</code></pre>
+</li>
+</ol>
+<h3 id="development-setup"><a class="header" href="#development-setup">Development Setup</a></h3>
+<ol>
+<li>
+<p><strong>Fork the repository</strong> on GitHub</p>
+</li>
+<li>
+<p><strong>Clone your fork</strong></p>
+<pre><code class="language-bash">git clone https://github.com/yourusername/soma-play.git
+cd soma-play
+</code></pre>
+</li>
+<li>
+<p><strong>Add upstream remote</strong></p>
+<pre><code class="language-bash">git remote add upstream https://github.com/mpuccini/soma-play.git
+</code></pre>
+</li>
+<li>
+<p><strong>Install development tools</strong></p>
+<pre><code class="language-bash"># Code formatting
+rustup component add rustfmt
+
+# Linting
+rustup component add clippy
+
+# Documentation
+cargo install mdbook
+
+# Security auditing
+cargo install cargo-audit
+
+# Test coverage
+cargo install cargo-tarpaulin
+</code></pre>
+</li>
+<li>
+<p><strong>Build and test</strong></p>
+<pre><code class="language-bash">cargo build
+cargo test
+cargo run
+</code></pre>
+</li>
+</ol>
+<h2 id="development-workflow"><a class="header" href="#development-workflow">Development Workflow</a></h2>
+<h3 id="1-create-a-feature-branch"><a class="header" href="#1-create-a-feature-branch">1. Create a Feature Branch</a></h3>
+<pre><code class="language-bash">git checkout -b feature/your-feature-name
+</code></pre>
+<p><strong>Branch Naming Conventions:</strong></p>
+<ul>
+<li><code>feature/</code> - New features</li>
+<li><code>fix/</code> - Bug fixes</li>
+<li><code>docs/</code> - Documentation updates</li>
+<li><code>refactor/</code> - Code refactoring</li>
+<li><code>test/</code> - Test improvements</li>
+</ul>
+<h3 id="2-make-your-changes"><a class="header" href="#2-make-your-changes">2. Make Your Changes</a></h3>
+<p>Follow our coding standards and guidelines (see below).</p>
+<h3 id="3-test-your-changes"><a class="header" href="#3-test-your-changes">3. Test Your Changes</a></h3>
+<pre><code class="language-bash"># Run all tests
+cargo test
+
+# Run tests with output
+cargo test -- --nocapture
+
+# Run specific test module
+cargo test config::tests
+
+# Check code formatting
+cargo fmt --check
+
+# Run linter
+cargo clippy -- -D warnings
+
+# Generate test coverage
+cargo tarpaulin --out Html
+</code></pre>
+<h3 id="4-commit-your-changes"><a class="header" href="#4-commit-your-changes">4. Commit Your Changes</a></h3>
+<p><strong>Commit Message Format:</strong></p>
+<pre><code>&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;
+
+&lt;body&gt;
+
+&lt;footer&gt;
+</code></pre>
+<p><strong>Types:</strong></p>
+<ul>
+<li><code>feat</code> - New feature</li>
+<li><code>fix</code> - Bug fix</li>
+<li><code>docs</code> - Documentation</li>
+<li><code>style</code> - Code style changes</li>
+<li><code>refactor</code> - Code refactoring</li>
+<li><code>test</code> - Test additions/improvements</li>
+<li><code>chore</code> - Maintenance tasks</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<pre><code class="language-bash">git commit -m "feat(audio): add volume fade transitions"
+git commit -m "fix(ui): resolve channel list scrolling issue"
+git commit -m "docs(api): update configuration examples"
+</code></pre>
+<h3 id="5-push-and-create-pull-request"><a class="header" href="#5-push-and-create-pull-request">5. Push and Create Pull Request</a></h3>
+<pre><code class="language-bash">git push origin feature/your-feature-name
+</code></pre>
+<p>Then create a pull request on GitHub.</p>
+<h2 id="coding-standards"><a class="header" href="#coding-standards">Coding Standards</a></h2>
+<h3 id="rust-code-style"><a class="header" href="#rust-code-style">Rust Code Style</a></h3>
+<ol>
+<li>
+<p><strong>Use <code>cargo fmt</code></strong> for consistent formatting</p>
+</li>
+<li>
+<p><strong>Follow Rust naming conventions</strong></p>
+<ul>
+<li><code>snake_case</code> for functions and variables</li>
+<li><code>PascalCase</code> for types and structs</li>
+<li><code>SCREAMING_SNAKE_CASE</code> for constants</li>
+</ul>
+</li>
+<li>
+<p><strong>Add documentation comments</strong></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// Plays audio from the specified stream URL.
+///
+/// # Arguments
+/// * `url` - The stream URL to play from
+///
+/// # Examples
+/// ```
+/// let mut player = AudioPlayer::new()?;
+/// player.play("http://stream.somafm.com/groovesalad".to_string())?;
+/// ```
+pub fn play(&amp;mut self, url: String) -&gt; Result&lt;()&gt; {
+    // Implementation
+}
+<span class="boring">}</span></code></pre></pre>
+</li>
+<li>
+<p><strong>Handle errors properly</strong></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Good: Use Result types and proper error handling
+fn load_config() -&gt; Result&lt;Config, ConfigError&gt; {
+    let content = fs::read_to_string(&amp;path)
+        .map_err(ConfigError::FileRead)?;
+    toml::from_str(&amp;content)
+        .map_err(ConfigError::Parse)
+}
+
+// Avoid: Using unwrap() or expect() in library code
+<span class="boring">}</span></code></pre></pre>
+</li>
+<li>
+<p><strong>Use meaningful variable names</strong></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Good
+let selected_channel_index = 0;
+let stream_url = "http://...";
+
+// Avoid
+let i = 0;
+let url = "http://...";
+<span class="boring">}</span></code></pre></pre>
+</li>
+</ol>
+<h3 id="module-organization"><a class="header" href="#module-organization">Module Organization</a></h3>
+<ol>
+<li><strong>Keep modules focused</strong> - Each module should have a single responsibility</li>
+<li><strong>Use clear imports</strong> - Prefer explicit imports over glob imports</li>
+<li><strong>Organize by feature</strong> - Group related functionality together</li>
+</ol>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Good: Explicit imports
+use crate::config::Config;
+use crate::models::{Channel, PlayerState};
+
+// Avoid: Glob imports (in most cases)
+use crate::models::*;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="error-handling"><a class="header" href="#error-handling">Error Handling</a></h3>
+<ol>
+<li><strong>Use custom error types</strong> with <code>thiserror</code></li>
+<li><strong>Provide context</strong> for errors</li>
+<li><strong>Convert errors at module boundaries</strong></li>
+</ol>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[derive(Debug, thiserror::Error)]
+pub enum AudioError {
+    #[error("Failed to initialize audio device: {0}")]
+    DeviceInit(String),
+    
+    #[error("Stream error: {0}")]
+    Stream(#[from] StreamError),
+    
+    #[error("Invalid volume level: {level} (must be 0-100)")]
+    InvalidVolume { level: u8 },
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="testing-guidelines"><a class="header" href="#testing-guidelines">Testing Guidelines</a></h3>
+<ol>
+<li><strong>Write unit tests</strong> for all public functions</li>
+<li><strong>Use integration tests</strong> for complex workflows</li>
+<li><strong>Mock external dependencies</strong> in tests</li>
+<li><strong>Test error conditions</strong> as well as success cases</li>
+</ol>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[cfg(test)]
+mod tests {
+    use super::*;
+    use tempfile::tempdir;
+
+    #[test]
+    fn test_config_save_and_load() {
+        let dir = tempdir().unwrap();
+        let config_path = dir.path().join("config.toml");
+        
+        let original_config = Config {
+            volume: 75,
+            last_channel_id: Some("groovesalad".to_string()),
+            auto_start: true,
+        };
+        
+        // Test save
+        original_config.save_to_path(&amp;config_path).unwrap();
+        
+        // Test load
+        let loaded_config = Config::load_from_path(&amp;config_path).unwrap();
+        
+        assert_eq!(original_config.volume, loaded_config.volume);
+        assert_eq!(original_config.last_channel_id, loaded_config.last_channel_id);
+        assert_eq!(original_config.auto_start, loaded_config.auto_start);
+    }
+    
+    #[test]
+    fn test_invalid_volume_returns_error() {
+        let mut player = AudioPlayer::new().unwrap();
+        let result = player.set_volume(150); // Invalid volume &gt; 100
+        assert!(result.is_err());
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="documentation"><a class="header" href="#documentation">Documentation</a></h2>
+<h3 id="code-documentation"><a class="header" href="#code-documentation">Code Documentation</a></h3>
+<ol>
+<li><strong>Document all public APIs</strong> with examples</li>
+<li><strong>Include usage examples</strong> in documentation</li>
+<li><strong>Document error conditions</strong> and return types</li>
+<li><strong>Keep documentation up to date</strong> with code changes</li>
+</ol>
+<h3 id="user-documentation"><a class="header" href="#user-documentation">User Documentation</a></h3>
+<ol>
+<li><strong>Update relevant guide sections</strong> when adding features</li>
+<li><strong>Include configuration examples</strong> for new settings</li>
+<li><strong>Add troubleshooting entries</strong> for known issues</li>
+<li><strong>Update the changelog</strong> with user-facing changes</li>
+</ol>
+<h3 id="building-documentation"><a class="header" href="#building-documentation">Building Documentation</a></h3>
+<pre><code class="language-bash"># Generate API documentation
+cargo doc --open
+
+# Build user guide
+cd docs &amp;&amp; mdbook serve --open
+
+# Build all documentation
+./build-docs.sh
+</code></pre>
+<h2 id="feature-development"><a class="header" href="#feature-development">Feature Development</a></h2>
+<h3 id="adding-new-features"><a class="header" href="#adding-new-features">Adding New Features</a></h3>
+<ol>
+<li><strong>Create an issue</strong> describing the feature</li>
+<li><strong>Discuss the approach</strong> with maintainers</li>
+<li><strong>Start with tests</strong> (TDD approach when possible)</li>
+<li><strong>Implement incrementally</strong> with small, focused commits</li>
+<li><strong>Update documentation</strong> before marking as complete</li>
+</ol>
+<h3 id="feature-guidelines"><a class="header" href="#feature-guidelines">Feature Guidelines</a></h3>
+<ol>
+<li><strong>Maintain backward compatibility</strong> when possible</li>
+<li><strong>Add configuration options</strong> for user preferences</li>
+<li><strong>Consider performance impact</strong> of new features</li>
+<li><strong>Ensure cross-platform compatibility</strong></li>
+</ol>
+<h3 id="example-adding-a-new-feature"><a class="header" href="#example-adding-a-new-feature">Example: Adding a New Feature</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// 1. Define the feature interface
+pub trait Equalizer {
+    fn set_bands(&amp;mut self, bands: Vec&lt;f32&gt;) -&gt; Result&lt;()&gt;;
+    fn get_bands(&amp;self) -&gt; Vec&lt;f32&gt;;
+}
+
+// 2. Add configuration support
+#[derive(Serialize, Deserialize)]
+pub struct EqualizerConfig {
+    pub enabled: bool,
+    pub bands: Vec&lt;f32&gt;,
+}
+
+// 3. Implement the feature
+pub struct GraphicEqualizer {
+    bands: Vec&lt;f32&gt;,
+    enabled: bool,
+}
+
+// 4. Add tests
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_equalizer_bands() {
+        let mut eq = GraphicEqualizer::new();
+        let bands = vec![0.0, 2.0, 4.0, 2.0, 0.0];
+        eq.set_bands(bands.clone()).unwrap();
+        assert_eq!(eq.get_bands(), bands);
+    }
+}
+
+// 5. Update UI integration
+impl App {
+    pub fn toggle_equalizer(&amp;mut self) -&gt; Result&lt;()&gt; {
+        // Implementation
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="bug-fixes"><a class="header" href="#bug-fixes">Bug Fixes</a></h2>
+<h3 id="finding-and-reporting-bugs"><a class="header" href="#finding-and-reporting-bugs">Finding and Reporting Bugs</a></h3>
+<ol>
+<li><strong>Search existing issues</strong> before creating new ones</li>
+<li><strong>Provide detailed reproduction steps</strong></li>
+<li><strong>Include system information</strong> (OS, Rust version, etc.)</li>
+<li><strong>Add logs or error messages</strong> when applicable</li>
+</ol>
+<h3 id="fixing-bugs"><a class="header" href="#fixing-bugs">Fixing Bugs</a></h3>
+<ol>
+<li><strong>Write a test</strong> that reproduces the bug</li>
+<li><strong>Fix the issue</strong> with minimal changes</li>
+<li><strong>Verify the test passes</strong> with your fix</li>
+<li><strong>Check for similar issues</strong> in related code</li>
+</ol>
+<h2 id="performance-considerations"><a class="header" href="#performance-considerations">Performance Considerations</a></h2>
+<h3 id="optimization-guidelines"><a class="header" href="#optimization-guidelines">Optimization Guidelines</a></h3>
+<ol>
+<li><strong>Profile before optimizing</strong> - Measure, don't guess</li>
+<li><strong>Focus on hot paths</strong> - Audio playback, UI rendering</li>
+<li><strong>Consider memory usage</strong> - Avoid unnecessary allocations</li>
+<li><strong>Benchmark changes</strong> - Ensure improvements are real</li>
+</ol>
+<h3 id="performance-testing"><a class="header" href="#performance-testing">Performance Testing</a></h3>
+<pre><code class="language-bash"># Run benchmarks (if available)
+cargo bench
+
+# Profile memory usage
+cargo run --release -- --log-level=debug
+
+# Monitor resource usage during development
+htop  # or similar system monitor
+</code></pre>
+<h2 id="security"><a class="header" href="#security">Security</a></h2>
+<h3 id="security-guidelines"><a class="header" href="#security-guidelines">Security Guidelines</a></h3>
+<ol>
+<li><strong>Validate all inputs</strong> from external sources</li>
+<li><strong>Use secure HTTP</strong> for API communications</li>
+<li><strong>Handle credentials safely</strong> (if any)</li>
+<li><strong>Audit dependencies</strong> regularly</li>
+</ol>
+<pre><code class="language-bash"># Run security audit
+cargo audit
+
+# Check for known vulnerabilities
+cargo audit --database advisory
+</code></pre>
+<h2 id="release-process"><a class="header" href="#release-process">Release Process</a></h2>
+<h3 id="preparing-a-release"><a class="header" href="#preparing-a-release">Preparing a Release</a></h3>
+<ol>
+<li><strong>Update version numbers</strong> in <code>Cargo.toml</code></li>
+<li><strong>Update CHANGELOG.md</strong> with new features and fixes</li>
+<li><strong>Run full test suite</strong> with <code>cargo test</code></li>
+<li><strong>Generate and review documentation</strong></li>
+<li><strong>Test on target platforms</strong></li>
+</ol>
+<h3 id="release-checklist"><a class="header" href="#release-checklist">Release Checklist</a></h3>
+<ul>
+<li><input disabled="" type="checkbox"/>
+All tests pass</li>
+<li><input disabled="" type="checkbox"/>
+Documentation is up to date</li>
+<li><input disabled="" type="checkbox"/>
+Changelog is updated</li>
+<li><input disabled="" type="checkbox"/>
+Version numbers are bumped</li>
+<li><input disabled="" type="checkbox"/>
+No security vulnerabilities</li>
+<li><input disabled="" type="checkbox"/>
+Performance regressions checked</li>
+<li><input disabled="" type="checkbox"/>
+Cross-platform compatibility verified</li>
+</ul>
+<h2 id="community-guidelines"><a class="header" href="#community-guidelines">Community Guidelines</a></h2>
+<h3 id="communication"><a class="header" href="#communication">Communication</a></h3>
+<ol>
+<li><strong>Be respectful</strong> and inclusive</li>
+<li><strong>Ask questions</strong> when you're unsure</li>
+<li><strong>Provide constructive feedback</strong> in reviews</li>
+<li><strong>Help newcomers</strong> get started</li>
+</ol>
+<h3 id="code-reviews"><a class="header" href="#code-reviews">Code Reviews</a></h3>
+<ol>
+<li><strong>Review for correctness</strong> and style</li>
+<li><strong>Suggest improvements</strong> rather than just pointing out problems</li>
+<li><strong>Acknowledge good work</strong> and clever solutions</li>
+<li><strong>Be open to feedback</strong> on your own code</li>
+</ol>
+<h3 id="issue-management"><a class="header" href="#issue-management">Issue Management</a></h3>
+<ol>
+<li><strong>Provide clear descriptions</strong> for issues and PRs</li>
+<li><strong>Link related issues</strong> and PRs</li>
+<li><strong>Update status</strong> as work progresses</li>
+<li><strong>Close issues</strong> when resolved</li>
+</ol>
+<h2 id="getting-help"><a class="header" href="#getting-help">Getting Help</a></h2>
+<h3 id="resources"><a class="header" href="#resources">Resources</a></h3>
+<ul>
+<li><strong>Documentation</strong>: <a href="../introduction.html">User Guide</a> and <a href="../api.html">API Reference</a></li>
+<li><strong>Source Code</strong>: Well-commented and documented</li>
+<li><strong>Issues</strong>: Check existing issues for similar problems</li>
+<li><strong>Discussions</strong>: GitHub Discussions for questions and ideas</li>
+</ul>
+<h3 id="contact"><a class="header" href="#contact">Contact</a></h3>
+<ul>
+<li><strong>GitHub Issues</strong>: For bugs and feature requests</li>
+<li><strong>GitHub Discussions</strong>: For questions and general discussion</li>
+<li><strong>Pull Requests</strong>: For code contributions and reviews</li>
+</ul>
+<p>Thank you for contributing to SomaFM Player! Your efforts help make this project better for everyone. 🎵</p>
 
                     </main>
 

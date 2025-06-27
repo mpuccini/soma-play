@@ -170,6 +170,160 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="configuration"><a class="header" href="#configuration">Configuration</a></h1>
+<p>SomaFM Player uses a TOML configuration file to store settings and preferences.</p>
+<h2 id="configuration-file-location"><a class="header" href="#configuration-file-location">Configuration File Location</a></h2>
+<p>The configuration file is automatically created at:</p>
+<pre><code>~/.config/soma-player/config.toml
+</code></pre>
+<p>On different systems:</p>
+<ul>
+<li><strong>Linux</strong>: <code>~/.config/soma-player/config.toml</code></li>
+<li><strong>macOS</strong>: <code>~/.config/soma-player/config.toml</code></li>
+<li><strong>Windows</strong>: <code>%APPDATA%\soma-player\config.toml</code></li>
+</ul>
+<h2 id="default-configuration"><a class="header" href="#default-configuration">Default Configuration</a></h2>
+<p>When you first run the application, it creates a default configuration:</p>
+<pre><code class="language-toml">last_channel_id = ""
+volume = 50
+auto_start = false
+</code></pre>
+<h2 id="configuration-options"><a class="header" href="#configuration-options">Configuration Options</a></h2>
+<h3 id="last_channel_id"><a class="header" href="#last_channel_id"><code>last_channel_id</code></a></h3>
+<ul>
+<li><strong>Type</strong>: String</li>
+<li><strong>Default</strong>: <code>""</code> (empty)</li>
+<li><strong>Description</strong>: ID of the last played channel</li>
+<li><strong>Auto-saved</strong>: Yes, updated automatically when you change channels</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre><code class="language-toml">last_channel_id = "groovesalad"
+</code></pre>
+<h3 id="volume"><a class="header" href="#volume"><code>volume</code></a></h3>
+<ul>
+<li><strong>Type</strong>: Integer</li>
+<li><strong>Range</strong>: 0-100</li>
+<li><strong>Default</strong>: 50</li>
+<li><strong>Description</strong>: Audio volume level as a percentage</li>
+<li><strong>Auto-saved</strong>: Yes, updated when you adjust volume with +/- keys</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre><code class="language-toml">volume = 75
+</code></pre>
+<h3 id="auto_start"><a class="header" href="#auto_start"><code>auto_start</code></a></h3>
+<ul>
+<li><strong>Type</strong>: Boolean</li>
+<li><strong>Default</strong>: <code>false</code></li>
+<li><strong>Description</strong>: Skip channel selection and automatically play the last channel</li>
+<li><strong>Behavior</strong>:
+<ul>
+<li><code>true</code>: Starts playing <code>last_channel_id</code> immediately</li>
+<li><code>false</code>: Shows channel selection screen</li>
+</ul>
+</li>
+</ul>
+<p><strong>Example</strong>:</p>
+<pre><code class="language-toml">auto_start = true
+</code></pre>
+<h2 id="complete-example-configuration"><a class="header" href="#complete-example-configuration">Complete Example Configuration</a></h2>
+<pre><code class="language-toml"># Last played channel (auto-saved)
+last_channel_id = "groovesalad"
+
+# Volume level (0-100, auto-saved)
+volume = 75
+
+# Auto-start last channel on startup
+auto_start = false
+</code></pre>
+<h2 id="logging-configuration"><a class="header" href="#logging-configuration">Logging Configuration</a></h2>
+<p>Logging behavior can be controlled via environment variables:</p>
+<h3 id="log-levels"><a class="header" href="#log-levels">Log Levels</a></h3>
+<p>Set the <code>RUST_LOG</code> environment variable:</p>
+<pre><code class="language-bash"># Debug level (very verbose)
+RUST_LOG=debug soma-player
+
+# Info level (default)
+RUST_LOG=info soma-player
+
+# Warning level (minimal logging)
+RUST_LOG=warn soma-player
+</code></pre>
+<h3 id="log-files"><a class="header" href="#log-files">Log Files</a></h3>
+<p>Log files are automatically created at:</p>
+<pre><code>~/.config/soma-player/logs/soma-player.log
+</code></pre>
+<p>Features:</p>
+<ul>
+<li><strong>Daily rotation</strong>: New log file each day</li>
+<li><strong>Automatic cleanup</strong>: Old logs are removed</li>
+<li><strong>Size management</strong>: Prevents excessive disk usage</li>
+</ul>
+<h2 id="manual-configuration"><a class="header" href="#manual-configuration">Manual Configuration</a></h2>
+<p>You can manually edit the configuration file while the application is not running:</p>
+<ol>
+<li><strong>Stop the application</strong> (if running)</li>
+<li><strong>Edit the file</strong>:
+<pre><code class="language-bash">nano ~/.config/soma-player/config.toml
+</code></pre>
+</li>
+<li><strong>Save and restart</strong> the application</li>
+</ol>
+<h2 id="troubleshooting-configuration"><a class="header" href="#troubleshooting-configuration">Troubleshooting Configuration</a></h2>
+<h3 id="configuration-not-saving"><a class="header" href="#configuration-not-saving">Configuration Not Saving</a></h3>
+<ul>
+<li>Check file permissions for <code>~/.config/soma-player/</code></li>
+<li>Ensure the directory is writable</li>
+<li>Look for error messages in the logs</li>
+</ul>
+<h3 id="configuration-file-corrupted"><a class="header" href="#configuration-file-corrupted">Configuration File Corrupted</a></h3>
+<p>If the configuration file becomes corrupted:</p>
+<ol>
+<li><strong>Stop the application</strong></li>
+<li><strong>Remove the config file</strong>:
+<pre><code class="language-bash">rm ~/.config/soma-player/config.toml
+</code></pre>
+</li>
+<li><strong>Restart the application</strong> - it will create a new default configuration</li>
+</ol>
+<h3 id="reset-to-defaults"><a class="header" href="#reset-to-defaults">Reset to Defaults</a></h3>
+<p>To reset all settings to defaults:</p>
+<pre><code class="language-bash"># Remove the entire configuration directory
+rm -rf ~/.config/soma-player/
+
+# Restart the application
+soma-player
+</code></pre>
+<h2 id="advanced-configuration"><a class="header" href="#advanced-configuration">Advanced Configuration</a></h2>
+<h3 id="multiple-profiles"><a class="header" href="#multiple-profiles">Multiple Profiles</a></h3>
+<p>While not built-in, you can use different config directories:</p>
+<pre><code class="language-bash"># Use a custom config directory
+XDG_CONFIG_HOME=/path/to/custom/config soma-player
+</code></pre>
+<h3 id="system-wide-configuration"><a class="header" href="#system-wide-configuration">System-wide Configuration</a></h3>
+<p>For system-wide defaults, you could:</p>
+<ol>
+<li>Create a template configuration</li>
+<li>Copy it to user directories as needed</li>
+<li>Use deployment scripts for multiple users</li>
+</ol>
+<h2 id="configuration-schema"><a class="header" href="#configuration-schema">Configuration Schema</a></h2>
+<p>The configuration follows this schema:</p>
+<pre><code class="language-toml"># String: Channel ID from SomaFM API
+last_channel_id = "string"
+
+# Integer: Volume level 0-100
+volume = 50
+
+# Boolean: Auto-start behavior
+auto_start = false
+</code></pre>
+<h2 id="future-configuration-options"><a class="header" href="#future-configuration-options">Future Configuration Options</a></h2>
+<p>Planned configuration options for future releases:</p>
+<ul>
+<li><code>theme</code> - Color theme selection</li>
+<li><code>keybindings</code> - Custom keyboard shortcuts</li>
+<li><code>network_timeout</code> - Connection timeout settings</li>
+<li><code>retry_attempts</code> - Network retry configuration</li>
+</ul>
 
                     </main>
 
