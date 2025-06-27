@@ -1,6 +1,6 @@
 [package]
 name = "soma-player"
-version = "0.1.7"
+version = "0.1.8"
 edition = "2024"
 authors = ["Marco Puccini <mpuccini@example.com>"]
 description = "A terminal-based music player for SomaFM internet radio stations with spectrum visualizer"
