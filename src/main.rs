@@ -1,7 +1,7 @@
 use std::io;
-use std::env;
 use std::sync::Arc;
 use tokio::sync::{mpsc, Mutex};
+use clap::Parser;
 use crossterm::{
     event::{self, Event},
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
@@ -24,6 +24,52 @@ use soma_player::{
         events::{handle_key_event, EventResult},
     },
 };
+
+/// Terminal-based SomaFM radio player with spectrum visualizer
+#[derive(Parser)]
+#[command(author = "Marco Puccini <mpuccini@example.com>")]
+#[command(version)]
+#[command(about = "A terminal-based music player for SomaFM internet radio stations")]
+#[command(long_about = "SomaFM Player streams high-quality internet radio from SomaFM stations. \
+Features include a spectrum visualizer, channel browsing, persistent configuration, \
+and keyboard controls for an optimal terminal experience.")]
+#[command(after_help = "KEYBOARD CONTROLS:
+    ↑/↓     Navigate channels
+    Enter   Select channel  
+    C       Change channel (while playing)
+    P       Pause/Resume playback
+    +/-     Volume control
+    Q/Esc   Quit
+
+EXAMPLES:
+    soma-player                      Start with channel selection
+    soma-player -a                   Auto-start with last channel
+    soma-player -c groovesalad       Play Groove Salad directly
+    soma-player -c dronezone -v 75   Play Drone Zone at 75% volume
+    soma-player --list               List all available channels")]
+struct Args {
+    /// Start playing immediately without showing channel selection
+    #[arg(short, long, help = "Skip channel selection screen and start playing")]
+    autostart: bool,
+    
+    /// Set initial volume (0-100)
+    #[arg(short, long, value_name = "LEVEL", help = "Set volume level (0-100)")]
+    #[arg(value_parser = clap::value_parser!(u8).range(0..=100))]
+    volume: Option<u8>,
+    
+    /// Play specific channel by ID (e.g., 'groovesalad', 'dronezone')
+    #[arg(short, long, value_name = "CHANNEL_ID")]
+    #[arg(help = "Play specific channel by ID (use --list to see available channels)")]
+    channel: Option<String>,
+    
+    /// List all available channels and exit
+    #[arg(short, long, help = "Display all available SomaFM channels and exit")]
+    list: bool,
+    
+    /// Show config file location and exit
+    #[arg(long, help = "Display configuration file path and exit")]
+    config: bool,
+}
 
 async fn play_session_tui(
     terminal: &mut Terminal<CrosstermBackend<io::Stdout>>,
@@ -153,25 +199,8 @@ async fn play_session_tui(
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Handle command line arguments FIRST, before any initialization
-    let args: Vec<String> = env::args().collect();
-    if args.len() > 1 {
-        match args[1].as_str() {
-            "--version" | "-V" => {
-                println!("soma-player {}", env!("CARGO_PKG_VERSION"));
-                std::process::exit(0);
-            }
-            "--help" | "-h" => {
-                print_help();
-                std::process::exit(0);
-            }
-            _ => {
-                eprintln!("Unknown argument: {}", args[1]);
-                print_help();
-                std::process::exit(1);
-            }
-        }
-    }
+    // Parse command line arguments - this automatically handles --help and --version
+    let args = Args::parse();
 
     // Initialize enhanced logging system
     let _log_guard = soma_player::logging::init_logging(
@@ -181,9 +210,62 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     color_eyre::install()?;
     tracing::info!("Starting SomaFM Player");
     
+    // Handle special arguments that don't require the full app
+    if args.config {
+        match soma_player::config::AppConfig::config_path() {
+            Ok(path) => {
+                println!("Configuration file: {}", path.display());
+                return Ok(());
+            }
+            Err(e) => {
+                eprintln!("Error getting config path: {}", e);
+                return Err(e);
+            }
+        }
+    }
+    
+    if args.list {
+        println!("Fetching SomaFM channels...");
+        match fetch_channels().await {
+            Ok(channels) => {
+                println!("\nAvailable channels:");
+                for channel in channels {
+                    println!("  {} - {}", channel.id, channel.title);
+                    if !channel.description.is_empty() {
+                        println!("    {}", channel.description);
+                    }
+                    println!();
+                }
+                return Ok(());
+            }
+            Err(e) => {
+                eprintln!("Error fetching channels: {}", e);
+                return Err(e.into());
+            }
+        }
+    }
+    
     // Load configuration
-    let mut config = AppConfig::load().unwrap_or_default();
+    let mut config = soma_player::config::AppConfig::load().unwrap_or_default();
     tracing::debug!("Configuration loaded: {:?}", config);
+    
+    // Apply command-line overrides
+    if args.autostart {
+        config.auto_start = true;
+    }
+    
+    if let Some(volume) = args.volume {
+        if volume <= 100 {
+            config.volume = Some(volume);
+        } else {
+            eprintln!("Warning: Volume must be between 0-100, ignoring value {}", volume);
+        }
+    }
+    
+    if let Some(channel_id) = args.channel {
+        config.last_channel_id = Some(channel_id);
+        config.auto_start = true; // Auto-start when specific channel is requested
+    }
     
     let result = run_player(&mut config).await;
     
@@ -192,27 +274,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     
     result
-}
-
-fn print_help() {
-    println!("SomaFM Player {} - Terminal-based SomaFM radio player", env!("CARGO_PKG_VERSION"));
-    println!();
-    println!("USAGE:");
-    println!("    soma-player [OPTIONS]");
-    println!();
-    println!("OPTIONS:");
-    println!("    -h, --help       Print this help message");
-    println!("    -V, --version    Print version information");
-    println!();
-    println!("CONTROLS:");
-    println!("    ↑/↓             Navigate channels");
-    println!("    Enter           Select channel");
-    println!("    C               Change channel (while playing)");
-    println!("    P               Pause/Resume playback");
-    println!("    +/-             Volume control");
-    println!("    Q/Esc           Quit");
-    println!();
-    println!("For more information, visit: https://github.com/mpuccini/soma-play");
 }
 
 async fn run_player(config: &mut AppConfig) -> Result<(), Box<dyn std::error::Error>> {
