@@ -191,15 +191,13 @@ pub async fn play_channel(
                     let new_track = parse_track_info(stream_title);
                     
                     // Update track info using try_lock to avoid blocking
-                    let track_clone = Arc::clone(&track_info_clone);
-                    if let Ok(mut track) = track_clone.try_lock() {
-                        *track = new_track.clone();
+                    // Don't use tokio::spawn in callback as it may not have runtime context
+                    if let Ok(mut track) = track_info_clone.try_lock() {
+                        *track = new_track;
+                        debug!("Updated track info: {} - {}", track.artist, track.title);
                     } else {
-                        // If try_lock fails, spawn a task to update it
-                        tokio::spawn(async move {
-                            let mut track = track_clone.lock().await;
-                            *track = new_track;
-                        });
+                        // If try_lock fails, just log it - we'll try again on next metadata
+                        debug!("Could not update track info (mutex locked), will retry on next metadata");
                     }
                 }
             }
