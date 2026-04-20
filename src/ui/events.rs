@@ -2,7 +2,7 @@ use crossterm::event::{KeyCode, KeyEvent};
 use crate::ui::app::{AppState, UIState};
 use crate::config::AppConfig;
 use crate::audio::PlayerCommand;
-use log::{error, info};
+use tracing::{error, info};
 
 pub enum EventResult {
     ChannelChange(usize),

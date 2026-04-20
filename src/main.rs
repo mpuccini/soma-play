@@ -89,9 +89,9 @@ async fn play_session_tui(
             let track_info = Arc::clone(&track_info);
             let audio_result_tx = audio_result_tx.clone();
             let volume = config.volume;
+            let handle = tokio::runtime::Handle::current();
             move || {
-                let rt = tokio::runtime::Runtime::new().unwrap();
-                let result = rt.block_on(play_channel(&selected_channel, track_info, rx, volume));
+                let result = handle.block_on(play_channel(&selected_channel, track_info, rx, volume));
                 let _ = audio_result_tx.send(result);
             }
         }))
@@ -100,15 +100,60 @@ async fn play_session_tui(
     };
     
     let mut last_update = std::time::Instant::now();
-    
-    
+
     loop {
-        // Update display
+        // Handle keyboard input — poll doubles as the loop timer (~16ms = 60fps ceiling)
+        if let Ok(true) = event::poll(std::time::Duration::from_millis(16)) {
+            if let Ok(Event::Key(key)) = event::read() {
+                let current_channel_index = channels.iter().position(|c| c.id == selected_channel.id);
+
+                match handle_key_event(
+                    &mut app,
+                    key,
+                    channels.len(),
+                    current_channel_index,
+                    config
+                ) {
+                    EventResult::ChannelChange(new_channel_index) => {
+                        if let Some(channel) = channels.get(new_channel_index) {
+                            if let Err(e) = config.set_last_channel(channel.id.clone()) {
+                                tracing::error!("Failed to save config: {}", e);
+                            }
+                        }
+
+                        if audio_handle.is_some() {
+                            let _ = tx.send(PlayerCommand::Quit);
+                        }
+                        break Ok(Some(new_channel_index));
+                    }
+                    EventResult::PlayerCommand(cmd) => {
+                        if audio_handle.is_some() {
+                            let _ = tx.send(cmd);
+                        }
+                    }
+                    EventResult::Quit => {
+                        if audio_handle.is_some() {
+                            let _ = tx.send(PlayerCommand::Quit);
+                        }
+                        break Ok(None);
+                    }
+                    EventResult::None => {}
+                }
+
+                if app.should_quit {
+                    if audio_handle.is_some() {
+                        let _ = tx.send(PlayerCommand::Quit);
+                    }
+                    break Ok(None);
+                }
+            }
+        }
+
+        // Update display at ~10fps (100ms throttle) for spectrum smoothness
         if last_update.elapsed() >= std::time::Duration::from_millis(100) {
-            // Update spectrum visualizer based on current state
             let is_playing = matches!(app.ui_state, UIState::Playing | UIState::SelectingChannel);
             app.spectrum.update(is_playing, app.is_paused);
-            
+
             let track = track_info.lock().await;
             if let Err(e) = terminal.draw(|frame| {
                 match app.ui_state {
@@ -127,73 +172,16 @@ async fn play_session_tui(
             }
             last_update = std::time::Instant::now();
         }
-        
-        // Handle keyboard input
-        if let Ok(true) = event::poll(std::time::Duration::from_millis(10)) {
-            if let Ok(Event::Key(key)) = event::read() {
-                let current_channel_index = channels.iter().position(|c| c.id == selected_channel.id);
-                
-                match handle_key_event(
-                    &mut app, 
-                    key, 
-                    channels.len(), 
-                    current_channel_index,
-                    config
-                ) {
-                    EventResult::ChannelChange(new_channel_index) => {
-                        // Update config with selected channel
-                        if let Some(channel) = channels.get(new_channel_index) {                        if let Err(e) = config.set_last_channel(channel.id.clone()) {
-                            tracing::error!("Failed to save config: {}", e);
-                        }
-                        }
-                        
-                        // Send quit to current audio if playing
-                        if audio_handle.is_some() {
-                            let _ = tx.send(PlayerCommand::Quit);
-                        }
-                        break Ok(Some(new_channel_index));
-                    }
-                    EventResult::PlayerCommand(cmd) => {
-                        // Send command to audio player
-                        if audio_handle.is_some() {
-                            let _ = tx.send(cmd);
-                        }
-                    }
-                    EventResult::Quit => {
-                        if audio_handle.is_some() {
-                            let _ = tx.send(PlayerCommand::Quit);
-                        }
-                        break Ok(None);
-                    }
-                    EventResult::None => {
-                        // Do nothing, continue loop
-                    }
-                }
-                
-                if app.should_quit {
-                    if audio_handle.is_some() {
-                        let _ = tx.send(PlayerCommand::Quit);
-                    }
-                    break Ok(None);
-                }
-            }
-        }
-        
+
         // Check audio task status
-        if let Some(audio_handle) = &audio_handle {
+        if let Some(ref _handle) = audio_handle {
             if let Ok(audio_result) = audio_result_rx.try_recv() {
                 match audio_result {
                     Ok(_) => break Ok(None),
                     Err(e) => break Err(e),
                 }
             }
-            
-            if audio_handle.is_finished() {
-                break Ok(None);
-            }
         }
-        
-        tokio::time::sleep(std::time::Duration::from_millis(10)).await;
     }
 }
 

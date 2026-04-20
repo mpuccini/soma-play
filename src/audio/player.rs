@@ -38,9 +38,43 @@ use rodio::{OutputStream, Sink, Decoder};
 use icy_metadata::{IcyHeaders, IcyMetadataReader, RequestIcyMetadata};
 use stream_download::http::reqwest::Client;
 use stream_download::http::HttpStream;
+use stream_download::storage::bounded::BoundedStorageProvider;
 use stream_download::storage::memory::MemoryStorageProvider;
 use stream_download::{Settings, StreamDownload};
-use log::{debug, error, info, warn};
+use tracing::{debug, error, info, warn};
+
+/// Suppress ALSA error messages that would corrupt the TUI.
+/// ALSA's C library writes diagnostics directly to stderr; this redirects them
+/// to a no-op handler so they don't bleed into the alternate screen.
+#[cfg(target_os = "linux")]
+fn suppress_alsa_errors() {
+    use std::ffi::CString;
+    // Load libasound dynamically and set a silent error handler
+    unsafe {
+        let lib = libc::dlopen(
+            CString::new("libasound.so.2").unwrap().as_ptr(),
+            libc::RTLD_NOW | libc::RTLD_NOLOAD,
+        );
+        if !lib.is_null() {
+            let func = libc::dlsym(
+                lib,
+                CString::new("snd_lib_error_set_handler").unwrap().as_ptr(),
+            );
+            if !func.is_null() {
+                // Set handler to a null pointer, which makes ALSA use a no-op handler
+                let set_handler: unsafe extern "C" fn(Option<unsafe extern "C" fn()>) =
+                    std::mem::transmute(func);
+                set_handler(None);
+            }
+            libc::dlclose(lib);
+        }
+    }
+}
+
+#[cfg(not(target_os = "linux"))]
+fn suppress_alsa_errors() {
+    // No-op on non-Linux platforms
+}
 
 use crate::models::{Channel, TrackInfo, parse_track_info};
 use crate::api::parse_pls_playlist;
@@ -140,23 +174,27 @@ pub async fn play_channel(
     let icy_headers = IcyHeaders::parse_from_headers(stream.headers());
     debug!("ICY headers: {:?}", icy_headers);
     
-    // Use simpler approach with memory storage to avoid bounded storage overflow issues
     let bitrate = icy_headers.bitrate().unwrap_or(128);
-    let prefetch_bytes = bitrate / 8 * 1024 * 5; // 5 seconds buffer
+    let bytes_per_sec = (bitrate as usize) * 1000 / 8;
+    let prefetch_bytes = (bytes_per_sec * 15) as u64; // 15 seconds prefetch
+    // Bounded circular buffer: 60 seconds of audio — prevents unbounded memory growth
+    let buffer_size = std::num::NonZeroUsize::new(bytes_per_sec * 60).unwrap();
 
-    debug!("Bitrate: {} kbps, prefetch: {} bytes", bitrate, prefetch_bytes);
+    debug!("Bitrate: {} kbps, prefetch: {} bytes, buffer: {} bytes", bitrate, prefetch_bytes, buffer_size);
 
-    // Create stream downloader with memory storage (unbounded)
     let reader = StreamDownload::from_stream(
         stream,
-        MemoryStorageProvider,
-        Settings::default().prefetch_bytes(prefetch_bytes as u64),
+        BoundedStorageProvider::new(MemoryStorageProvider, buffer_size),
+        Settings::default().prefetch_bytes(prefetch_bytes),
     )
     .await
     .map_err(|e| {
         error!("Failed to create stream downloader: {}", e);
         format!("Failed to create stream downloader: {}", e)
     })?;
+
+    // Suppress ALSA diagnostic messages that would corrupt the TUI
+    suppress_alsa_errors();
 
     // Create audio output
     let (_stream, handle) = OutputStream::try_default()
