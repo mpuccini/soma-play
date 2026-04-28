@@ -7,6 +7,18 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
     execute,
 };
+
+/// Restore the terminal before any panic message prints, regardless of which
+/// thread panicked. Without this, a panic in the audio worker leaves the shell
+/// in raw mode inside the alternate screen.
+fn install_panic_hook() {
+    let prev = std::panic::take_hook();
+    std::panic::set_hook(Box::new(move |info| {
+        let _ = disable_raw_mode();
+        let _ = execute!(io::stdout(), LeaveAlternateScreen);
+        prev(info);
+    }));
+}
 use ratatui::{
     backend::CrosstermBackend,
     Terminal,
@@ -196,6 +208,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
 
     color_eyre::install()?;
+    install_panic_hook();
     tracing::info!("Starting SomaFM Player");
     
     // Handle special arguments that don't require the full app

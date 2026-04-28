@@ -1071,8 +1071,6 @@ dependencies = [
 [[package]]
 name = "icy-metadata"
 version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cc195cd32ab94b8c3ddea5cd947e6b6782e766451156e373e50cfb62242efe64"
 dependencies = [
  "http",
  "reqwest",
@@ -2166,7 +2164,7 @@ dependencies = [
 
 [[package]]
 name = "soma-player"
-version = "0.1.3"
+version = "0.1.4"
 dependencies = [
  "clap",
  "color-eyre",

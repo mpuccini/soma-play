@@ -1,6 +1,6 @@
 [package]
 name = "soma-player"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2024"
 authors = ["Marco Puccini <mpuccini@example.com>"]
 description = "A terminal-based music player for SomaFM internet radio stations with spectrum visualizer"
@@ -16,6 +16,7 @@ exclude = [
     "/docs/",
     "/site/",
     "/sbom/",
+    "/vendor/",
     "*.sh",
     ".gitignore"
 ]
@@ -52,3 +53,9 @@ libc = "0.2"
 [dev-dependencies]
 tempfile = "3.8"
 tokio-test = "0.4"
+
+# Local fork of icy-metadata 0.2.1 with a bounds fix in `parse_next_metadata`.
+# Upstream panics when a stream's metaint exceeds the decoder's read buffer
+# (e.g. SomaFM's Sonic Universe). Drop this patch once the fix lands upstream.
+[patch.crates-io]
+icy-metadata = { path = "vendor/icy-metadata" }

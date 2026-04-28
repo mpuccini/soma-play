@@ -1,0 +1,48 @@
+[package]
+name = "icy-metadata"
+version = "0.2.1"
+rust-version = "1.71.0"
+edition = "2021"
+authors = ["Austin Schey <aschey13@gmail.com>"]
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/aschey/icy-metadata"
+keywords = ["audio", "stream", "media", "icecast", "icy"]
+categories = ["multimedia", "parsing"]
+description = "A library for parsing Icecast metadata"
+include = ["/src", "/examples", "/tests"]
+
+[dependencies]
+http = "1"
+urlencoding = "2"
+serde = { version = "1.0.134", features = ["derive"], optional = true }
+reqwest = { version = "0.12", default-features = false, optional = true }
+tracing = "0.1.36"
+
+[dev-dependencies]
+rodio = { version = "0.20.1", default-features = false, features = [
+  "symphonia-all",
+] }
+rstest = "0.24.0"
+stream-download = { version = "0.14.0", features = ["reqwest-rustls"] }
+tokio = { version = "1.38.0", features = ["rt-multi-thread", "macros"] }
+
+[features]
+serde = ["dep:serde"]
+reqwest = ["dep:reqwest"]
+default = ["reqwest"]
+
+[[example]]
+name = "stream"
+required-features = ["reqwest"]
+doc-scrape-examples = true
+
+[[example]]
+name = "seek"
+required-features = ["reqwest"]
+doc-scrape-examples = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
+cargo-args = ["-Zunstable-options", "-Zrustdoc-scrape-examples"]
